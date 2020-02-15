@@ -6,13 +6,36 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button, Title  } from 'react-native-paper';
 
 export default class Login extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      email: "",
+      password: "",
+      errorMsg: "",
+    }
+  }
+  async loginCall(JsonObj) { 
+
+  }
+
+  async handleSubmit(values) {
+    if (values){
+      var obj = {};    
+      console.log("EMAIL: ", values.email)
+      console.log("PASSWORD: ", values.password)
+      obj["email"] = values.email;
+      obj["password"] = values.password; 
+      // this.loginCall(obj); 
+    }
+  }
+  
   render() {
     return (
       <View style={styles.container}>
         <Title style={styles.title}>Login</Title>
         <Formik
-          initialValues={{ email: '', password: '' }}
-          onSubmit={values => Alert.alert(JSON.stringify(values))}
+          initialValues={this.state}      
+          onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
             email: yup
               .string()
