@@ -1,23 +1,45 @@
 import * as yup from 'yup'
 import { Formik } from 'formik'
+import { Block, Text, theme } from 'galio-framework';
 
 import React, { Component, Fragment } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, View, AsyncStorage} from 'react-native';
 import { TextInput, Button, Title  } from 'react-native-paper';
 
 export default class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "mudassir@gmail.com",
+      password: "12345678",
       errorMsg: "",
     }
   }
   async loginCall(JsonObj) { 
-
+    const response = await fetch('https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/UserLogin', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(JsonObj)
+    })
+    if(response.status === 200){
+       console.log("RESPONSE", response.headers.map["x-auth-token"])
+      await AsyncStorage.setItem("x-auth-token", response.headers.map["x-auth-token"]).then((res)=>{
+        console.log("Login token set")
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } else{
+      this.setState({
+        errorMsg: "Invalid username or password"
+      })
+    }
   }
 
+  
   async handleSubmit(values) {
     if (values){
       var obj = {};    
@@ -25,11 +47,13 @@ export default class Login extends Component {
       console.log("PASSWORD: ", values.password)
       obj["email"] = values.email;
       obj["password"] = values.password; 
-      // this.loginCall(obj); 
+      this.loginCall(obj); 
     }
   }
   
   render() {
+    const { navigation } = this.props;
+
     return (
       <View style={styles.container}>
         <Title style={styles.title}>Login</Title>
@@ -68,10 +92,17 @@ export default class Login extends Component {
               {touched.password && errors.password &&
                 <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
               }
+
+              <Text style={{color: "red"}}>{this.state.errorMsg}</Text>
+
               <Button style={{marginTop: 30}} icon="login" disabled={!isValid} mode="contained" onPress={handleSubmit}>
                 Sign in
               </Button>
-            
+              
+              <Block row space="between" style={{ paddingVertical: 10, alignItems: 'baseline' }}>
+                <Text size={16}>Don't have an account</Text>
+                <Text size={12} color={theme.COLORS.PRIMARY} onPress={() => navigation.navigate('Sign Up')}>Signup</Text>
+              </Block>
             </Fragment>
           )}
         </Formik>

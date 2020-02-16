@@ -2,46 +2,47 @@ import * as yup from 'yup'
 import { Formik } from 'formik'
 
 import React, { Component, Fragment } from 'react';
-import { Alert, StyleSheet, Text, View } from 'react-native';
+import { Alert, StyleSheet, Text, View, AsyncStorage } from 'react-native';
 import { TextInput, Button, Title  } from 'react-native-paper';
-import PhoneInput from 'react-native-phone-input'
-import CountryPicker from 'react-native-country-picker-modal';
+
+const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/
 
 export default class Registration extends Component {
   constructor(props){
     super(props);
     this.state = {
-      name: "",
-      email: "",
-      phone: "",
-      cca2: 'US',
-      password: "",
+      name: "mudassir",
+      email: "mudassir@gmail.com",
+      phone: "12345678901234567890",
+      password: "12345678",
       errorMsg: "",
     }
-
-    this.onPressFlag = this.onPressFlag.bind(this);
-    this.selectCountry = this.selectCountry.bind(this);
   }
 
-  onPressFlag(){
-    this.myCountryPicker.open()
-  }
+   async SignupApiCall(JsonObj) {
 
-  selectCountry(country) {
-    this.phone.selectCountry(country.cca2.toLowerCase());
-    this.setState({ cca2: country.cca2 });
-  }
-
-  componentDidMount(){
-    this.setState({
-      pickerData: this.phone.getPickerData(),
+    const response = await fetch('https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(JsonObj)
     })
+    if(response.status === 200){
+       console.log("RESPONSE", response.headers.map["x-auth-token"])
+      await AsyncStorage.setItem("x-auth-token", response.headers.map["x-auth-token"]).then((res)=>{
+        console.log("Sign up token set")
+      })
+      .catch(err=>{
+        console.log(err)
+      })
+    } else{
+      this.setState({
+        errorMsg: "Email or password already present"
+      })
+    }
   }
-
-  async loginCall(JsonObj) { 
-
-  }
-
   async handleSubmit(values) {
     if (values){
       var obj = {};    
@@ -51,9 +52,9 @@ export default class Registration extends Component {
       console.log("PASSWORD: ", values.password)
       obj["name"] = values.name;
       obj["email"] = values.email;
-      obj["phone"] = values.phone; 
+      obj["phnnbr"] = values.phone; 
       obj["password"] = values.password; 
-      // this.loginCall(obj); 
+      this.SignupApiCall(obj); 
     }
   }
   render() {
@@ -71,12 +72,10 @@ export default class Registration extends Component {
             name: yup
               .string()
               .required()
-              .min(3)
-              .max(7),
-            // phone: yup
-            //   .number()
-            //   .positive()
-            //   .required(),
+              .min(3),
+            phone: yup
+              .string()
+              .matches(phoneRegExp, 'Phone number is not valid'),
             password: yup
               .string()
               .min(8)
@@ -106,7 +105,7 @@ export default class Registration extends Component {
                 <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
               }
               
-              {/* <TextInput
+              <TextInput
                 label="phone"
                 value={values.phone}
                 onChangeText={handleChange('phone')}
@@ -115,31 +114,8 @@ export default class Registration extends Component {
               />
               {touched.phone && errors.phone &&
                 <Text style={{ fontSize: 10, color: 'red' }}>{errors.phone}</Text>
-              } */}
+              }
              
-             {/* <PhoneInput   label="phone"
-                value={values.phone}
-                onChangeText={handleChange('phone')}
-                formikKey="phone"
-                onBlur={() => setFieldTouched('phone')}/> */}
-              <PhoneInput
-                ref={(ref) => {
-                  this.phone = ref;
-                }}
-                onPressFlag={this.onPressFlag}
-              />
-
-              <CountryPicker
-                ref={(ref) => {
-                  this.countryPicker = ref;
-                }}
-                onChange={value => this.selectCountry(value)}
-                translation="eng"
-                cca2={this.state.cca2}
-              >
-                <View />
-              </CountryPicker>
-
               <TextInput
                 label="password"
                 value={values.password}
@@ -150,6 +126,9 @@ export default class Registration extends Component {
               {touched.password && errors.password &&
                 <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
               }
+
+              <Text style={{color: "red"}}>{this.state.errorMsg}</Text>
+
               <Button style={{marginTop: 30}} icon="account-box" disabled={!isValid} mode="contained" onPress={handleSubmit}>
                 Sign up
               </Button>

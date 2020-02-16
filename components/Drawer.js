@@ -92,6 +92,22 @@ class DrawerItem extends React.Component {
             family="ionicon"
             color={focused ? 'white' : materialTheme.COLORS.MUTED} />
         );
+      case 'Reset Password':
+        return (
+          <Icon
+            size={16}
+            name="spellcheck"
+            family="material"
+            color={focused ? 'white' : materialTheme.COLORS.MUTED} />
+        );
+      case 'Forget Password':
+        return (
+          <Icon
+            size={16}
+            name="lock"
+            family="material"
+            color={focused ? 'white' : materialTheme.COLORS.MUTED} />
+        );
       default:
         return null;
     }

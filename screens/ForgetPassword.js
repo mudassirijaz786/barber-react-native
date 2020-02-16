@@ -6,13 +6,32 @@ import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button, Title  } from 'react-native-paper';
 
 export default class ForgetPassword extends Component {
+  constructor(props){
+    super(props);
+    this.state = {
+      email: "",
+      errorMsg: "",
+    }
+  }
+  async loginCall(JsonObj) { 
+
+  }
+
+  async handleSubmit(values) {
+    if (values){
+      var obj = {};    
+      console.log("EMAIL: ", values.email)
+      obj["email"] = values.email;
+      // this.loginCall(obj); 
+    }
+  }
   render() {
     return (
       <View style={styles.container}>
         <Title style={styles.title}>Forget Password</Title>
         <Formik
-          initialValues={{ email: '' }}
-          onSubmit={values => Alert.alert(JSON.stringify(values))}
+          initialValues={this.state}      
+          onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
             email: yup
               .string()
