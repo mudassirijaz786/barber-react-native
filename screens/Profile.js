@@ -1,16 +1,24 @@
 import React from 'react';
-import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform } from 'react-native';
+import { StyleSheet, Dimensions, ScrollView, Image, ImageBackground, Platform ,AsyncStorage} from 'react-native';
 import { Block, Text, theme } from 'galio-framework';
 import { LinearGradient } from 'expo-linear-gradient';
 
 import { Icon } from '../components';
 import { Images, materialTheme } from '../constants';
 import { HeaderHeight } from "../constants/utils";
+import { TextInput, Button, Title,ActivityIndicator, Colors  } from 'react-native-paper';
 
 const { width, height } = Dimensions.get('screen');
 const thumbMeasure = (width - 48 - 32) / 3;
 
 export default class Profile extends React.Component {
+  async logout() {
+    const token=await AsyncStorage.getItem('x-auth-token');
+    console.log("before deletion",token)
+    await AsyncStorage.removeItem('x-auth-token').then(res=>console.log("removed successfullly")).catch(err=>console.log("not remove"))
+    const token2=await AsyncStorage.getItem('x-auth-token');
+    console.log("after deletion",token2) 
+}
   render() {
     return (
       <Block flex style={styles.profile}>
@@ -65,16 +73,13 @@ export default class Profile extends React.Component {
               <Text size={12} color={theme.COLORS.PRIMARY} onPress={() => this.props.navigation.navigate('Home')}>View All</Text>
             </Block>
             <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
-              <Block row space="between" style={{ flexWrap: 'wrap' }} >
-                {Images.Viewed.map((img, imgIndex) => (
-                  <Image
-                    source={{ uri: img }}
-                    key={`viewed-${img}`}  
-                    resizeMode="cover"
-                    style={styles.thumb}
-                  />
-                ))}
-              </Block>
+              <Button onPress={() => this.props.navigation.navigate('UpdateProfile')}>Update profile</Button>
+            </Block>
+            <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+              <Button onPress={() => this.props.navigation.navigate('SignIn') && this.logout}>Logout</Button>
+            </Block>
+            <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
+              <Button onPress={ this.logout}>Token</Button>
             </Block>
           </ScrollView>
         </Block>

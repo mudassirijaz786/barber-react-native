@@ -14,14 +14,14 @@ const Drawer = (props) => (
       <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Profile')} >
         <Block style={styles.profile}>
           <Image source={{ uri: props.profile.avatar}} style={styles.avatar} />
-          <Text h5 color="white">{props.profile.name}</Text>
+          <Text h5 color="white">Moazzam</Text>
         </Block>
       </TouchableWithoutFeedback>
       <Block row>
-        <Block middle style={styles.pro}>
-          <Text size={16} color="white">{props.profile.plan}</Text>
-        </Block>
-        <Text size={16} muted style={styles.seller}>{props.profile.type}</Text>
+        {/* <Block middle style={styles.pro}>
+          <Text size={16} color="white">customer</Text>
+        </Block> */}
+        <Text size={16} muted style={styles.seller}>customer</Text>
         <Text size={16} color={materialTheme.COLORS.WARNING}>
           {props.profile.rating} <Icon name="shape-star" family="GalioExtra" size={14} />
         </Text>

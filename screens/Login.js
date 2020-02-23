@@ -4,14 +4,21 @@ import { Block, Text, theme } from 'galio-framework';
 
 import React, { Component, Fragment } from 'react';
 import { Alert, StyleSheet, View, AsyncStorage} from 'react-native';
-import { TextInput, Button, Title  } from 'react-native-paper';
+import { TextInput, Button, Title,ActivityIndicator, Colors  } from 'react-native-paper';
+import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
+import { Ionicons } from '@expo/vector-icons';
+
+import Registration from './Registration'
+import ResetPassword from './ResetPassword'
+import ForgetPassword from "./ForgetPassword"
+import HomeScreen from './Home';
 
 export default class Login extends Component {
   constructor(props){
     super(props);
     this.state = {
-      email: "mudassir@gmail.com",
-      password: "12345678",
+      email: "testing@gmail.com",
+      password: "123123",
       errorMsg: "",
     }
   }
@@ -25,6 +32,8 @@ export default class Login extends Component {
       body: JSON.stringify(JsonObj)
     })
     if(response.status === 200){
+      <ActivityIndicator animating={true} color={Colors.blue800} />
+      this.props.navigation.navigate('Home')
        console.log("RESPONSE", response.headers.map["x-auth-token"])
       await AsyncStorage.setItem("x-auth-token", response.headers.map["x-auth-token"]).then((res)=>{
         console.log("Login token set")
@@ -32,6 +41,7 @@ export default class Login extends Component {
       .catch(err=>{
         console.log(err)
       })
+
     } else{
       this.setState({
         errorMsg: "Invalid username or password"
@@ -50,13 +60,17 @@ export default class Login extends Component {
       this.loginCall(obj); 
     }
   }
+
+  icon (d){
+    console.log("icon click")
+    disabled="false"
+  }
   
   render() {
-    const { navigation } = this.props;
-
+    
     return (
       <View style={styles.container}>
-        <Title style={styles.title}>Login</Title>
+        <Text color="black" size={28} style={{ paddingBottom: 8, marginLeft: 150}}>Login</Text>
         <Formik
           initialValues={this.state}      
           onSubmit={this.handleSubmit.bind(this)}
@@ -67,20 +81,28 @@ export default class Login extends Component {
               .required(),
             password: yup
               .string()
-              .min(6)
+              .min(3)
               .required(),
           })}
         >
           {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
             <Fragment>
+
+
               <TextInput
                 label="email"
                 value={values.email}
                 onChangeText={handleChange('email')}
                 onBlur={() => setFieldTouched('email')}
+                style={{marginTop: 15}}
+                mode="flat"
+                underlineColor= {theme.COLORS.INPUT}
+
+                // disabled="true"
               />
+              {/* <Ionicons name="md-checkmark-circle" size={32} color="green" onPress={(d)=>this.icon(d)}/> */}
               {touched.email && errors.email &&
-                <Text style={{ fontSize: 10, color: 'red' }}>{errors.email}</Text>
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.email}</Text>
               }
               <TextInput
                 label="password"
@@ -88,20 +110,27 @@ export default class Login extends Component {
                 onChangeText={handleChange('password')}
                 onBlur={() => setFieldTouched('password')}
                 secureTextEntry={true}
+                style={{marginTop: 15}}
+                mode="flat"
+                underlineColor= {theme.COLORS.INPUT}
+                // disabled="true"
               />
               {touched.password && errors.password &&
-                <Text style={{ fontSize: 10, color: 'red' }}>{errors.password}</Text>
+                <Text style={{ fontSize: 12, color: 'red' }}>{errors.password}</Text>
               }
 
               <Text style={{color: "red"}}>{this.state.errorMsg}</Text>
 
-              <Button style={{marginTop: 30}} icon="login" disabled={!isValid} mode="contained" onPress={handleSubmit}>
+              <Button style={{marginTop: 30}} icon="login" mode="contained" disabled={!isValid}  onPress={handleSubmit}>
                 Sign in
               </Button>
+
+              <Text color={theme.COLORS.PRIMARY} style={{marginTop: 20, textAlign: "center"}} onPress={() => this.props.navigation.navigate('ForgetPassword')}>Forgot password? </Text>
+
               
-              <Block row space="between" style={{ paddingVertical: 10, alignItems: 'baseline' }}>
+              <Block row style={{ paddingVertical: 3, alignItems: 'baseline', marginTop: 5, marginLeft: 100 }}>
                 <Text size={16}>Don't have an account</Text>
-                <Text size={12} color={theme.COLORS.PRIMARY} onPress={() => navigation.navigate('Sign Up')}>Signup</Text>
+                <Text size={16} color={theme.COLORS.PRIMARY} onPress={() => this.props.navigation.navigate('Registration')}> Signup</Text>
               </Block>
             </Fragment>
           )}
@@ -114,13 +143,12 @@ export default class Login extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50
-  }, 
-  title: {
-    fontWeight: 'bold',
-    marginTop: 50
+    marginTop: 200,
+    marginLeft: 10,
+    marginRight: 10
   },
   input: {
     margin: 10
   }
 });
+

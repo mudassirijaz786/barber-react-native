@@ -1,12 +1,12 @@
 import React from 'react';
 import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { Button, Block, Text, Input, theme } from 'galio-framework';
+import { Button, Block, Text, Input, theme, Card } from 'galio-framework';
 
 import { Icon, Product } from '../components/';
 
 const { width } = Dimensions.get('screen');
 import products from '../constants/products';
-
+import Salon from "../components/Salon"
 export default class Home extends React.Component {
   renderSearch = () => {
     const { navigation } = this.props;
@@ -18,7 +18,7 @@ export default class Home extends React.Component {
         color="black"
         style={styles.search}
         iconContent={iconCamera}
-        placeholder="Which service are you looking for?"
+        placeholder="Which salon are you looking for?"
         onFocus={() => navigation.navigate('Pro')}
       />
     )
@@ -58,21 +58,12 @@ export default class Home extends React.Component {
       <ScrollView
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.products}>
-        <Block flex>
-          <Product product={products[0]} horizontal />
-          <Product product={products[1]} horizontal />
-          <Product product={products[3]} horizontal />
-          <Product product={products[2]} horizontal />
-          <Product product={products[0]} horizontal />
-          <Product product={products[1]} horizontal />
-          <Product product={products[4]} horizontal />
-          {/* <Block flex row>
-            <Product product={products[1]} style={{ marginRight: theme.SIZES.BASE }} />
-            <Product product={products[2]} />
-          </Block>
-          <Product product={products[3]} horizontal />
-          <Product product={products[4]} full /> */}
-        </Block>
+        <Button onPress = {() =>this.props.navigation.navigate('Services')}>Service</Button>
+        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Tonny and guy"/>
+        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Alice"/>
+        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Mark"/>
+        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Charles"/>
+
       </ScrollView>
     )
   }

@@ -1,10 +1,8 @@
 import * as yup from 'yup'
 import { Formik } from 'formik'
-
 import React, { Component, Fragment } from 'react';
 import { Alert, StyleSheet, Text, View } from 'react-native';
 import { TextInput, Button, Title  } from 'react-native-paper';
-
 export default class ForgetPassword extends Component {
   constructor(props){
     super(props);
@@ -13,10 +11,23 @@ export default class ForgetPassword extends Component {
       errorMsg: "",
     }
   }
-  async loginCall(JsonObj) { 
-
+  async loginCall(JsonObj) {  
+    const response = await fetch('https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/forgot/password', {
+      method: 'post',
+      headers: {
+        'Accept': 'application/json, text/plain, */*',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(JsonObj)
+    })
+    if(response.status === 200){
+        console.log("email sent successfully")
+    } else{
+      this.setState({
+        errorMsg: "email does not send successfully"
+      })
+    }
   }
-
   async handleSubmit(values) {
     if (values){
       var obj = {};    
@@ -28,7 +39,7 @@ export default class ForgetPassword extends Component {
   render() {
     return (
       <View style={styles.container}>
-        <Title style={styles.title}>Forget Password</Title>
+        <Title color="black" size={28} style={{ paddingBottom: 8, marginLeft: 130}}>Forget Password</Title>
         <Formik
           initialValues={this.state}      
           onSubmit={this.handleSubmit.bind(this)}
@@ -53,23 +64,18 @@ export default class ForgetPassword extends Component {
               <Button style={{marginTop: 30}} icon="cached" disabled={!isValid} mode="contained" onPress={handleSubmit}>
                 Forget Password
               </Button>
-            
             </Fragment>
           )}
         </Formik>
       </View>
-      
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
-    marginTop: 50
-  }, 
-  title: {
-    fontWeight: 'bold',
-    marginTop: 50
+    marginTop: 200,
+    marginLeft: 10,
+    marginRight: 10
   },
   input: {
     margin: 10

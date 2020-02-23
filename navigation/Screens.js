@@ -6,7 +6,7 @@ import { Block, Text, theme } from "galio-framework";
 
 import ComponentsScreen from '../screens/Components';
 import HomeScreen from '../screens/Home';
-import OnboardingScreen from '../screens/Onboarding';
+import OnboardingScreen from '../screens/Login';
 import ProfileScreen from '../screens/Profile';
 import ProScreen from '../screens/Pro';
 import Registration from '../screens/Registration'
@@ -14,10 +14,16 @@ import Login from '../screens/Login'
 import ResetPassword from '../screens/ResetPassword'
 import ForgetPassword from "../screens/ForgetPassword"
 import SettingsScreen from '../screens/Settings';
+import TimePick from "../screens/TimePick"
+import Landing from '../screens/Landing';
+import Logout from '../screens/Logout';
+import UpdateProfile from "../screens/UpdateProfile"
+import ServicesScreen from "../screens/ServicesScreen"
 
 import Menu from './Menu';
 import Header from '../components/Header';
 import { Drawer } from '../components/';
+import ServiceScreen from '../screens/ServiceScreen';
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
   transitionSpec: {
@@ -62,10 +68,42 @@ const ProfileStack = createStackNavigator({
       headerTransparent: true,
     })
   },
+  UpdateProfile: {
+    screen: UpdateProfile,
+    navigationOptions: {
+      drawerLabel: () => {},
+    },    
+  },
+
 }, {
   cardStyle: { backgroundColor: '#EEEEEE', },
   transitionConfig,
 });
+
+const SelectingServicesStack = createStackNavigator({
+  Services: {
+    screen: ServicesScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header search title="Select services" navigation={navigation} />,
+    })
+  },
+  Service: {
+    screen: ServiceScreen,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title="Service" navigation={navigation} />,
+    }) 
+  },
+  TimePick: {
+    screen: TimePick,
+    navigationOptions: ({ navigation }) => ({
+      header: <Header title="Appointment" navigation={navigation} />,
+    }) 
+  },
+},
+{
+  cardStyle: { backgroundColor: '#EEEEEE', },
+  transitionConfig,
+})
 
 const SettingsStack = createStackNavigator({
   Settings: {
@@ -98,10 +136,10 @@ const HomeStack = createStackNavigator({
       header: <Header search tabs title="Home" navigation={navigation} />,
     })
   },
-  Pro: {
-    screen: ProScreen,
+  Landing: {
+    screen: Landing,
     navigationOptions: ({navigation}) => ({
-      header: <Header back white transparent title="" navigation={navigation} />,
+      header: <Header back white transparent title="Landing" navigation={navigation} />,
       headerTransparent: true,
     })
   },
@@ -129,32 +167,38 @@ const AppStack = createDrawerNavigator(
         )
       }
     },
+    Service:{
+      screen: SelectingServicesStack,
+      navigationOptions: {
+        drawerLabel: () => {},
+      },
+    },
     Woman: {
-      screen: ProScreen,
+      screen: Landing,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Woman" />
+          <Drawer focused={focused} screen="Landing" title="Woman" />
         ),
       }),
     },
     Man: {
-      screen: ProScreen,
+      screen: Landing,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Man" />
+          <Drawer focused={focused} screen="Landing" title="Man" />
         ),
       }),
     },
     Kids: {
-      screen: ProScreen,
+      screen: Landing,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Pro" title="Kids" />
+          <Drawer focused={focused} screen="Landing" title="Kids" />
         ),
       }),
     },
     NewCollection: {
-      screen: ProScreen,
+      screen: Landing,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({focused}) => (
           <Drawer focused={focused} screen="Pro" title="New Collection" />
@@ -201,28 +245,30 @@ const AppStack = createDrawerNavigator(
     },
     ForgetPassword: {
       screen: ForgetPassword,
+      navigationOptions: {
+        drawerLabel: () => {},
+      },    
+    },
+    Logout: {
+      screen: Logout,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="ForgetPassword" title="Forget Password" />
+          <Drawer focused={focused} screen="Logout" title="Logout" />
         ),
       }),
     },
     SignIn: {
       screen: Login,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Login" title="Sign In" />
-        ),
-      }),
+       navigationOptions: {
+        drawerLabel: () => {},
+      },
     },
-    SignUp: {
+    Registration: {
       screen: Registration,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({focused}) => (
-          <Drawer focused={focused} screen="Registration" title="Sign Up" />
-        ),
-      }),
-    },
+      navigationOptions: {
+        drawerLabel: () => {},
+      },    
+    }
   },
   Menu
 );

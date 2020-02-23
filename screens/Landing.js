@@ -7,7 +7,7 @@ const { height, width } = Dimensions.get('screen');
 import materialTheme from '../constants/Theme';
 import Images from '../constants/Images';
 
-export default class Onboarding extends React.Component {
+export default class Landing extends React.Component {
   render() {
     const { navigation } = this.props;
 
@@ -22,24 +22,13 @@ export default class Onboarding extends React.Component {
         </Block>
         <Block flex space="between" style={styles.padded}>
           <Block flex space="around" style={{ zIndex: 2 }}>
-            <Block>
-              <Block>
-                <Text color="white" size={60}>Your</Text>
-              </Block>
-              <Block row>
-                <Text color="white" size={60}>Salon</Text>
-              </Block>
-              <Text size={16} color='rgba(255,255,255,0.6)'>
-                Get services by famous salons in Lahore
-              </Text>
-            </Block>
             <Block center>
               <Button
                 shadowless
                 style={styles.button}
                 color={materialTheme.COLORS.BUTTON_COLOR}
                 onPress={() => navigation.navigate('Home')}>
-                Let's avail
+               Go to home screen
               </Button>
             </Block>
           </Block>
