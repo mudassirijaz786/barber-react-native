@@ -1,154 +1,156 @@
-import * as yup from 'yup'
-import { Formik } from 'formik'
-import { Block, Text, theme } from 'galio-framework';
+import React, { Component } from "react";
+import DatePicker from "react-native-datepicker";
+import { Alert, StyleSheet, View, Button, Text, Picker } from "react-native";
+import RNSchedule from "rnschedule";
+import { Avatar, Card, Title, Paragraph, Image } from "react-native-paper";
 
-import React, { Component, Fragment } from 'react';
-import { Alert, StyleSheet, View, AsyncStorage} from 'react-native';
-import { TextInput, Button, Title,ActivityIndicator, Colors  } from 'react-native-paper';
-import { createSwitchNavigator, createStackNavigator, createDrawerNavigator, createAppContainer } from 'react-navigation';
-import { Ionicons } from '@expo/vector-icons';
+const data = [
+  {
+    title: "Lunch Appointment",
+    subtitle: "With Harry",
+    start: new Date(2020, 29, 2, 13, 20),
+    end: new Date(2020, 29, 2, 14, 20),
+    color: "#390099"
+  }
+];
 
-import Registration from './Registration'
-import ResetPassword from './ResetPassword'
-import ForgetPassword from "./ForgetPassword"
-import HomeScreen from './Home';
-
-export default class Login extends Component {
-  constructor(props){
+export default class TimePick extends Component {
+  constructor(props) {
     super(props);
     this.state = {
-      email: "testing@gmail.com",
-      password: "123123",
-      errorMsg: "",
-    }
-  }
-  async loginCall(JsonObj) { 
-    const response = await fetch('https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/UserLogin', {
-      method: 'post',
-      headers: {
-        'Accept': 'application/json, text/plain, */*',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(JsonObj)
-    })
-    if(response.status === 200){
-      <ActivityIndicator animating={true} color={Colors.blue800} />
-      this.props.navigation.navigate('Home')
-       console.log("RESPONSE", response.headers.map["x-auth-token"])
-      await AsyncStorage.setItem("x-auth-token", response.headers.map["x-auth-token"]).then((res)=>{
-        console.log("Login token set")
-      })
-      .catch(err=>{
-        console.log(err)
-      })
-
-    } else{
-      this.setState({
-        errorMsg: "Invalid username or password"
-      })
-    }
+      date: "",
+      hours: [
+        "00",
+        "01",
+        "02",
+        "03",
+        "04",
+        "05",
+        "06",
+        "07",
+        "08",
+        "09",
+        "10",
+        "11",
+        "12"
+      ],
+      minute: ["15", "30", "45"],
+      slot: ["am", "pm"],
+      concatDate: "",
+      selecthour: "",
+      slectmin: "",
+      selectslot: ""
+    };
   }
 
-  
-  async handleSubmit(values) {
-    if (values){
-      var obj = {};    
-      console.log("EMAIL: ", values.email)
-      console.log("PASSWORD: ", values.password)
-      obj["email"] = values.email;
-      obj["password"] = values.password; 
-      this.loginCall(obj); 
-    }
-  }
+  datePick = date => {
+    this.setState({ date: date });
+    console.log(date);
+  };
 
-  icon (d){
-    console.log("icon click")
-    disabled="false"
-  }
-  
+  concatDate = e => {
+    console.log("concatDAte ");
+    console.log(this.state.selecthour);
+    console.log(this.state.slectmin);
+    console.log(this.state.selectslot);
+
+    const concate = { ...this.state.selecthour };
+    const concat2 = { ...this.state.slectmin };
+    const concat3 = { ...this.state.selectslot };
+    //  var obj = Object.assign({}, concate, concat2, concat3);
+    //  console.log(obj);
+    //  const fulldate = concate + concat2 + concat3;
+    let jsonStringfy = JSON.stringify(concate);
+    console.log(jsonStringfy.split(":")[0]);
+    console.log(jsonStringfy.split(":")[1]);
+  };
   render() {
-    
+    const { date } = this.state;
+    console.log(date);
     return (
-      <View style={styles.container}>
-        <Text color="black" size={28} style={{ paddingBottom: 8, marginLeft: 150}}>Login</Text>
-        <Formik
-          initialValues={this.state}      
-          onSubmit={this.handleSubmit.bind(this)}
-          validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email()
-              .required(),
-            password: yup
-              .string()
-              .min(3)
-              .required(),
-          })}
+      <View style={{ marginTop: 30 }}>
+        <Text style={{ textAlign: "center" }}>Please select date</Text>
+        <DatePicker
+          style={{ width: 200, marginLeft: 80 }}
+          date={this.state.date}
+          mode="datetime"
+          placeholder="select date"
+          format="YYYY-MM-DD-h-mm-a"
+          // minDate="2016-05-01"
+          maxDate="2020-03-25"
+          confirmBtnText="Confirm"
+          minTime="09-30"
+          maxTime="13-20"
+          cancelBtnText="Cancel"
+          customStyles={{
+            dateIcon: {
+              position: "absolute",
+              left: 0,
+              top: 4,
+              marginLeft: 0
+            },
+            dateInput: {
+              marginLeft: 36
+            }
+            // ... You can check the source to find the other keys.
+          }}
+          onDateChange={date => {
+            this.datePick(date);
+          }}
+          minuteInterval={8}
+        />
+        {/* <RNSchedule dataArray={data} onEventPress={appt => console.log(appt)} /> */}
+
+        <Picker
+          selectedValue={this.state.selecthour}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ selecthour: itemValue })
+          }
         >
-          {({ values, handleChange, errors, setFieldTouched, touched, isValid, handleSubmit }) => (
-            <Fragment>
-
-
-              <TextInput
-                label="email"
-                value={values.email}
-                onChangeText={handleChange('email')}
-                onBlur={() => setFieldTouched('email')}
-                style={{marginTop: 15}}
-                mode="flat"
-                underlineColor= {theme.COLORS.INPUT}
-
-                // disabled="true"
-              />
-              {/* <Ionicons name="md-checkmark-circle" size={32} color="green" onPress={(d)=>this.icon(d)}/> */}
-              {touched.email && errors.email &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.email}</Text>
-              }
-              <TextInput
-                label="password"
-                value={values.password}
-                onChangeText={handleChange('password')}
-                onBlur={() => setFieldTouched('password')}
-                secureTextEntry={true}
-                style={{marginTop: 15}}
-                mode="flat"
-                underlineColor= {theme.COLORS.INPUT}
-                // disabled="true"
-              />
-              {touched.password && errors.password &&
-                <Text style={{ fontSize: 12, color: 'red' }}>{errors.password}</Text>
-              }
-
-              <Text style={{color: "red"}}>{this.state.errorMsg}</Text>
-
-              <Button style={{marginTop: 30}} icon="login" mode="contained" disabled={!isValid}  onPress={handleSubmit}>
-                Sign in
-              </Button>
-
-              <Text color={theme.COLORS.PRIMARY} style={{marginTop: 20, textAlign: "center"}} onPress={() => this.props.navigation.navigate('ForgetPassword')}>Forgot password? </Text>
-
-              
-              <Block row style={{ paddingVertical: 3, alignItems: 'baseline', marginTop: 5, marginLeft: 100 }}>
-                <Text size={16}>Don't have an account</Text>
-                <Text size={16} color={theme.COLORS.PRIMARY} onPress={() => this.props.navigation.navigate('Registration')}> Signup</Text>
-              </Block>
-            </Fragment>
-          )}
-        </Formik>
+          {this.state.hours.map(option => (
+            <Picker.Item key={option} label={option} value={option} />
+          ))}
+        </Picker>
+        <Picker
+          selectedValue={this.state.slectmin}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ slectmin: itemValue })
+          }
+        >
+          {this.state.minute.map(option => (
+            <Picker.Item key={option} label={option} value={option} />
+          ))}
+        </Picker>
+        <Picker
+          selectedValue={this.state.selectslot}
+          style={{ height: 50, width: 100 }}
+          onValueChange={(itemValue, itemIndex) =>
+            this.setState({ selectslot: itemValue })
+          }
+        >
+          {this.state.slot.map(option => (
+            <Picker.Item key={option} label={option} value={option} />
+          ))}
+        </Picker>
+        <Button title="Press me" color="#f194ff" onPress={this.concatDate} />
+        <Card style={{ marginTop: 30 }}>
+          <Card.Content>
+            <Title>Your selected datetime</Title>
+            <Paragraph> {this.state.date}</Paragraph>
+          </Card.Content>
+        </Card>
       </View>
-      
     );
   }
 }
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 200,
-    marginLeft: 10,
-    marginRight: 10
+    marginTop: 200
   },
   input: {
     margin: 10
   }
 });
-
