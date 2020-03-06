@@ -3,6 +3,7 @@ import DatePicker from "react-native-datepicker";
 import { Alert, StyleSheet, View, Button, Text, Picker } from "react-native";
 import RNSchedule from "rnschedule";
 import { Avatar, Card, Title, Paragraph, Image } from "react-native-paper";
+import Axios from "axios";
 
 const data = [
   {
@@ -15,39 +16,118 @@ const data = [
 ];
 
 export default class TimePick extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      date: "",
-      hours: [
-        "00",
-        "01",
-        "02",
-        "03",
-        "04",
-        "05",
-        "06",
-        "07",
-        "08",
-        "09",
-        "10",
-        "11",
-        "12"
-      ],
-      minute: ["15", "30", "45"],
-      slot: ["am", "pm"],
-      concatDate: "",
-      selecthour: "",
-      slectmin: "",
-      selectslot: ""
-    };
-  }
-
-  datePick = date => {
-    this.setState({ date: date });
-    console.log(date);
+  state = {
+    date: "",
+    hours: [
+      "00",
+      "01",
+      "02",
+      "03",
+      "04",
+      "05",
+      "06",
+      "07",
+      "08",
+      "09",
+      "10",
+      "11",
+      "12"
+    ],
+    minute: ["15", "30", "45"],
+    slot: ["am", "pm"],
+    concatDate: "",
+    selecthour: "",
+    slectmin: "",
+    selectslot: "",
+    stating_time: "",
+    booking_date: ""
   };
 
+  fun = () => {
+    console.log("moment.fn.format");
+    const h = this.state.selecthour;
+    const i = this.state.slectmin;
+    const j = this.state.selectslot;
+    const f = h + ":" + i + " " + j;
+    this.setState({ c: f });
+    console.log("DATE", f);
+  };
+  datePick = date => {
+    this.setState({ booking_date: date });
+    console.log("DATE", date);
+  };
+
+  async timeSelect(JsonObj) {
+    const response = await fetch(
+      "https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/book/appointment",
+      {
+        method: "post",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(JsonObj)
+      }
+    );
+    console.log("RESPONSE APPOINTMENT");
+  }
+
+  okTime = () => {
+    const h = this.state.selecthour;
+    const i = this.state.slectmin;
+    const j = this.state.selectslot;
+    const f = h + ":" + i + " " + j;
+    this.setState({ stating_time: f });
+  };
+  handleSubmit = () => {
+    var obj = {};
+    console.log("moment.fn.format");
+    const h = this.state.selecthour;
+    const i = this.state.slectmin;
+    const j = this.state.selectslot;
+    const f = h + ":" + i + " " + j;
+    console.log("before starting time", this.state.stating_time);
+    this.setState({ stating_time: f }, async () => {
+      obj["booking_date"] = this.state.booking_date;
+      obj["stating_time"] = this.state.stating_time;
+      Axios({
+        url:
+          "https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/book/appointment",
+        method: "POST",
+        headers: {
+          Accept: "application/json, text/plain, */*",
+          "Content-Type": "application/json"
+        },
+        data: {
+          booking_date: this.state.booking_date,
+          stating_time: this.state.stating_time
+        }
+      })
+        .then(response => {
+          console.log("RESPONSE", response.data);
+          // List_of_services = { ...this.state.List_of_services0 };
+          // List_of_services = response;
+        })
+
+        // console.log("IN COMPONENT DID MOUNT", this.state.name);
+
+        .catch(function(error) {
+          alert(error);
+        });
+    });
+  };
+  // console.log("f", f);
+
+  // console.log("booking_date: ", this.state.booking_date);
+  // console.log("stating_time: ", this.state.stating_time);
+
+  // obj["booking_date"] = this.state.booking_date;
+  // obj["stating_time"] = this.state.stating_time;
+  // this.timeSelect(obj);
+
+  prit = () => {
+    console.log("stating_time: ", this.state.stating_time);
+  };
   concatDate = e => {
     console.log("concatDAte ");
     console.log(this.state.selecthour);
@@ -73,9 +153,9 @@ export default class TimePick extends Component {
         <DatePicker
           style={{ width: 200, marginLeft: 80 }}
           date={this.state.date}
-          mode="datetime"
+          mode="date"
           placeholder="select date"
-          format="YYYY-MM-DD-h-mm-a"
+          format="YYYY-MM-DD"
           // minDate="2016-05-01"
           maxDate="2020-03-25"
           confirmBtnText="Confirm"
@@ -134,7 +214,9 @@ export default class TimePick extends Component {
             <Picker.Item key={option} label={option} value={option} />
           ))}
         </Picker>
-        <Button title="Press me" color="#f194ff" onPress={this.concatDate} />
+        {/* <Button title="ok" color="#f194ff" onPress={this.okTime} /> */}
+        <Button title="Press me" color="#f194ff" onPress={this.handleSubmit} />
+        {/* <Button title="See states" color="#f194ff" onPress={this.prit} /> */}
         <Card style={{ marginTop: 30 }}>
           <Card.Content>
             <Title>Your selected datetime</Title>
