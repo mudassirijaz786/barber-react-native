@@ -24,7 +24,7 @@ import Landing from "../screens/Landing";
 import Logout from "../screens/Logout";
 import UpdateProfile from "../screens/UpdateProfile";
 import ServicesScreen from "../screens/ServicesScreen";
-
+import ViewAppointment from "../screens/ViewAppointment";
 import Menu from "./Menu";
 import Header from "../components/Header";
 import { Drawer } from "../components/";
@@ -112,6 +112,12 @@ const SelectingServicesStack = createStackNavigator(
       screen: TimePick,
       navigationOptions: ({ navigation }) => ({
         header: <Header title="Appointment" navigation={navigation} />
+      })
+    },
+    ViewAppointment: {
+      screen: ViewAppointment,
+      navigationOptions: ({ navigation }) => ({
+        header: <Header title="View your Appointment" navigation={navigation} />
       })
     }
   },
