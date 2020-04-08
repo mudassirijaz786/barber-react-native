@@ -1,85 +1,218 @@
-import React from 'react';
-import { StyleSheet, Dimensions, ScrollView } from 'react-native';
-import { Button, Block, Text, Input, theme, Card } from 'galio-framework';
+import React from "react";
+import {
+  StyleSheet,
+  Dimensions,
+  ScrollView,
+  AsyncStorage,
+  View,
+} from "react-native";
+import { Block, Text, Input, theme } from "galio-framework";
+import {
+  Avatar,
+  Button,
+  Title,
+  Paragraph,
+  ActivityIndicator,
+} from "react-native-paper";
+import materialTheme from "../constants/Theme";
+import { SearchBar } from "react-native-elements";
 
-import { Icon, Product } from '../components/';
-
-const { width } = Dimensions.get('screen');
-import products from '../constants/products';
-import Salon from "../components/Salon"
+import { showMessage, hideMessage } from "react-native-flash-message";
+import decode from "jwt-decode";
+import Axios from "axios";
+import {
+  Left,
+  Right,
+  // Title,
+  Card,
+  Content,
+  Thumbnail,
+  Grid,
+  Col,
+  Header,
+  CheczkBox,
+  Body,
+  Container,
+  CardItem,
+} from "native-base";
+import Icon from "../components/Icon";
+const { width } = Dimensions.get("screen");
 export default class Home extends React.Component {
-  renderSearch = () => {
-    const { navigation } = this.props;
-    const iconCamera = <Icon size={16} color={theme.COLORS.MUTED} name="zoom-in" family="material" />
-
-    return (
-      <Input
-        right
-        color="black"
-        style={styles.search}
-        iconContent={iconCamera}
-        placeholder="Which salon are you looking for?"
-        onFocus={() => navigation.navigate('Pro')}
-      />
-    )
-  }
-  
-  renderTabs = () => {
-    const { navigation } = this.props;
-
-    return (
-      <Block row style={styles.tabs}>
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Profile')}>
-          <Block row middle>
-            <Icon name="grid" family="feather" style={{ paddingRight: 8 }} />
-            <Text size={16} style={styles.tabTitle}>Categories</Text>
-          </Block>
-        </Button>
-
-        <Button shadowless style={[styles.tab, styles.divider]} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon name="grid" family="feather" style={{ paddingRight: 8 }} />
-            <Text size={16} style={styles.tabTitle}>Categories</Text>
-          </Block>
-        </Button>
-
-        <Button shadowless style={styles.tab} onPress={() => navigation.navigate('Pro')}>
-          <Block row middle>
-            <Icon size={16} name="camera-18" family="GalioExtra" style={{ paddingRight: 8 }} />
-            <Text size={16} style={styles.tabTitle}>Best Services</Text>
-          </Block>
-        </Button>
-      </Block>
-    )
+  constructor(props) {
+    super(props);
+    this.state = {
+      List_of_salons: [123],
+      isLoading: false,
+      search: "",
+      arrayholder: [123],
+    };
   }
 
-  renderProducts = () => {
-    return (
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-        contentContainerStyle={styles.products}>
-        <Button onPress = {() =>this.props.navigation.navigate('Services')}>Service</Button>
-        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Tonny and guy"/>
-        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Alice"/>
-        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Mark"/>
-        <Salon uri={{uri: 'https://picsum.photos/700'}} name="Charles"/>
+  async componentDidMount() {
+    const value = await AsyncStorage.getItem("x-auth-token");
+    this.setState({ isLoading: true });
+    await Axios({
+      url:
+        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/SalonSignUp",
+      method: "GET",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+    })
+      .then((response) => {
+        this.setState({
+          List_of_salons: response.data,
+          arrayholder: response.data,
+        });
+      })
 
-      </ScrollView>
-    )
+      .catch((error) => {
+        showMessage({
+          message: { error },
+          type: "danger",
+        });
+      });
+    this.setState({ isLoading: false });
+  }
+  onPressed(items) {
+    console.log("clicked");
+    this.props.navigation.navigate("MapandServices", { items: items });
   }
 
+  onFilter(items) {
+    this.props.navigation.navigate("MapandServices", { items: items });
+  }
+  updateSearch = (search) => {
+    const newData = this.state.arrayholder.filter((item) => {
+      //applying filter for the inserted text in search bar
+      const itemData = item.SalonName
+        ? item.SalonName.toLowerCase()
+        : "".toLowerCase();
+      const textData = search.toLowerCase();
+      return itemData.indexOf(textData) > -1;
+    });
+
+    this.setState({ search, List_of_salons: newData });
+  };
   render() {
+    const { title, focused } = this.props;
+    const { search } = this.state;
     return (
-      <Block flex center style={styles.home}>
-        {this.renderProducts()}
-      </Block>
+      <Container>
+        <View
+          style={{
+            justifyContent: "center",
+            flexDirection: "row",
+            // alignItems: "center",
+            marginTop: 5,
+            // marginBottom: 5,
+          }}
+        >
+          <Text style={{ fontSize: 30 }}>Filter by near location</Text>
+          <Icon
+            size={30}
+            name="filter-list"
+            family="material"
+            color={focused ? "white" : materialTheme.COLORS.MUTED}
+            onPress={() => this.onFilter(this.state.List_of_salons)}
+          />
+        </View>
+        <Title
+          style={{
+            textAlign: "center",
+            color: "indigo",
+            fontSize: 30,
+            marginTop: 5,
+            marginBottom: 5,
+          }}
+        >
+          Availible salons
+        </Title>
+        <SearchBar
+          round
+          placeholderTextColor="indigo"
+          underlineColorAndroid="indigo"
+          lightTheme
+          inputContainerStyle={{ backgroundColor: "transparent" }}
+          containerStyle={{ backgroundColor: "transparent" }}
+          placeholder="Search salon by name..."
+          onChangeText={this.updateSearch}
+          value={search}
+          showLoading={this.state.isLoading}
+        />
+        <Content style={{ flex: 1 }}>
+          {this.state.List_of_salons.length !== 0 &&
+            this.state.List_of_salons.map((items) => {
+              return (
+                <View style={{ boderColor: "indigo" }}>
+                  {this.state.isLoading ? (
+                    <ActivityIndicator
+                      animating={this.state.isLoading}
+                      size="large"
+                      color="#0000ff"
+                      style={{ marginTop: 350 }}
+                    />
+                  ) : (
+                    <Card style={{ alignItems: "center" }} elevation={8}>
+                      <CardItem header>
+                        <Left>
+                          <Body style={{ alignItems: "flex-start", top: -10 }}>
+                            <Title>{items.SalonName}</Title>
+                          </Body>
+                        </Left>
+                      </CardItem>
+                      <CardItem>
+                        <Left>
+                          <Body style={{ alignItems: "flex-start", top: -10 }}>
+                            <Text>Opening at {items.Salon_opening_hours}</Text>
+                          </Body>
+                        </Left>
+                        <Right>
+                          <Body style={{ alignItems: "flex-start", top: -10 }}>
+                            <Text>Closing at {items.Salon_closing_hours}</Text>
+                          </Body>
+                        </Right>
+                      </CardItem>
+                      <CardItem>
+                        <Button
+                          style={styles.button}
+                          mode="outlined"
+                          uppercase={false}
+                          contentStyle={{ height: 30 }}
+                          // onPress={() => this.onFilter(this.state.List_of_salons)}
+                          onPress={() => this.onPressed(items)}
+                        >
+                          See services
+                        </Button>
+                      </CardItem>
+                    </Card>
+                  )}
+                </View>
+              );
+            })}
+
+          {this.state.List_of_salons.length == 0 && (
+            <Title
+              style={{
+                textAlign: "center",
+                color: "red",
+                fontSize: 30,
+                marginTop: 50,
+              }}
+            >
+              Sorry, No salon to display
+            </Title>
+          )}
+        </Content>
+      </Container>
     );
   }
 }
-
 const styles = StyleSheet.create({
   home: {
-    width: width,    
+    width: width,
   },
   search: {
     height: 48,
@@ -93,7 +226,7 @@ const styles = StyleSheet.create({
     shadowColor: theme.COLORS.BLACK,
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowRadius: 8,
     shadowOpacity: 0.2,
@@ -107,7 +240,7 @@ const styles = StyleSheet.create({
   },
   tab: {
     backgroundColor: theme.COLORS.TRANSPARENT,
-    width: width * 0.50,
+    width: width * 0.5,
     borderRadius: 0,
     borderWidth: 0,
     height: 24,
@@ -115,7 +248,7 @@ const styles = StyleSheet.create({
   },
   tabTitle: {
     lineHeight: 19,
-    fontWeight: '300'
+    fontWeight: "300",
   },
   divider: {
     borderRightWidth: 0.3,
@@ -124,5 +257,9 @@ const styles = StyleSheet.create({
   products: {
     width: width - theme.SIZES.BASE * 2,
     paddingVertical: theme.SIZES.BASE * 2,
+  },
+  button: {
+    borderRadius: 40,
+    marginLeft: 10,
   },
 });

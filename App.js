@@ -11,29 +11,19 @@
 
 */
 
-import React from 'react';
-import { Platform, StatusBar, Image } from 'react-native';
-import { AppLoading } from 'expo';
-import { Asset } from 'expo-asset';
-import { Block, GalioProvider } from 'galio-framework';
+import React from "react";
+import { Platform, StatusBar, Image, NetInfo, Text } from "react-native";
+import { AppLoading } from "expo";
+import { Asset } from "expo-asset";
+import { Block, GalioProvider } from "galio-framework";
 
-import AppContainer from './navigation/Screens';
-import { Images, products, materialTheme } from './constants/';
-
-// cache app images
-const assetImages = [
-  Images.Pro,
-  Images.Profile,
-  Images.Avatar,
-  Images.Onboarding,
-];
-
-// cache product images
-products.map(product => assetImages.push(product.image));
+import AppContainer from "./navigation/Screens";
+import { materialTheme } from "./constants/";
+import FlashMessage from "react-native-flash-message";
 
 function cacheImages(images) {
-  return images.map(image => {
-    if (typeof image === 'string') {
+  return images.map((image) => {
+    if (typeof image === "string") {
       return Image.prefetch(image);
     } else {
       return Asset.fromModule(image).downloadAsync();
@@ -44,8 +34,43 @@ function cacheImages(images) {
 export default class App extends React.Component {
   state = {
     isLoadingComplete: false,
+    connection_Status: "",
   };
+  componentDidMount() {
+    NetInfo.isConnected.addEventListener(
+      "connectionChange",
+      this._handleConnectivityChange
+    );
 
+    NetInfo.isConnected.fetch().done((isConnected) => {
+      if (isConnected == false) {
+        this.setState({
+          connection_Status: `You are offline, Please check your internet connection 😔️`,
+        });
+      } else {
+        this.setState({
+          connection_Status: "",
+        });
+      }
+    });
+  }
+  componentWillUnmount() {
+    NetInfo.isConnected.removeEventListener(
+      "connectionChange",
+      this._handleConnectivityChange
+    );
+  }
+  _handleConnectivityChange = (isConnected) => {
+    if (isConnected == false) {
+      this.setState({
+        connection_Status: `You are offline, Please check your internet connection 😔️`,
+      });
+    } else {
+      this.setState({
+        connection_Status: "",
+      });
+    }
+  };
   render() {
     if (!this.state.isLoadingComplete && !this.props.skipLoadingScreen) {
       return (
@@ -59,8 +84,19 @@ export default class App extends React.Component {
       return (
         <GalioProvider theme={materialTheme}>
           <Block flex>
-            {Platform.OS === 'ios' && <StatusBar barStyle="default" />}
+            {Platform.OS === "ios" && <StatusBar barStyle="default" />}
             <AppContainer />
+            <Text
+              style={{
+                fontSize: 20,
+                textAlign: "center",
+                marginBottom: 20,
+                color: "red",
+              }}
+            >
+              {this.state.connection_Status}
+            </Text>
+            <FlashMessage position="top" />
           </Block>
         </GalioProvider>
       );
@@ -68,12 +104,10 @@ export default class App extends React.Component {
   }
 
   _loadResourcesAsync = async () => {
-    return Promise.all([
-      ...cacheImages(assetImages),
-    ]);
+    return Promise.all([...cacheImages(assetImages)]);
   };
 
-  _handleLoadingError = error => {
+  _handleLoadingError = (error) => {
     // In this case, you might want to report the error to your error
     // reporting service, for example Sentry
     console.warn(error);

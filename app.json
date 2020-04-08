@@ -5,10 +5,14 @@
     "slug": "rn-material-kit-free",
     "privacy": "unlisted",
     "sdkVersion": "35.0.0",
-    "platforms": [
-      "ios",
-      "android"
-    ],
+    "android": {
+      "config": {
+        "googleMaps": {
+          "apiKey": "AIzaSyARjyRyPhNoOKCNv4bS1W7zP-1reTQElFs"
+        }
+      }
+    },
+    "platforms": ["ios", "android"],
     "version": "1.4.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
@@ -20,9 +24,7 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true
     }

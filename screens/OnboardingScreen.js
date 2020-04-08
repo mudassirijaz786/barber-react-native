@@ -21,7 +21,7 @@ const { height, width } = Dimensions.get("screen");
 import Login from "../screens/Login";
 import materialTheme from "../constants/Theme";
 import Images from "../constants/Images";
-
+import Maps from "../screens/Maps";
 import TimePicker from "../screens/TimePicker";
 export default class OnboardingScreen extends React.Component {
   constructor(props) {
@@ -34,7 +34,7 @@ export default class OnboardingScreen extends React.Component {
   }
   async loginCall(JsonObj) {
     const response = await fetch(
-      "https://digital-salon-app.herokuapp.com/Digital_Saloon.com/api/UserLogin",
+      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserLogin",
       {
         method: "post",
         headers: {
@@ -133,7 +133,8 @@ export default class OnboardingScreen extends React.Component {
       //     </Formik>
       //   </View>
       // <Login/>
-      <TimePicker />
+      // <TimePicker />
+      <Maps />
     );
   }
 }

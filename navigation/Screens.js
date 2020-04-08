@@ -1,21 +1,17 @@
 import React from "react";
-import { Easing, Animated, Platform } from "react-native";
+import { Easing, Animated } from "react-native";
 import {
-  createSwitchNavigator,
   createStackNavigator,
   createDrawerNavigator,
-  createAppContainer
+  createAppContainer,
 } from "react-navigation";
-
-import { Block, Text, theme } from "galio-framework";
-
-import ComponentsScreen from "../screens/Components";
+import { Block, Text } from "galio-framework";
+import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import OnboardingScreen from "../screens/Login";
+import OnboardingScreen from "../screens/ServiceScreen";
+import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
-import ProScreen from "../screens/Pro";
 import Registration from "../screens/Registration";
-import Login from "../screens/Login";
 import ResetPassword from "../screens/ResetPassword";
 import ForgetPassword from "../screens/ForgetPassword";
 import SettingsScreen from "../screens/Settings";
@@ -23,40 +19,33 @@ import TimePick from "../screens/TimePick";
 import Landing from "../screens/Landing";
 import Logout from "../screens/Logout";
 import UpdateProfile from "../screens/UpdateProfile";
-import ServicesScreen from "../screens/ServicesScreen";
 import ViewAppointment from "../screens/ViewAppointment";
 import Menu from "./Menu";
 import Header from "../components/Header";
 import { Drawer } from "../components/";
 import ServiceScreen from "../screens/ServiceScreen";
+import SlotsAvailing from "../screens/SlotsAvailing";
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
   transitionSpec: {
     duration: 400,
     easing: Easing.out(Easing.poly(4)),
-    timing: Animated.timing
+    timing: Animated.timing,
   },
-  screenInterpolator: sceneProps => {
+  screenInterpolator: (sceneProps) => {
     const { layout, position, scene } = sceneProps;
     const thisSceneIndex = scene.index;
     const width = layout.initWidth;
-
-    const scale = position.interpolate({
-      inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
-      outputRange: [4, 1, 1]
-    });
     const opacity = position.interpolate({
       inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
-      outputRange: [0, 1, 1]
+      outputRange: [0, 1, 1],
     });
     const translateX = position.interpolate({
       inputRange: [thisSceneIndex - 1, thisSceneIndex],
-      outputRange: [width, 0]
+      outputRange: [width, 0],
     });
-
     const scaleWithOpacity = { opacity };
     const screenName = "Search";
-
     if (
       screenName === transitionProps.scene.route.routeName ||
       (prevTransitionProps &&
@@ -65,9 +54,10 @@ const transitionConfig = (transitionProps, prevTransitionProps) => ({
       return scaleWithOpacity;
     }
     return { transform: [{ translateX }] };
-  }
+  },
 });
 
+// ProfileStack working fine it has 2 screens Profile to Update Profile
 const ProfileStack = createStackNavigator(
   {
     Profile: {
@@ -76,54 +66,54 @@ const ProfileStack = createStackNavigator(
         header: (
           <Header white transparent title="Profile" navigation={navigation} />
         ),
-        headerTransparent: true
-      })
+        headerTransparent: true,
+      }),
     },
     UpdateProfile: {
       screen: UpdateProfile,
       navigationOptions: {
-        drawerLabel: () => {}
-      }
-    }
+        drawerLabel: () => {},
+      },
+    },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig
+    transitionConfig,
   }
 );
 
-const SelectingServicesStack = createStackNavigator(
+const MapandServicesStack = createStackNavigator(
   {
-    Services: {
-      screen: ServicesScreen,
+    MapandServices: {
+      screen: MapandServices,
       navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header search title="Select services" navigation={navigation} />
-        )
-      })
+        header: <Header title="Map and Services" navigation={navigation} />,
+      }),
     },
     Service: {
       screen: ServiceScreen,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Service" navigation={navigation} />
-      })
+        header: <Header title="Service" navigation={navigation} />,
+      }),
     },
     TimePick: {
       screen: TimePick,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Appointment" navigation={navigation} />
-      })
+        header: <Header title="Appointment" navigation={navigation} />,
+      }),
     },
     ViewAppointment: {
       screen: ViewAppointment,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="View your Appointment" navigation={navigation} />
-      })
-    }
+        header: (
+          <Header title="View your Appointment" navigation={navigation} />
+        ),
+      }),
+    },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig
+    transitionConfig,
   }
 );
 
@@ -132,28 +122,43 @@ const SettingsStack = createStackNavigator(
     Settings: {
       screen: SettingsScreen,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Settings" navigation={navigation} />
-      })
-    }
+        header: <Header title="Settings" navigation={navigation} />,
+      }),
+    },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig
+    transitionConfig,
   }
 );
 
-const ComponentsStack = createStackNavigator(
+const CartStack = createStackNavigator(
   {
-    Components: {
-      screen: ComponentsScreen,
+    Cart: {
+      screen: Cart,
       navigationOptions: ({ navigation }) => ({
-        header: <Header title="Components" navigation={navigation} />
-      })
-    }
+        header: <Header title="Your Cart" navigation={navigation} />,
+      }),
+    },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig
+    transitionConfig,
+  }
+);
+
+const SlotsAvailingStack = createStackNavigator(
+  {
+    SlotsAvailing: {
+      screen: SlotsAvailing,
+      navigationOptions: ({ navigation }) => ({
+        header: <Header title="Slots History" navigation={navigation} />,
+      }),
+    },
+  },
+  {
+    cardStyle: { backgroundColor: "#EEEEEE" },
+    transitionConfig,
   }
 );
 
@@ -162,9 +167,10 @@ const HomeStack = createStackNavigator(
     Home: {
       screen: HomeScreen,
       navigationOptions: ({ navigation }) => ({
-        header: <Header search tabs title="Home" navigation={navigation} />
-      })
+        header: <Header title="Home" navigation={navigation} />,
+      }),
     },
+
     Landing: {
       screen: Landing,
       navigationOptions: ({ navigation }) => ({
@@ -177,15 +183,15 @@ const HomeStack = createStackNavigator(
             navigation={navigation}
           />
         ),
-        headerTransparent: true
-      })
-    }
+        headerTransparent: true,
+      }),
+    },
   },
   {
     cardStyle: {
-      backgroundColor: "#EEEEEE" //this is the backgroundColor for the app
+      backgroundColor: "#EEEEEE", //this is the backgroundColor for the app
     },
-    transitionConfig
+    transitionConfig,
   }
 );
 
@@ -194,127 +200,97 @@ const AppStack = createDrawerNavigator(
     Onboarding: {
       screen: OnboardingScreen,
       navigationOptions: {
-        drawerLabel: () => {}
-      }
+        drawerLabel: () => {},
+      },
     },
     Home: {
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Home" title="Home" />
-        )
-      }
+        ),
+      },
     },
-    Service: {
-      screen: SelectingServicesStack,
+    MapWithServices: {
+      screen: MapandServicesStack,
       navigationOptions: {
-        drawerLabel: () => {}
-      }
+        drawerLabel: () => {},
+      },
     },
-    Woman: {
-      screen: Landing,
-      navigationOptions: navOpt => ({
+    Cart: {
+      screen: CartStack,
+      navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Landing" title="Woman" />
-        )
-      })
+          <Drawer focused={focused} screen="Cart" title="Customer Cart" />
+        ),
+      }),
     },
-    Man: {
-      screen: Landing,
-      navigationOptions: navOpt => ({
+
+    SlotsAvailing: {
+      screen: SlotsAvailingStack,
+      navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Landing" title="Man" />
-        )
-      })
+          <Drawer
+            focused={focused}
+            screen="SlotsAvailing"
+            title="Slots Availing"
+          />
+        ),
+      }),
     },
-    Kids: {
-      screen: Landing,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Landing" title="Kids" />
-        )
-      })
-    },
-    NewCollection: {
-      screen: Landing,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Pro" title="New Collection" />
-        )
-      })
-    },
+
     Profile: {
       screen: ProfileStack,
-      navigationOptions: navOpt => ({
+      navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Profile" title="Profile" />
-        )
-      })
+        ),
+      }),
     },
-    Settings: {
-      screen: SettingsStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Settings" title="Settings" />
-        )
-      })
-    },
-    Components: {
-      screen: ComponentsStack,
-      navigationOptions: navOpt => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Components" title="Components" />
-        )
-      })
-    },
+
     MenuDivider: {
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: () => (
-          <Block style={{ marginVertical: 8 }}>
+          <Block style={{ marginVertical: 30 }}>
             <Text>{` `}</Text>
           </Block>
-        )
-      }
+        ),
+      },
     },
+
     ResetPassword: {
       screen: ResetPassword,
-      navigationOptions: navOpt => ({
+      navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
           <Drawer
             focused={focused}
             screen="ResetPassword"
             title="Reset Password"
           />
-        )
-      })
+        ),
+      }),
     },
     ForgetPassword: {
       screen: ForgetPassword,
       navigationOptions: {
-        drawerLabel: () => {}
-      }
+        drawerLabel: () => {},
+      },
     },
     Logout: {
       screen: Logout,
-      navigationOptions: navOpt => ({
+      navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Logout" title="Logout" />
-        )
-      })
-    },
-    SignIn: {
-      screen: Login,
-      navigationOptions: {
-        drawerLabel: () => {}
-      }
+        ),
+      }),
     },
     Registration: {
       screen: Registration,
       navigationOptions: {
-        drawerLabel: () => {}
-      }
-    }
+        drawerLabel: () => {},
+      },
+    },
   },
   Menu
 );

@@ -1,29 +1,45 @@
 import React from "react";
-import { DrawerItems } from 'react-navigation';
-import { TouchableWithoutFeedback, ScrollView, StyleSheet, Dimensions, Image } from "react-native";
+import { DrawerItems } from "react-navigation";
+import {
+  TouchableWithoutFeedback,
+  ScrollView,
+  StyleSheet,
+  Dimensions,
+  Image,
+} from "react-native";
 import { Block, Text, theme } from "galio-framework";
 
-import { Icon } from '../components/';
-import { Images, materialTheme } from "../constants/";
+import { Icon } from "../components/";
+import { materialTheme } from "../constants/";
 
-const { width } = Dimensions.get('screen');
+const { width } = Dimensions.get("screen");
 
 const Drawer = (props) => (
-  <Block style={styles.container} forceInset={{ top: 'always', horizontal: 'never' }}>
+  <Block
+    style={styles.container}
+    forceInset={{ top: "always", horizontal: "never" }}
+  >
     <Block flex={0.2} style={styles.header}>
-      <TouchableWithoutFeedback onPress={() => props.navigation.navigate('Profile')} >
+      <TouchableWithoutFeedback
+        onPress={() => props.navigation.navigate("Profile")}
+      >
         <Block style={styles.profile}>
-          <Image source={{ uri: props.profile.avatar}} style={styles.avatar} />
-          <Text h5 color="white">Moazzam</Text>
+          <Image source={{ uri: props.profile.avatar }} style={styles.avatar} />
+          <Text h5 color="white">
+            Moazzam
+          </Text>
         </Block>
       </TouchableWithoutFeedback>
       <Block row>
         {/* <Block middle style={styles.pro}>
           <Text size={16} color="white">customer</Text>
         </Block> */}
-        <Text size={16} muted style={styles.seller}>customer</Text>
+        <Text size={16} muted style={styles.seller}>
+          customer
+        </Text>
         <Text size={16} color={materialTheme.COLORS.WARNING}>
-          {props.profile.rating} <Icon name="shape-star" family="GalioExtra" size={14} />
+          {props.profile.rating}{" "}
+          <Icon name="shape-star" family="GalioExtra" size={14} />
         </Text>
       </Block>
     </Block>
@@ -36,37 +52,36 @@ const Drawer = (props) => (
 );
 
 const profile = {
-  avatar: Images.Profile,
-  name: 'Rachel Brown',
-  type: 'Seller',
-  plan: 'Pro',
-  rating: 4.8
+  name: "Rachel Brown",
+  type: "Seller",
+  plan: "Pro",
+  rating: 4.8,
 };
 
 const Menu = {
-  contentComponent: props => <Drawer {...props} profile={profile} />,
-  drawerBackgroundColor: 'white',
+  contentComponent: (props) => <Drawer {...props} profile={profile} />,
+  drawerBackgroundColor: "white",
   drawerWidth: width * 0.8,
   contentOptions: {
-    activeTintColor: 'white',
-    inactiveTintColor: '#000',
-    activeBackgroundColor: 'transparent',
+    activeTintColor: "white",
+    inactiveTintColor: "#000",
+    activeBackgroundColor: "transparent",
     itemStyle: {
       width: width * 0.75,
-      backgroundColor: 'transparent',
+      backgroundColor: "transparent",
     },
     labelStyle: {
       fontSize: 18,
       marginLeft: 12,
-      fontWeight: 'normal',
+      fontWeight: "normal",
     },
     itemsContainerStyle: {
       paddingVertical: 16,
       paddingHorizonal: 12,
-      justifyContent: 'center',
-      alignContent: 'center',
-      alignItems: 'center',
-      overflow: 'hidden',
+      justifyContent: "center",
+      alignContent: "center",
+      alignItems: "center",
+      overflow: "hidden",
     },
   },
 };
@@ -76,15 +91,15 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   header: {
-    backgroundColor: '#4B1958',
+    backgroundColor: "#4B1958",
     paddingHorizontal: 28,
     paddingBottom: theme.SIZES.BASE,
     paddingTop: theme.SIZES.BASE * 2,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   footer: {
     paddingHorizontal: 28,
-    justifyContent: 'flex-end'
+    justifyContent: "flex-end",
   },
   profile: {
     marginBottom: theme.SIZES.BASE / 2,
@@ -105,7 +120,7 @@ const styles = StyleSheet.create({
   },
   seller: {
     marginRight: 16,
-  }
+  },
 });
 
 export default Menu;

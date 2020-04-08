@@ -1,11 +1,10 @@
-import React from 'react';
-import { ImageBackground, StyleSheet, StatusBar, Dimensions, Platform } from 'react-native';
-import { Block, Button, Text, theme } from 'galio-framework';
+import React from "react";
+import { StyleSheet, StatusBar, Dimensions, Platform } from "react-native";
+import { Block, Button, Text, theme } from "galio-framework";
 
-const { height, width } = Dimensions.get('screen');
+const { height, width } = Dimensions.get("screen");
 
-import materialTheme from '../constants/Theme';
-import Images from '../constants/Images';
+import materialTheme from "../constants/Theme";
 
 export default class Landing extends React.Component {
   render() {
@@ -14,12 +13,7 @@ export default class Landing extends React.Component {
     return (
       <Block flex style={styles.container}>
         <StatusBar barStyle="light-content" />
-        <Block flex center>
-          <ImageBackground
-            source={{  uri: Images.Onboarding }}
-            style={{ height: height, width: width, marginTop: '-55%', zIndex: 1 }}
-          />
-        </Block>
+
         <Block flex space="between" style={styles.padded}>
           <Block flex space="around" style={{ zIndex: 2 }}>
             <Block center>
@@ -27,8 +21,9 @@ export default class Landing extends React.Component {
                 shadowless
                 style={styles.button}
                 color={materialTheme.COLORS.BUTTON_COLOR}
-                onPress={() => navigation.navigate('Home')}>
-               Go to home screen
+                onPress={() => navigation.navigate("Home")}
+              >
+                Go to home screen
               </Button>
             </Block>
           </Block>
@@ -44,7 +39,7 @@ const styles = StyleSheet.create({
   },
   padded: {
     paddingHorizontal: theme.SIZES.BASE * 2,
-    position: 'relative',
+    position: "relative",
     bottom: theme.SIZES.BASE,
   },
   button: {
