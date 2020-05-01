@@ -74,8 +74,7 @@ export default class TimePick extends Component {
 
     await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-        // this.props.navigation.state.params.items._id,
-        "5ea9d9b4400e040017d78eaa",
+        this.props.navigation.state.params.items._id,
       {
         method: "post",
         headers: {
@@ -158,8 +157,7 @@ export default class TimePick extends Component {
       Axios({
         url:
           "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-          // this.props.navigation.state.params.items._id,
-          "5ea9d9b4400e040017d78eaa",
+          this.props.navigation.state.params.items._id,
         method: "POST",
         headers: {
           Accept: "application/json, text/plain, */*",

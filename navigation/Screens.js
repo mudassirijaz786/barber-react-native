@@ -9,7 +9,7 @@ import {
 import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import OnboardingScreen from "../screens/TimePick";
+import OnboardingScreen from "../screens/Login";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import Registration from "../screens/Registration";
@@ -19,6 +19,7 @@ import SettingsScreen from "../screens/Settings";
 import TimePick from "../screens/TimePick";
 import Landing from "../screens/Landing";
 import Logout from "../screens/Logout";
+import Schedules from "../screens/Schedules";
 import UpdateProfile from "../screens/UpdateProfile";
 import ViewAppointment from "../screens/ViewAppointment";
 import Menu from "./Menu";
@@ -222,16 +223,11 @@ const AppStack = createDrawerNavigator(
         ),
       }),
     },
-
-    SlotsAvailing: {
-      screen: SlotsAvailingStack,
+    Schedules: {
+      screen: Schedules,
       navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
-          <Drawer
-            focused={focused}
-            screen="SlotsAvailing"
-            title="Slots Availing"
-          />
+          <Drawer focused={focused} screen="Schedules" title="Schedules" />
         ),
       }),
     },
@@ -241,6 +237,18 @@ const AppStack = createDrawerNavigator(
       navigationOptions: (navOpt) => ({
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Profile" title="Profile" />
+        ),
+      }),
+    },
+    SlotsAvailing: {
+      screen: SlotsAvailingStack,
+      navigationOptions: (navOpt) => ({
+        drawerLabel: ({ focused }) => (
+          <Drawer
+            focused={focused}
+            screen="SlotsAvailing"
+            title="Slots Availing"
+          />
         ),
       }),
     },

@@ -4,7 +4,7 @@ import {
   TouchableOpacity,
   StyleSheet,
   Platform,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { Button, Block, NavBar, Input, Text, theme } from "galio-framework";
 
@@ -92,7 +92,7 @@ class Header extends React.Component {
           key="basket-title"
           navigation={navigation}
           isWhite={white}
-        />
+        />,
       ];
     }
 
@@ -103,12 +103,12 @@ class Header extends React.Component {
             key="filter-home"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Deals":
         return [
           <ChatButton key="chat-categories" navigation={navigation} />,
-          <BasketButton key="basket-categories" navigation={navigation} />
+          <BasketButton key="basket-categories" navigation={navigation} />,
         ];
       case "Categories":
         return [
@@ -121,7 +121,7 @@ class Header extends React.Component {
             key="basket-categories"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Category":
         return [
@@ -134,7 +134,7 @@ class Header extends React.Component {
             key="basket-deals"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Profile":
         return [
@@ -147,7 +147,7 @@ class Header extends React.Component {
             key="basket-deals"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Product":
         return [
@@ -160,7 +160,7 @@ class Header extends React.Component {
             key="basket-product"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Search":
         return [
@@ -173,7 +173,7 @@ class Header extends React.Component {
             key="basket-search"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       case "Settings":
         return [
@@ -186,7 +186,7 @@ class Header extends React.Component {
             key="basket-search"
             navigation={navigation}
             isWhite={white}
-          />
+          />,
         ];
       default:
         break;
@@ -273,11 +273,11 @@ class Header extends React.Component {
       "Categories",
       "Deals",
       "Pro",
-      "Profile"
+      "Profile",
     ].includes(routeName);
     const headerStyles = [
       !noShadow ? styles.shadow : null,
-      transparent ? { backgroundColor: "rgba(0,0,0,0)" } : null
+      transparent ? { backgroundColor: "rgba(0,0,0,0)" } : null,
     ];
 
     return (
@@ -294,7 +294,7 @@ class Header extends React.Component {
           leftIconColor={white ? theme.COLORS.WHITE : theme.COLORS.ICON}
           titleStyle={[
             styles.title,
-            { color: theme.COLORS[white ? "WHITE" : "ICON"] }
+            { color: theme.COLORS[white ? "WHITE" : "ICON"] },
           ]}
           onLeftPress={this.handleLeftPress}
         />
@@ -309,18 +309,18 @@ export default withNavigation(Header);
 const styles = StyleSheet.create({
   button: {
     padding: 12,
-    position: "relative"
+    position: "relative",
   },
   title: {
     width: "100%",
     fontSize: 16,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   navbar: {
     paddingVertical: 0,
     paddingBottom: theme.SIZES.BASE * 1.5,
     paddingTop: iPhoneX ? theme.SIZES.BASE * 4 : theme.SIZES.BASE,
-    zIndex: 5
+    zIndex: 5,
   },
   shadow: {
     backgroundColor: theme.COLORS.WHITE,
@@ -328,7 +328,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowRadius: 6,
     shadowOpacity: 0.2,
-    elevation: 3
+    elevation: 3,
   },
   notify: {
     backgroundColor: materialTheme.COLORS.LABEL,
@@ -337,26 +337,26 @@ const styles = StyleSheet.create({
     width: theme.SIZES.BASE / 2,
     position: "absolute",
     top: 8,
-    right: 8
+    right: 8,
   },
   header: {
-    backgroundColor: theme.COLORS.WHITE
+    backgroundColor: theme.COLORS.WHITE,
   },
   divider: {
     borderRightWidth: 0.3,
-    borderRightColor: theme.COLORS.MUTED
+    borderRightColor: theme.COLORS.MUTED,
   },
   search: {
     height: 48,
     width: width - 32,
     marginHorizontal: 16,
     borderWidth: 1,
-    borderRadius: 3
+    borderRadius: 3,
   },
   tabs: {
     marginBottom: 24,
     marginTop: 10,
-    elevation: 4
+    elevation: 4,
   },
   tab: {
     backgroundColor: theme.COLORS.TRANSPARENT,
@@ -364,10 +364,10 @@ const styles = StyleSheet.create({
     borderRadius: 0,
     borderWidth: 0,
     height: 24,
-    elevation: 0
+    elevation: 0,
   },
   tabTitle: {
     lineHeight: 19,
-    fontWeight: "300"
-  }
+    fontWeight: "300",
+  },
 });

@@ -30,6 +30,15 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : materialTheme.COLORS.MUTED}
           />
         );
+      case "Schedules":
+        return (
+          <Icon
+            size={16}
+            name="schedule"
+            family="material"
+            color={focused ? "white" : materialTheme.COLORS.MUTED}
+          />
+        );
       case "Customer Cart":
         return (
           <Icon
