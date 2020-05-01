@@ -9,7 +9,7 @@ import {
 import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import OnboardingScreen from "../screens/Login";
+import OnboardingScreen from "../screens/Home";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import Registration from "../screens/Registration";
@@ -87,29 +87,31 @@ const MapandServicesStack = createStackNavigator(
   {
     MapandServices: {
       screen: MapandServices,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Map and Services" navigation={navigation} />,
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   header: <Header title="Map and Services" navigation={navigation} />,
+      // }),
     },
     Service: {
       screen: OneServiceScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Service" navigation={navigation} />,
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   // header: <Header title="Service" navigation={navigation} />,
+      //   drawerLabel: () => {},
+      // }),
     },
     TimePick: {
       screen: TimePick,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Appointment" navigation={navigation} />,
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   // header: <Header title="Appointment" navigation={navigation} />,
+      //   drawerLabel: () => {},
+      // }),
     },
     ViewAppointment: {
       screen: ViewAppointment,
-      navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header title="View your Appointment" navigation={navigation} />
-        ),
-      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   header: (
+      //     <Header title="View your Appointment" navigation={navigation} />
+      //   ),
+      // }),
     },
   },
   {
@@ -171,7 +173,12 @@ const HomeStack = createStackNavigator(
         header: <Header title="Home" navigation={navigation} />,
       }),
     },
-
+    MapWithServices: {
+      screen: MapandServicesStack,
+      navigationOptions: {
+        drawerLabel: () => {},
+      },
+    },
     Landing: {
       screen: Landing,
       navigationOptions: ({ navigation }) => ({
@@ -206,12 +213,7 @@ const AppStack = createDrawerNavigator(
         ),
       },
     },
-    MapWithServices: {
-      screen: MapandServicesStack,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
-    },
+
     Cart: {
       screen: CartStack,
       navigationOptions: (navOpt) => ({

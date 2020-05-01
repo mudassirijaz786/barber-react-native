@@ -1,11 +1,21 @@
-import { Text, Block } from "galio-framework";
-
 import React, { Component } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
-import { Avatar, Button, Card, Title, Paragraph } from "react-native-paper";
-import { Icon } from "../components";
-import { Images, materialTheme } from "../constants";
+import { StyleSheet } from "react-native";
+import { Block, theme, Text } from "galio-framework";
 
+import { View, ScrollView, Image } from "react-native";
+import { Avatar, Button, Title, Paragraph } from "react-native-paper";
+import {
+  Container,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Thumbnail,
+  Icon,
+  Left,
+  Body,
+  Right,
+} from "native-base";
 export default class ServiceScreen extends Component {
   constructor(props) {
     super(props);
@@ -28,64 +38,83 @@ export default class ServiceScreen extends Component {
     this.props.navigation.navigate("TimePick", { items: items });
   }
   render() {
-    console.log("RESPONSE IN STATE ONE SERVICE", this.state.items);
     const { items } = this.state;
-    if (this.state.items.length === 0) {
-      return <Text>no serive to display </Text>;
-    } else {
-      return (
-        <ScrollView style={{ flex: 1, boderColor: "indigo" }}>
-          <Block
-            style={{
-              flex: 1,
-              resizeMode: "cover",
-              borderRadius: 5,
-              borderWidth: 1,
-              borderColor: "#dddddd",
-              marginLeft: 18,
-              marginRight: 18,
-            }}
-          >
-            <Card key={items._id}>
-              <Card.Content>
-                <Title>{items.serviceName}</Title>
-                <Paragraph> {items.serviceDescription}</Paragraph>
-                <Paragraph>{items.Salon_id}</Paragraph>
-                <Paragraph>{items.service_time}</Paragraph>
-                <Paragraph>{items.service_category}</Paragraph>
-              </Card.Content>
-              {/* <Card.Cover
-                style={{
-                  flex: 1,
-                  resizeMode: "cover",
-                  borderRadius: 5,
-                  borderWidth: 1,
-                  borderColor: "#dddddd",
-                  marginLeft: 18,
-                  marginRight: 18
-                }}
-                source={{ uri: "https://picsum.photos/700" }}
-              /> */}
-              <Card.Actions>
+    return (
+      <Container>
+        <Title
+          style={{
+            textAlign: "center",
+            color: "indigo",
+            fontSize: 30,
+            marginTop: 30,
+          }}
+        >
+          {items.serviceName}
+        </Title>
+        <Title
+          style={{
+            textAlign: "center",
+            color: "indigo",
+            fontSize: 30,
+            marginTop: 30,
+          }}
+        >
+          Service information
+        </Title>
+        <Content>
+          <Card style={{ flex: 0 }} key={items._id}>
+            <CardItem header>
+              <Left>
+                <Thumbnail
+                  source={{
+                    uri: items.image_url,
+                  }}
+                />
+                <Body>
+                  <Text size={24}>{items.serviceName}</Text>
+                  <Text size={12} color={theme.COLORS.PRIMARY}>
+                    {items.service_category}
+                  </Text>
+                </Body>
+              </Left>
+              <Right>
                 <Button onPress={() => this.onPressed(items)}>
                   Explore it
                 </Button>
-                <Block row>
-                  <Block>
-                    <Text>{items.servicePrice}</Text>
-                  </Block>
-                </Block>
-              </Card.Actions>
-            </Card>
-          </Block>
-        </ScrollView>
-      );
-    }
+              </Right>
+            </CardItem>
+            <CardItem>
+              <Body>
+                <Image
+                  source={{
+                    uri: items.image_url,
+                  }}
+                  style={{
+                    width: 370,
+                    height: 300,
+                    borderRadius: 10,
+                    flex: 1,
+                  }}
+                />
+                <Text muted style={{ marginTop: 20 }}>
+                  {items.serviceDescription}
+                </Text>
+              </Body>
+            </CardItem>
+            <CardItem footer>
+              <Left>
+                <Text>{items.servicePrice}</Text>
+              </Left>
+              <Right>
+                <Text>{items._id}</Text>
+              </Right>
+            </CardItem>
+          </Card>
+          <Title style={{ textAlign: "center", color: "green", fontSize: 30 }}>
+            People reviews
+          </Title>
+        </Content>
+      </Container>
+    );
   }
 }
-
-const styles = StyleSheet.create({
-  input: {
-    margin: 10,
-  },
-});
