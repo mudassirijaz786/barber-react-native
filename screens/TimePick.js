@@ -7,7 +7,7 @@ import {
   Button,
   Text,
   Picker,
-  AsyncStorage
+  AsyncStorage,
 } from "react-native";
 import RNSchedule from "rnschedule";
 import { Avatar, Card, Title, Paragraph, Image } from "react-native-paper";
@@ -20,8 +20,8 @@ const data = [
     subtitle: "With Harry",
     start: new Date(2020, 29, 2, 13, 20),
     end: new Date(2020, 29, 2, 14, 20),
-    color: "#390099"
-  }
+    color: "#390099",
+  },
 ];
 
 export default class TimePick extends Component {
@@ -40,7 +40,7 @@ export default class TimePick extends Component {
       "09",
       "10",
       "11",
-      "12"
+      "12",
     ],
     minute: ["15", "30", "45"],
     slot: ["am", "pm"],
@@ -50,7 +50,7 @@ export default class TimePick extends Component {
     selectslot: "",
     stating_time: "",
     booking_date: "",
-    itemId: this.props.navigation.state.params.items._id
+    itemId: this.props.navigation.state.params.items._id,
   };
 
   fun = () => {
@@ -62,7 +62,7 @@ export default class TimePick extends Component {
     this.setState({ c: f });
     console.log("DATE", f);
   };
-  datePick = date => {
+  datePick = (date) => {
     this.setState({ booking_date: date });
     console.log("DATE", date);
   };
@@ -78,22 +78,22 @@ export default class TimePick extends Component {
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
-          "x-auth-token": value
+          "x-auth-token": value,
         },
-        body: JSON.stringify(JsonObj)
+        body: JSON.stringify(JsonObj),
       }
     )
-      .then(response => {
+      .then((response) => {
         showMessage({
           message: "Appointment is booked message",
-          type: "info"
+          type: "info",
         });
         console.log("RESPONSE APPOINTMENT", response);
       })
-      .catch(err => {
+      .catch((err) => {
         showMessage({
           message: "Appoitnment is not booked",
-          type: "danger"
+          type: "danger",
         });
         console.log(err);
       });
@@ -160,11 +160,11 @@ export default class TimePick extends Component {
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
-          "x-auth-token": value
+          "x-auth-token": value,
         },
-        data: obj
+        data: obj,
       })
-        .then(response => {
+        .then((response) => {
           console.log("RESPONSE OBJECT", response.data);
           // console.log("value of token", value);
           // List_of_services = { ...this.state.List_of_services0 };
@@ -172,18 +172,18 @@ export default class TimePick extends Component {
           // this.setState({ List_of_services: response.data });
           showMessage({
             message: "Appointment is booked",
-            type: "success"
+            type: "success",
           });
           this.props.navigation.navigate("Home");
         })
 
         // console.log("IN COMPONENT DID MOUNT", this.state.name);
 
-        .catch(error => {
+        .catch((error) => {
           // console.log(error);
           showMessage({
             message: "Appoitnment is not booked",
-            type: "danger"
+            type: "danger",
           });
           // alert(error);
 
@@ -221,7 +221,7 @@ export default class TimePick extends Component {
   prit = () => {
     console.log("stating_time: ", this.state.stating_time);
   };
-  concatDate = e => {
+  concatDate = (e) => {
     console.log("concatDAte ");
     console.log(this.state.selecthour);
     console.log(this.state.slectmin);
@@ -252,7 +252,7 @@ export default class TimePick extends Component {
           placeholder="select date"
           format="YYYY-MM-DD"
           // minDate="2016-05-01"
-          maxDate="2020-03-25"
+          // maxDate="2020-03-25"
           confirmBtnText="Confirm"
           minTime="09-30"
           maxTime="13-20"
@@ -262,14 +262,14 @@ export default class TimePick extends Component {
               position: "absolute",
               left: 0,
               top: 4,
-              marginLeft: 0
+              marginLeft: 0,
             },
             dateInput: {
-              marginLeft: 36
-            }
+              marginLeft: 36,
+            },
             // ... You can check the source to find the other keys.
           }}
-          onDateChange={date => {
+          onDateChange={(date) => {
             this.datePick(date);
           }}
           minuteInterval={8}
@@ -283,7 +283,7 @@ export default class TimePick extends Component {
             this.setState({ selecthour: itemValue })
           }
         >
-          {this.state.hours.map(option => (
+          {this.state.hours.map((option) => (
             <Picker.Item key={option} label={option} value={option} />
           ))}
         </Picker>
@@ -294,7 +294,7 @@ export default class TimePick extends Component {
             this.setState({ slectmin: itemValue })
           }
         >
-          {this.state.minute.map(option => (
+          {this.state.minute.map((option) => (
             <Picker.Item key={option} label={option} value={option} />
           ))}
         </Picker>
@@ -305,7 +305,7 @@ export default class TimePick extends Component {
             this.setState({ selectslot: itemValue })
           }
         >
-          {this.state.slot.map(option => (
+          {this.state.slot.map((option) => (
             <Picker.Item key={option} label={option} value={option} />
           ))}
         </Picker>
@@ -330,9 +330,9 @@ export default class TimePick extends Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 200
+    marginTop: 200,
   },
   input: {
-    margin: 10
-  }
+    margin: 10,
+  },
 });

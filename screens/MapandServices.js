@@ -14,9 +14,9 @@ export default class MapandServices extends Component {
     const { items } = this.state;
     return (
       <View style={styles.container}>
-        {/* <MapContainer items={items} /> */}
+        <MapContainer items={items} />
 
-        <ServicesScreen items={items} />
+        <ServicesScreen items={items} navigation={this.props.navigation} />
       </View>
     );
   }

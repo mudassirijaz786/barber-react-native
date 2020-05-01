@@ -3,12 +3,13 @@ import { Easing, Animated } from "react-native";
 import {
   createStackNavigator,
   createDrawerNavigator,
+  createSwitchNavigator,
   createAppContainer,
 } from "react-navigation";
 import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import OnboardingScreen from "../screens/ServiceScreen";
+import OnboardingScreen from "../screens/Login";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import Registration from "../screens/Registration";
@@ -23,7 +24,7 @@ import ViewAppointment from "../screens/ViewAppointment";
 import Menu from "./Menu";
 import Header from "../components/Header";
 import { Drawer } from "../components/";
-import ServiceScreen from "../screens/ServiceScreen";
+import OneServiceScreen from "../screens/OneService";
 import SlotsAvailing from "../screens/SlotsAvailing";
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
@@ -91,7 +92,7 @@ const MapandServicesStack = createStackNavigator(
       }),
     },
     Service: {
-      screen: ServiceScreen,
+      screen: OneServiceScreen,
       navigationOptions: ({ navigation }) => ({
         header: <Header title="Service" navigation={navigation} />,
       }),
@@ -197,12 +198,6 @@ const HomeStack = createStackNavigator(
 
 const AppStack = createDrawerNavigator(
   {
-    Onboarding: {
-      screen: OnboardingScreen,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
-    },
     Home: {
       screen: HomeStack,
       navigationOptions: {
@@ -271,12 +266,7 @@ const AppStack = createDrawerNavigator(
         ),
       }),
     },
-    ForgetPassword: {
-      screen: ForgetPassword,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
-    },
+
     Logout: {
       screen: Logout,
       navigationOptions: (navOpt) => ({
@@ -285,15 +275,33 @@ const AppStack = createDrawerNavigator(
         ),
       }),
     },
+  },
+  Menu
+);
+
+const AppNavigator = createSwitchNavigator(
+  {
+    App: AppStack,
+    Login: {
+      screen: OnboardingScreen,
+    },
     Registration: {
       screen: Registration,
       navigationOptions: {
         drawerLabel: () => {},
       },
     },
+    ForgetPassword: {
+      screen: ForgetPassword,
+      navigationOptions: {
+        drawerLabel: () => {},
+      },
+    },
   },
-  Menu
+  {
+    initialRouteName: "Login",
+  }
 );
 
-const AppContainer = createAppContainer(AppStack);
+const AppContainer = createAppContainer(AppNavigator);
 export default AppContainer;
