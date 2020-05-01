@@ -4,25 +4,27 @@ import {
   Alert,
   StyleSheet,
   View,
-  Button,
   Text,
   Picker,
   AsyncStorage,
 } from "react-native";
-import RNSchedule from "rnschedule";
-import { Avatar, Card, Title, Paragraph, Image } from "react-native-paper";
+import {
+  Container,
+  Header,
+  Content,
+  Card,
+  CardItem,
+  Thumbnail,
+  Icon,
+  Left,
+  Body,
+  Right,
+} from "native-base";
+import { theme } from "galio-framework";
+
+import { Title, Paragraph, Image, Button } from "react-native-paper";
 import Axios from "axios";
 import { showMessage, hideMessage } from "react-native-flash-message";
-
-const data = [
-  {
-    title: "Lunch Appointment",
-    subtitle: "With Harry",
-    start: new Date(2020, 29, 2, 13, 20),
-    end: new Date(2020, 29, 2, 14, 20),
-    color: "#390099",
-  },
-];
 
 export default class TimePick extends Component {
   state = {
@@ -50,7 +52,7 @@ export default class TimePick extends Component {
     selectslot: "",
     stating_time: "",
     booking_date: "",
-    itemId: this.props.navigation.state.params.items._id,
+    // itemId: this.props.navigation.state.params.items._id,
   };
 
   fun = () => {
@@ -72,7 +74,8 @@ export default class TimePick extends Component {
 
     await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-        this.props.navigation.state.params.items._id,
+        // this.props.navigation.state.params.items._id,
+        "5ea9d9b4400e040017d78eaa",
       {
         method: "post",
         headers: {
@@ -155,7 +158,8 @@ export default class TimePick extends Component {
       Axios({
         url:
           "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-          this.props.navigation.state.params.items._id,
+          // this.props.navigation.state.params.items._id,
+          "5ea9d9b4400e040017d78eaa",
         method: "POST",
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -242,88 +246,127 @@ export default class TimePick extends Component {
 
     console.log(date);
     return (
-      <View style={{ marginTop: 30 }}>
-        <Text style={{ textAlign: "center" }}>Please select date</Text>
-        <Text>Service Id: {this.props.navigation.state.params.items._id}</Text>
-        <DatePicker
-          style={{ width: 200, marginLeft: 80 }}
-          date={this.state.date}
-          mode="date"
-          placeholder="select date"
-          format="YYYY-MM-DD"
-          // minDate="2016-05-01"
-          // maxDate="2020-03-25"
-          confirmBtnText="Confirm"
-          minTime="09-30"
-          maxTime="13-20"
-          cancelBtnText="Cancel"
-          customStyles={{
-            dateIcon: {
-              position: "absolute",
-              left: 0,
-              top: 4,
-              marginLeft: 0,
-            },
-            dateInput: {
-              marginLeft: 36,
-            },
-            // ... You can check the source to find the other keys.
+      <Container>
+        {/**        <Text>Service Id: {this.props.navigation.state.params.items._id}</Text>
+         */}
+        <Title
+          style={{
+            textAlign: "center",
+            color: "indigo",
+            fontSize: 30,
+            marginTop: 30,
           }}
-          onDateChange={(date) => {
-            this.datePick(date);
-          }}
-          minuteInterval={8}
-        />
-        {/* <RNSchedule dataArray={data} onEventPress={appt => console.log(appt)} /> */}
+        >
+          Book this service
+        </Title>
+        <Card style={{ flex: 0 }}>
+          <CardItem bordered>
+            <Left>
+              <Body>
+                <DatePicker
+                  style={{ width: 200, marginLeft: 80 }}
+                  date={this.state.booking_date}
+                  mode="date"
+                  placeholder="select date"
+                  format="YYYY-MM-DD"
+                  // minDate="2016-05-01"
+                  // maxDate="2020-03-25"
+                  confirmBtnText="Confirm"
+                  // minTime="09-30"
+                  // maxTime="13-20"
+                  cancelBtnText="Cancel"
+                  customStyles={{
+                    dateIcon: {
+                      position: "absolute",
+                      left: 0,
+                      top: 4,
+                      marginLeft: 0,
+                    },
+                    dateInput: {
+                      marginLeft: 36,
+                    },
+                    // ... You can check the source to find the other keys.
+                  }}
+                  onDateChange={(date) => {
+                    this.datePick(date);
+                  }}
+                  minuteInterval={8}
+                />
+              </Body>
+            </Left>
+          </CardItem>
 
-        <Picker
-          selectedValue={this.state.selecthour}
-          style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ selecthour: itemValue })
-          }
-        >
-          {this.state.hours.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
-        <Picker
-          selectedValue={this.state.slectmin}
-          style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ slectmin: itemValue })
-          }
-        >
-          {this.state.minute.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
-        <Picker
-          selectedValue={this.state.selectslot}
-          style={{ height: 50, width: 100 }}
-          onValueChange={(itemValue, itemIndex) =>
-            this.setState({ selectslot: itemValue })
-          }
-        >
-          {this.state.slot.map((option) => (
-            <Picker.Item key={option} label={option} value={option} />
-          ))}
-        </Picker>
-        {/* <Button title="ok" color="#f194ff" onPress={this.okTime} /> */}
-        <Button title="Press me" color="#f194ff" onPress={this.handleSubmit} />
-        {/* <Button title="See states" color="#f194ff" onPress={this.prit} /> */}
-        <Button
-          title="Get Token"
-          color="#f194ff"
-          onPress={this.getToken}
-        ></Button>
-        <Card style={{ marginTop: 30 }}>
-          <Card.Content>
-            <Title>Your selected datetime</Title>
-            <Paragraph> {this.state.date}</Paragraph>
-          </Card.Content>
+          <CardItem bordered>
+            <Left>
+              <Text> Select Hour</Text>
+            </Left>
+            <Right>
+              <Picker
+                selectedValue={this.state.selecthour}
+                style={{ height: 50, width: 100 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ selecthour: itemValue })
+                }
+              >
+                {this.state.hours.map((option) => (
+                  <Picker.Item key={option} label={option} value={option} />
+                ))}
+              </Picker>
+            </Right>
+          </CardItem>
+
+          <CardItem bordered>
+            <Left>
+              <Text> Select min</Text>
+            </Left>
+            <Right>
+              <Picker
+                selectedValue={this.state.slectmin}
+                style={{ height: 50, width: 100 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ slectmin: itemValue })
+                }
+              >
+                {this.state.minute.map((option) => (
+                  <Picker.Item key={option} label={option} value={option} />
+                ))}
+              </Picker>
+            </Right>
+          </CardItem>
+
+          <CardItem footer>
+            <Left>
+              <Text> Select mode</Text>
+            </Left>
+            <Right>
+              <Picker
+                selectedValue={this.state.selectslot}
+                style={{ height: 50, width: 100 }}
+                onValueChange={(itemValue, itemIndex) =>
+                  this.setState({ selectslot: itemValue })
+                }
+              >
+                {this.state.slot.map((option) => (
+                  <Picker.Item key={option} label={option} value={option} />
+                ))}
+              </Picker>
+            </Right>
+          </CardItem>
         </Card>
-      </View>
+
+        {/* <RNSchedule dataArray={data} onEventPress={appt => console.log(appt)} /> */}
+        <Button
+          style={styles.button}
+          mode="outlined"
+          uppercase={false}
+          contentStyle={{ height: 30 }}
+          // onPress={() => this.onFilter(this.state.List_of_salons)}
+          onPress={this.handleSubmit}
+        >
+          Book it
+        </Button>
+        {/* <Button title="ok" color="#f194ff" onPress={this.okTime} /> */}
+      </Container>
     );
   }
 }
@@ -334,5 +377,9 @@ const styles = StyleSheet.create({
   },
   input: {
     margin: 10,
+  },
+  button: {
+    borderRadius: 40,
+    marginLeft: 10,
   },
 });
