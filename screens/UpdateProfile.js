@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { StyleSheet, Dimensions, View } from "react-native";
+import { StyleSheet, Dimensions, View, AsyncStorage } from "react-native";
 import { Text, theme } from "galio-framework";
 import {
   TextInput,
@@ -10,6 +10,7 @@ import {
 import * as yup from "yup";
 import { Formik } from "formik";
 const { width } = Dimensions.get("screen");
+import { showMessage } from "react-native-flash-message";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
 
@@ -18,40 +19,35 @@ export default class UpdateProfile extends React.Component {
     super(props);
     this.state = {
       name: "dasdasd",
-      email: "dasdasdasd@gmail.com",
-      phone: "23423213123",
+      email: "ijazmudassir786@gmail.com",
+      phnnbr: "23423213123",
       errorMsg: "",
     };
   }
   async loginCall(JsonObj) {
+    const value = await AsyncStorage.getItem("x-auth-token");
+
     const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserLogin",
+      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/",
       {
-        method: "post",
+        method: "put",
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
+          "x-auth-token": value,
         },
         body: JSON.stringify(JsonObj),
       }
     );
     if (response.status === 200) {
-      <ActivityIndicator animating={true} color={Colors.blue800} />;
-      this.props.navigation.navigate("Home");
-      console.log("RESPONSE", response.headers.map["x-auth-token"]);
-      await AsyncStorage.setItem(
-        "x-auth-token",
-        response.headers.map["x-auth-token"]
-      )
-        .then((res) => {
-          console.log("Login token set");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      showMessage({
+        message: "Profile updated successfully",
+        type: "success",
+      });
     } else {
-      this.setState({
-        errorMsg: "Invalid username or password",
+      showMessage({
+        message: "Profile could not be updated",
+        type: "danger",
       });
     }
   }
@@ -59,10 +55,9 @@ export default class UpdateProfile extends React.Component {
   async handleSubmit(values) {
     if (values) {
       var obj = {};
-      console.log("EMAIL: ", values.email);
-      console.log("PASSWORD: ", values.password);
+      obj["name"] = values.name;
       obj["email"] = values.email;
-      obj["password"] = values.password;
+      obj["phnnbr"] = values.phone;
       this.loginCall(obj);
     }
   }
@@ -83,9 +78,7 @@ export default class UpdateProfile extends React.Component {
           validationSchema={yup.object().shape({
             email: yup.string().email().required(),
             name: yup.string().required().min(3),
-            phone: yup
-              .string()
-              .matches(phoneRegExp, "Phone number is not valid"),
+            phone: yup.string().required().min(8),
           })}
         >
           {({
@@ -103,41 +96,43 @@ export default class UpdateProfile extends React.Component {
                 value={values.name}
                 onChangeText={handleChange("name")}
                 onBlur={() => setFieldTouched("name")}
+                //background color ?
+
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
-                mode="flat"
                 placeholder="please enter your name"
+                mode="flat"
               />
               {touched.name && errors.name && (
                 <Text style={{ fontSize: 12, color: "red" }}>
                   {errors.name}
                 </Text>
               )}
-
               <TextInput
                 label="email"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
+                //background color ?
+                placeholder="please enter your email"
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
-                placeholder="please enter your email"
               />
               {touched.email && errors.email && (
                 <Text style={{ fontSize: 12, color: "red" }}>
                   {errors.email}
                 </Text>
               )}
-
               <TextInput
                 label="phone"
                 value={values.phone}
                 onChangeText={handleChange("phone")}
                 onBlur={() => setFieldTouched("phone")}
                 formikKey="phone"
-                keyboardType={"phone-pad"}
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
-                mode="flat"
+                //background color ?
                 placeholder="please enter your phone"
+                style={{ marginTop: 15, backgroundColor: "transparent" }}
+                keyboardType={"phone-pad"}
+                mode="flat"
               />
               {touched.phone && errors.phone && (
                 <Text style={{ fontSize: 12, color: "red" }}>
@@ -145,16 +140,15 @@ export default class UpdateProfile extends React.Component {
                 </Text>
               )}
 
-              <Text style={{ color: "red" }}>{this.state.errorMsg}</Text>
-
               <Button
                 style={styles.button}
-                icon="login"
-                disabled={!isValid}
+                icon="account-box"
+                disabled={!isValid || this.state.isLoading}
                 mode="outlined"
-                uppercase={false}
                 onPress={handleSubmit}
+                loading={this.state.isLoading}
                 contentStyle={{ height: 50 }}
+                uppercase={false}
               >
                 Update Profile
               </Button>

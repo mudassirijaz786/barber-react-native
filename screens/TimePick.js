@@ -102,10 +102,7 @@ export default class TimePick extends Component {
   }
 
   componentDidMount() {
-    console.log(
-      "TOKEN IN TIME COMPONENT",
-      AsyncStorage.getItem("x-auth-token")
-    );
+    console.log("Service id", this.props.navigation.state.params.items._id);
   }
 
   async getToken() {
@@ -153,7 +150,6 @@ export default class TimePick extends Component {
       //   // Error retrieving data
       // }
       const value = await AsyncStorage.getItem("x-auth-token");
-
       Axios({
         url:
           "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
@@ -176,13 +172,13 @@ export default class TimePick extends Component {
             message: "Appointment is booked",
             type: "success",
           });
-          this.props.navigation.navigate("Home");
+          this.props.navigation.navigate("SlotsAvailing");
         })
 
         // console.log("IN COMPONENT DID MOUNT", this.state.name);
 
         .catch((error) => {
-          // console.log(error);
+          console.log(error);
           showMessage({
             message: "Appoitnment is not booked",
             type: "danger",

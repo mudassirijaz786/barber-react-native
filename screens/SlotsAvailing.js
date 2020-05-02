@@ -9,24 +9,56 @@ import {
   ScrollView,
   AsyncStorage,
 } from "react-native";
-import { Block } from "galio-framework";
+import {
+  Left,
+  Right,
+  // Title,
+  Card,
+  Icon,
+  Content,
+  Thumbnail,
+  Grid,
+  Col,
+  Header,
+  CheczkBox,
+  Body,
+  Container,
+  CardItem,
+} from "native-base";
+import { SearchBar } from "react-native-elements";
+
+import { Block, theme } from "galio-framework";
 import { showMessage, hideMessage } from "react-native-flash-message";
 import decode from "jwt-decode";
 import moment from "moment";
 import RNSchedule from "rnschedule";
 import {
   Avatar,
-  Card,
   Paragraph,
   Image,
   Button,
   Title,
+  ActivityIndicator,
 } from "react-native-paper";
 import Axios from "axios";
+
+res = [
+  { service_time: "ewewqe", date: "e32231" },
+  { service_time: "ewewqe", date: "e32231" },
+  { service_time: "ewewqe", date: "e32231" },
+];
 export default class SlotsAvailing extends Component {
   constructor(props) {
     super(props);
-    this.state = { date: "", responseData: [123] };
+    this.state = {
+      date: "",
+      isLoading: false,
+
+      responseData: {},
+      search: "",
+      arrayholder: {},
+      noHistory: "",
+    };
   }
 
   datePick = (date) => {
@@ -34,6 +66,8 @@ export default class SlotsAvailing extends Component {
   };
 
   async componentDidMount() {
+    this.setState({ isLoading: true });
+
     var date = moment().utcOffset("PST").format("YYYY-MM-DD hh:mm:ss a");
     this.setState({
       date,
@@ -41,8 +75,8 @@ export default class SlotsAvailing extends Component {
 
     value = await AsyncStorage.getItem("x-auth-token");
 
-    decodedValue = decode(value);
-    console.log("decoded value of token in home screen", decodedValue.id);
+    // decodedValue = decode(value);
+    // console.log("decoded value of token in home screen", decodedValue.id);
 
     var obj = {};
 
@@ -50,8 +84,8 @@ export default class SlotsAvailing extends Component {
 
     // obj["current_date"] = "123";
 
-    console.log("obj before post request", obj);
-    Axios({
+    // console.log("obj before post request", obj);
+    const request = await Axios({
       url:
         "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/customer/schedule",
 
@@ -63,28 +97,31 @@ export default class SlotsAvailing extends Component {
       },
       data: obj,
     })
+      // if (response.status === 400) {
+      //   this.setState({ noHistory: "No appointment today", isLoading: false });
+      //   console.log("404", noHistory);
+      // } else {
+      //   this.setState({ responseData: response.data });
+      //   // console.log("response", response.data);
+      // }
       .then((response) => {
-        console.log("RESPONSE OBJECT", response.data);
-        // console.log("value of token", value);
-        // List_of_services = { ...this.state.List_of_services0 };
-        // List_of_services = response;
+        // if (typeof response.data === "string") {
+        //   this.setState({
+        //     responseData: "yo dont have any service which is going to avail",
+        //   });
+        // } else {
         this.setState({ responseData: response.data });
 
-        // this.props.navigation.navigate("Home");
+        console.log("response", response);
+
+        // }
       })
 
-      // console.log("IN COMPONENT DID MOUNT", this.state.name);
-
       .catch((error) => {
-        // console.log(error);
-        showMessage({
-          message: { error },
-          type: "danger",
-        });
-        // alert(error);
-
-        // console.log("url", url);
+        console.log("error", error);
+        this.setState({ noHistory: "No appointment" });
       });
+    this.setState({ isLoading: false });
   }
 
   getTimeAndDate() {
@@ -93,58 +130,106 @@ export default class SlotsAvailing extends Component {
   }
 
   render() {
-    console.log("responseData", this.state.responseData);
+    const { isLoading, responseData, noHistory } = this.state;
+    console.log("responseData", responseData);
+    console.log("noHistory", noHistory);
 
-    if (this.state.responseData.length == 0) {
-      return <Text>You have no serive to display </Text>;
-    }
     return (
-      <Block
-        style={{
-          flex: 1,
-          resizeMode: "cover",
-          borderRadius: 5,
-          borderWidth: 1,
-          borderColor: "#dddddd",
-          marginLeft: 18,
-          marginRight: 18,
-        }}
-      >
-        <Card key={this.state.responseData._id}>
-          <Card.Title
-            title={this.state.responseData.Salon_id}
-            subtitle={this.state.responseData.service_id}
-          />
-          <Card.Content>
-            <Title>{this.state.responseData.stating_time}</Title>
-            <Paragraph>{this.state.responseData.ending_time}</Paragraph>
-          </Card.Content>
-        </Card>
-      </Block>
-    );
+      <Container>
+        <Title
+          style={{
+            textAlign: "center",
+            color: "indigo",
+            fontSize: 30,
+            marginTop: 5,
+            marginBottom: 5,
+          }}
+        >
+          Availible services
+        </Title>
 
-    // return this.state.responseData.map(items => {
-    //   return (
-    //     <Block
-    //       style={{
-    //         flex: 1,
-    //         resizeMode: "cover",
-    //         borderRadius: 5,
-    //         borderWidth: 1,
-    //         borderColor: "#dddddd",
-    //         marginLeft: 18,
-    //         marginRight: 18
-    //       }}
-    //     >
-    //       <Card key={items._id}>
-    //         <Card.Title title={items.Salon_id} subtitle={items.service_id} />
-    //         <Card.Content>
-    //           <Title>{items.stating_time}</Title>
-    //           <Paragraph>{items.ending_time}</Paragraph>
-    //         </Card.Content>
-    //       </Card>
-    //     </Block>
-    //   );
-    // });
+        {isLoading && (
+          <ActivityIndicator
+            animating={this.state.isLoading}
+            size="large"
+            color="#0000ff"
+            style={{ marginTop: 350 }}
+          />
+        )}
+        {Object.keys(responseData).length === 0 && (
+          <Title
+            style={{
+              textAlign: "center",
+              color: "red",
+              fontSize: 30,
+              marginTop: 50,
+            }}
+          >
+            {noHistory}
+          </Title>
+        )}
+        <Content style={{ flex: 1 }}>
+          <View style={{ boderColor: "indigo" }}>
+            {Object.keys(responseData).length !== 0 && (
+              <Card style={{ alignItems: "center" }} elevation={8}>
+                <CardItem header>
+                  <Left>
+                    <View style={{ alignItems: "flex-start", top: -10 }}>
+                      <Title>{responseData.Salon_id}</Title>
+                      <Text style={{ color: "indigo", fontSize: 24 }}>
+                        {responseData.service_id}
+                      </Text>
+                      <View
+                        style={{
+                          alignItems: "flex-end",
+                          marginTop: 20,
+                        }}
+                      >
+                        <Text muted>
+                          Starting Time: {responseData.stating_time}
+                        </Text>
+                        <Text muted>
+                          Ending Time: {responseData.ending_time}
+                        </Text>
+                      </View>
+                    </View>
+                  </Left>
+                </CardItem>
+                {/* <CardItem cardBody>
+                </CardItem> */}
+                <CardItem footer>
+                  <Left>
+                    <View
+                      style={{
+                        alignItems: "flex-start",
+                        top: -10,
+                        marginLeft: 0,
+                      }}
+                    >
+                      <Text color={theme.COLORS.PRIMARY}>
+                        {responseData.booking_date}
+                      </Text>
+                      <Text>Customer ID: {responseData.customer_id}</Text>
+                    </View>
+                  </Left>
+                  <Right>
+                    <Text style={{ color: "green", fontSize: 30 }}>
+                      {responseData.service_status}
+                    </Text>
+                  </Right>
+                </CardItem>
+              </Card>
+            )}
+          </View>
+        </Content>
+      </Container>
+    );
   }
 }
+
+const styles = StyleSheet.create({
+  button: {
+    borderRadius: 40,
+    marginLeft: 10,
+  },
+});
