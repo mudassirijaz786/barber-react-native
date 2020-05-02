@@ -1,6 +1,6 @@
 import * as yup from "yup";
 import { Formik } from "formik";
-import React, { Component, Fragment, AsyncStorage } from "react";
+import React, { Component, Fragment } from "react";
 import { StyleSheet, View } from "react-native";
 import {
   TextInput,
@@ -11,12 +11,14 @@ import {
 import { Block, theme, Text } from "galio-framework";
 import { showMessage } from "react-native-flash-message";
 
-export default class ForgetPassword extends Component {
+export default class TokenSignup extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "ijazmudassir786@gmail.com",
+      token: "69775",
       errorMsg: "",
+      //   newpassword: "123123",
+      //   confirmpassword: "123123",
       isLoading: false,
     };
   }
@@ -25,24 +27,25 @@ export default class ForgetPassword extends Component {
     this.setState({ isLoading: true });
 
     const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/forgot/password",
+      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/verify_code/and/update_password",
       {
         method: "post",
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
+          // "x-auth-token": token,
         },
         body: JSON.stringify(JsonObj),
       }
     );
     if (response.status === 200) {
       this.setState({ isLoading: false });
+
       showMessage({
-        message: "Email sent successfully",
+        message: "Password reset successfully",
         type: "success",
       });
-
-      this.props.navigation.navigate("TokenForgetPassword");
+      this.props.navigation.navigate("Login");
     } else {
       this.setState({ isLoading: false });
 
@@ -55,7 +58,9 @@ export default class ForgetPassword extends Component {
   async handleSubmit(values) {
     if (values) {
       var obj = {};
-      obj["email"] = values.email;
+      obj["token"] = values.token;
+      //   obj["newpassword"] = values.newpassword;
+      //   obj["confirmpassword"] = values.confirmpassword;
       // this.setState({ isLoading: true });
 
       this.loginCall(obj);
@@ -63,7 +68,6 @@ export default class ForgetPassword extends Component {
     }
   }
   render() {
-    console.log(this.state.isLoading);
     return (
       <View style={styles.container}>
         {this.state.isLoading ? (
@@ -78,15 +82,23 @@ export default class ForgetPassword extends Component {
             size={28}
             style={{ paddingBottom: 8, marginLeft: 120 }}
           >
-            Forget password
+            Signup Token screen
           </Title>
         )}
-
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
-            email: yup.string().email().required(),
+            token: yup.string().required(),
+            // newpassword: yup.string().min(3).required(),
+            // confirmpassword: yup
+            //   .string()
+            //   .required()
+            //   .test("passwords-match", "Passwords must match", function (
+            //     value
+            //   ) {
+            //     return this.parent.newpassword === value;
+            //   }),
           })}
         >
           {({
@@ -100,19 +112,57 @@ export default class ForgetPassword extends Component {
           }) => (
             <Fragment>
               <TextInput
-                label="email"
-                value={values.email}
-                onChangeText={handleChange("email")}
-                onBlur={() => setFieldTouched("email")}
-                placeholder="please enter your email"
+                label="token"
+                value={values.token}
+                onChangeText={handleChange("token")}
+                onBlur={() => setFieldTouched("token")}
+                placeholder="please enter your token"
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
+                keyboardType={"phone-pad"}
               />
-              {touched.email && errors.email && (
+              {touched.token && errors.token && (
                 <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.email}
+                  {errors.token}
                 </Text>
               )}
+              {/*
+            
+            
+              <TextInput
+                label="newpassword"
+                value={values.newpassword}
+                style={{ marginTop: 15, backgroundColor: "transparent" }}
+                onChangeText={handleChange("newpassword")}
+                onBlur={() => setFieldTouched("newpassword")}
+                placeholder="please enter your new password"
+                mode="flat"
+                secureTextEntry={true}
+              />
+              {touched.password && errors.password && (
+                <Text style={{ fontSize: 12, color: "red" }}>
+                  {errors.password}
+                </Text>
+              )}
+              <TextInput
+                label="confirmPassword"
+                value={values.confirmpassword}
+                onChangeText={handleChange("confirmpassword")}
+                onBlur={() => setFieldTouched("confirmpassword")}
+                style={{ marginTop: 15, backgroundColor: "transparent" }}
+                placeholder="please confirm your new password"
+                mode="flat"
+                secureTextEntry={true}
+              />
+              {touched.confirmpassword && errors.confirmpassword && (
+                <Text style={{ fontSize: 12, color: "red" }}>
+                  {errors.confirmpassword}
+                </Text>
+              )}
+            
+            
+            
+            */}
               <Button
                 style={{ marginTop: 30, borderRadius: 40 }}
                 icon="cached"
@@ -160,6 +210,27 @@ export default class ForgetPassword extends Component {
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
+                </Text>
+              </Block>
+
+              <Block
+                row
+                style={{
+                  paddingVertical: 3,
+                  alignItems: "baseline",
+                  marginTop: 2,
+                  marginLeft: 100,
+                }}
+              >
+                <Text size={16}>Back to forget password screen? </Text>
+                <Text
+                  size={16}
+                  color={theme.COLORS.PRIMARY}
+                  onPress={() =>
+                    this.props.navigation.navigate("ForgetPassword")
+                  }
+                >
+                  back
                 </Text>
               </Block>
             </Fragment>

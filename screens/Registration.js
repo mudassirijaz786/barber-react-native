@@ -38,7 +38,7 @@ export default class Registration extends Component {
       }
     );
     if (response.status === 200) {
-      this.props.navigation.navigate("Home");
+      this.props.navigation.navigate("TokenSignup");
       console.log("RESPONSE", response.headers.map["x-auth-token"]);
       await AsyncStorage.setItem(
         "x-auth-token",
@@ -200,13 +200,32 @@ export default class Registration extends Component {
                   marginLeft: 100,
                 }}
               >
-                <Text size={16}>Have an account</Text>
+                <Text size={16}>Have an account? </Text>
                 <Text
                   size={16}
                   color={theme.COLORS.PRIMARY}
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
+                </Text>
+              </Block>
+
+              <Block
+                row
+                style={{
+                  paddingVertical: 3,
+                  alignItems: "baseline",
+                  marginTop: 20,
+                  marginLeft: 100,
+                }}
+              >
+                <Text size={16}>Token signuo </Text>
+                <Text
+                  size={16}
+                  color={theme.COLORS.PRIMARY}
+                  onPress={() => this.props.navigation.navigate("TokenSignup")}
+                >
+                  Signup token
                 </Text>
               </Block>
             </Fragment>

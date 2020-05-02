@@ -22,10 +22,12 @@ export default class UpdateProfile extends React.Component {
       email: "ijazmudassir786@gmail.com",
       phnnbr: "23423213123",
       errorMsg: "",
+      isLoading: false,
     };
   }
   async loginCall(JsonObj) {
     const value = await AsyncStorage.getItem("x-auth-token");
+    this.setState({ isLoading: true });
 
     const response = await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/",
@@ -40,11 +42,15 @@ export default class UpdateProfile extends React.Component {
       }
     );
     if (response.status === 200) {
+      this.setState({ isLoading: false });
+
       showMessage({
         message: "Profile updated successfully",
         type: "success",
       });
     } else {
+      this.setState({ isLoading: false });
+
       showMessage({
         message: "Profile could not be updated",
         type: "danger",
@@ -58,6 +64,7 @@ export default class UpdateProfile extends React.Component {
       obj["name"] = values.name;
       obj["email"] = values.email;
       obj["phnnbr"] = values.phone;
+
       this.loginCall(obj);
     }
   }
@@ -65,13 +72,22 @@ export default class UpdateProfile extends React.Component {
   render() {
     return (
       <View style={styles.container}>
-        <Text
-          color="black"
-          size={28}
-          style={{ paddingBottom: 8, marginLeft: 100 }}
-        >
-          Update your profile
-        </Text>
+        {this.state.isLoading ? (
+          <ActivityIndicator
+            animating={this.state.isLoading}
+            size="large"
+            color="#0000ff"
+          />
+        ) : (
+          <Text
+            color="black"
+            size={28}
+            style={{ paddingBottom: 8, marginLeft: 100 }}
+          >
+            Update your profile
+          </Text>
+        )}
+
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}

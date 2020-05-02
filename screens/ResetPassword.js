@@ -3,21 +3,30 @@ import { Formik } from "formik";
 
 import React, { Component, Fragment } from "react";
 import { Alert, StyleSheet, Text, View, AsyncStorage } from "react-native";
-import { TextInput, Button, Title } from "react-native-paper";
+import {
+  TextInput,
+  Button,
+  Title,
+  ActivityIndicator,
+} from "react-native-paper";
+import { showMessage } from "react-native-flash-message";
+
 import axios from "react-native-axios";
 export default class ResetPassword extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      oldpassword: "",
-      password: "",
-      confirmpassword: "",
+      oldpassword: "123123123",
+      password: "123123",
+      confirmpassword: "123123",
       errorMsg: "",
+      isLoading: false,
     };
   }
   async passwordResetAPICall(JsonObj) {
     const token = await AsyncStorage.getItem("x-auth-token");
     console.log("BEFORE REQUEST THE TOKEN = ", token);
+    this.setState({ isLoading: true });
     const response = await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/change/password",
       {
@@ -32,11 +41,20 @@ export default class ResetPassword extends Component {
     );
     console.log(response.headers["Authorization"]);
     if (response.status === 200) {
+      this.setState({ isLoading: false });
+
       console.log("updated successfully");
+      showMessage({
+        message: "Password updated successfully",
+        type: "success",
+      });
       this.props.navigation.navigate("Home");
     } else {
-      this.setState({
-        errorMsg: "does not update password",
+      this.setState({ isLoading: false });
+
+      showMessage({
+        message: "Password is not updated",
+        type: "danger",
       });
     }
     // const headers = () => {
@@ -132,13 +150,23 @@ export default class ResetPassword extends Component {
         >
           back to home
         </Button>
-        <Title
-          color="black"
-          size={28}
-          style={{ paddingBottom: 8, marginLeft: 130 }}
-        >
-          Reset Password
-        </Title>
+
+        {this.state.isLoading ? (
+          <ActivityIndicator
+            animating={this.state.isLoading}
+            size="large"
+            color="#0000ff"
+          />
+        ) : (
+          <Title
+            color="black"
+            size={28}
+            style={{ paddingBottom: 8, marginLeft: 130 }}
+          >
+            Reset Password
+          </Title>
+        )}
+
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
@@ -214,8 +242,9 @@ export default class ResetPassword extends Component {
               <Button
                 icon="cached"
                 style={styles.button}
-                disabled={!isValid}
+                disabled={!isValid || this.state.isLoading}
                 uppercase={false}
+                loading={this.state.isLoading}
                 mode="outlined"
                 contentStyle={{ height: 50 }}
                 onPress={handleSubmit}

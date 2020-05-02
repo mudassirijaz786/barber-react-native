@@ -9,7 +9,8 @@ import {
 import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import OnboardingScreen from "../screens/SlotsAvailing";
+import TokenSignup from "../screens/TokenSignup";
+import OnboardingScreen from "../screens/Registration";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import Registration from "../screens/Registration";
@@ -21,7 +22,7 @@ import Landing from "../screens/Landing";
 import Logout from "../screens/Logout";
 import Schedules from "../screens/Schedules";
 import UpdateProfile from "../screens/UpdateProfile";
-import ViewAppointment from "../screens/ViewAppointment";
+import TokenForgetPassword from "../screens/TokenForgetPassword";
 import Menu from "./Menu";
 import Header from "../components/Header";
 import { Drawer } from "../components/";
@@ -104,14 +105,6 @@ const MapandServicesStack = createStackNavigator(
       // navigationOptions: ({ navigation }) => ({
       //   // header: <Header title="Appointment" navigation={navigation} />,
       //   drawerLabel: () => {},
-      // }),
-    },
-    ViewAppointment: {
-      screen: ViewAppointment,
-      // navigationOptions: ({ navigation }) => ({
-      //   header: (
-      //     <Header title="View your Appointment" navigation={navigation} />
-      //   ),
       // }),
     },
   },
@@ -301,11 +294,26 @@ const AppNavigator = createSwitchNavigator(
         drawerLabel: () => {},
       },
     },
+    TokenSignup: {
+      screen: TokenSignup,
+      navigationOptions: {
+        drawerLabel: () => {},
+      },
+    },
+
     ForgetPassword: {
       screen: ForgetPassword,
       navigationOptions: {
         drawerLabel: () => {},
       },
+    },
+    TokenForgetPassword: {
+      screen: TokenForgetPassword,
+      // navigationOptions: ({ navigation }) => ({
+      //   header: (
+      //     <Header title="View your Appointment" navigation={navigation} />
+      //   ),
+      // }),
     },
   },
   {
