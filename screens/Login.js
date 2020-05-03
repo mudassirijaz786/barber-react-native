@@ -11,8 +11,8 @@ export default class Login extends Component {
     super(props);
     this.state = {
       email: "ijazmudassir786@gmail.com",
-      password: "123123123",
-      isLoading: false
+      password: "123123",
+      isLoading: false,
     };
   }
 
@@ -23,9 +23,9 @@ export default class Login extends Component {
         method: "post",
         headers: {
           Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json"
+          "Content-Type": "application/json",
         },
-        body: JSON.stringify(JsonObj)
+        body: JSON.stringify(JsonObj),
       }
     );
     if (response.status === 200) {
@@ -35,16 +35,16 @@ export default class Login extends Component {
         "x-auth-token",
         response.headers.map["x-auth-token"]
       )
-        .then(res => {
+        .then((res) => {
           console.log("Login token set", res);
         })
-        .catch(err => {
+        .catch((err) => {
           console.log(err);
         });
     } else {
       showMessage({
         message: "Invalid username or password",
-        type: "danger"
+        type: "danger",
       });
     }
   }
@@ -83,14 +83,8 @@ export default class Login extends Component {
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
-            email: yup
-              .string()
-              .email()
-              .required(),
-            password: yup
-              .string()
-              .min(3)
-              .required()
+            email: yup.string().email().required(),
+            password: yup.string().min(3).required(),
           })}
         >
           {({
@@ -100,7 +94,7 @@ export default class Login extends Component {
             setFieldTouched,
             touched,
             isValid,
-            handleSubmit
+            handleSubmit,
           }) => (
             <Fragment>
               <TextInput
@@ -163,7 +157,7 @@ export default class Login extends Component {
                   paddingVertical: 3,
                   alignItems: "baseline",
                   marginTop: 5,
-                  marginLeft: 100
+                  marginLeft: 100,
                 }}
               >
                 <Text size={16}>Don't have an account</Text>
@@ -188,13 +182,13 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 100,
     marginLeft: 10,
-    marginRight: 10
+    marginRight: 10,
   },
   input: {
-    margin: 10
+    margin: 10,
   },
   button: {
     marginTop: 30,
-    borderRadius: 40
-  }
+    borderRadius: 40,
+  },
 });

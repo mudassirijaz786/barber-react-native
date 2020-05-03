@@ -10,7 +10,7 @@ import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
 import TokenSignup from "../screens/TokenSignup";
-import OnboardingScreen from "../screens/Registration";
+import OnboardingScreen from "../screens/Login";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import Registration from "../screens/Registration";
@@ -28,6 +28,7 @@ import Header from "../components/Header";
 import { Drawer } from "../components/";
 import OneServiceScreen from "../screens/OneService";
 import SlotsAvailing from "../screens/SlotsAvailing";
+import ServicesScreen from "../screens/ServicesScreen";
 
 const transitionConfig = (transitionProps, prevTransitionProps) => ({
   transitionSpec: {
@@ -35,32 +36,8 @@ const transitionConfig = (transitionProps, prevTransitionProps) => ({
     easing: Easing.out(Easing.poly(4)),
     timing: Animated.timing,
   },
-  screenInterpolator: (sceneProps) => {
-    const { layout, position, scene } = sceneProps;
-    const thisSceneIndex = scene.index;
-    const width = layout.initWidth;
-    const opacity = position.interpolate({
-      inputRange: [thisSceneIndex - 1, thisSceneIndex, thisSceneIndex + 1],
-      outputRange: [0, 1, 1],
-    });
-    const translateX = position.interpolate({
-      inputRange: [thisSceneIndex - 1, thisSceneIndex],
-      outputRange: [width, 0],
-    });
-    const scaleWithOpacity = { opacity };
-    const screenName = "Search";
-    if (
-      screenName === transitionProps.scene.route.routeName ||
-      (prevTransitionProps &&
-        screenName === prevTransitionProps.scene.route.routeName)
-    ) {
-      return scaleWithOpacity;
-    }
-    return { transform: [{ translateX }] };
-  },
 });
 
-// ProfileStack working fine it has 2 screens Profile to Update Profile
 const ProfileStack = createStackNavigator(
   {
     Profile: {
@@ -74,9 +51,18 @@ const ProfileStack = createStackNavigator(
     },
     UpdateProfile: {
       screen: UpdateProfile,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
+      navigationOptions: ({ navigation }) => ({
+        title: "Update Profile",
+        headerStyle: {
+          backgroundColor: "orange",
+          alignSelf: "center",
+        },
+        headerTintColor: "#fff",
+        headerTitleStyle: {
+          fontWeight: "bold",
+        },
+        headerTransparent: true,
+      }),
     },
   },
   {
@@ -89,12 +75,15 @@ const MapandServicesStack = createStackNavigator(
   {
     MapandServices: {
       screen: MapandServices,
-      // navigationOptions: ({ navigation }) => ({
-      //   header: <Header title="Map and Services" navigation={navigation} />,
-      // }),
+      navigationOptions: ({ navigation }) => ({
+        title: "Maps and services",
+      }),
     },
     Service: {
       screen: OneServiceScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: "Service",
+      }),
       // navigationOptions: ({ navigation }) => ({
       //   // header: <Header title="Service" navigation={navigation} />,
       //   drawerLabel: () => {},
@@ -102,6 +91,9 @@ const MapandServicesStack = createStackNavigator(
     },
     TimePick: {
       screen: TimePick,
+      navigationOptions: ({ navigation }) => ({
+        title: "time picker",
+      }),
       // navigationOptions: ({ navigation }) => ({
       //   // header: <Header title="Appointment" navigation={navigation} />,
       //   drawerLabel: () => {},
@@ -167,12 +159,34 @@ const HomeStack = createStackNavigator(
         header: <Header title="Home" navigation={navigation} />,
       }),
     },
-    MapWithServices: {
-      screen: MapandServicesStack,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
+
+    MapandServices: {
+      screen: MapandServices,
+      navigationOptions: ({ navigation }) => ({
+        title: "Maps and services",
+      }),
     },
+    Service: {
+      screen: OneServiceScreen,
+      navigationOptions: ({ navigation }) => ({
+        title: "Service",
+      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   // header: <Header title="Service" navigation={navigation} />,
+      //   drawerLabel: () => {},
+      // }),
+    },
+    TimePick: {
+      screen: TimePick,
+      navigationOptions: ({ navigation }) => ({
+        title: "time picker",
+      }),
+      // navigationOptions: ({ navigation }) => ({
+      //   // header: <Header title="Appointment" navigation={navigation} />,
+      //   drawerLabel: () => {},
+      // }),
+    },
+
     Landing: {
       screen: Landing,
       navigationOptions: ({ navigation }) => ({

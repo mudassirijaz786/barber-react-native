@@ -152,7 +152,7 @@ export default class Home extends React.Component {
                       animating={this.state.isLoading}
                       size="large"
                       color="#0000ff"
-                      style={{ marginTop: 350 }}
+                      style={{ marginTop: 200 }}
                     />
                   ) : (
                     <Card style={{ alignItems: "center" }} elevation={8}>

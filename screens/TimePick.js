@@ -353,7 +353,7 @@ export default class TimePick extends Component {
           style={styles.button}
           mode="outlined"
           uppercase={false}
-          contentStyle={{ height: 30 }}
+          contentStyle={{ height: 50 }}
           // onPress={() => this.onFilter(this.state.List_of_salons)}
           onPress={this.handleSubmit}
         >

@@ -4,6 +4,7 @@ import { Dimensions, StyleSheet, View, Text } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import MapView, { Marker } from "react-native-maps";
 import * as geolib from "geolib";
+import { Title } from "react-native-paper";
 
 import MapViewDirections from "react-native-maps-directions";
 import { getLocation, geocodeLocationByName } from "./location-service";
@@ -165,6 +166,8 @@ class DistanceAlongServices extends Component {
 
     return (
       <View style={styles.container}>
+        <Title>Maps</Title>
+
         {length == 6 && (
           <View style={styles.container}>
             {latitude && longitude && (

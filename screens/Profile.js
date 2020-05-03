@@ -132,6 +132,10 @@ export default class Profile extends React.Component {
             </Block>
             <Block style={{ paddingBottom: -HeaderHeight * 2 }}>
               <Button
+                contentStyle={{ height: 50 }}
+                mode="outlined"
+                uppercase={false}
+                style={styles.button}
                 onPress={() => this.props.navigation.navigate("UpdateProfile")}
               >
                 Update profile
@@ -189,6 +193,10 @@ const styles = StyleSheet.create({
   },
   seller: {
     marginRight: theme.SIZES.BASE / 2,
+  },
+  button: {
+    marginTop: 30,
+    borderRadius: 40,
   },
   options: {
     position: "relative",
