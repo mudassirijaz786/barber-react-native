@@ -9,8 +9,8 @@ import {
 import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
-import TokenSignup from "../screens/TokenSignup";
-import OnboardingScreen from "../screens/ForgetPasswordScreen";
+import TokenSignupScreen from "../screens/TokenSignupScreen";
+import OnboardingScreen from "../screens/TokenSignupScreen";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import RegistrationScreen from "../screens/RegistrationScreen";
@@ -22,7 +22,7 @@ import Landing from "../screens/Landing";
 import Logout from "../screens/Logout";
 import Schedules from "../screens/Schedules";
 import UpdateProfile from "../screens/UpdateProfile";
-import TokenForgetPassword from "../screens/TokenForgetPassword";
+import TokenForgetPasswordScreen from "../screens/TokenForgetPasswordScreen";
 import Menu from "./Menu";
 import Header from "../components/Header";
 import { Drawer } from "../components/";
@@ -309,7 +309,7 @@ const AppNavigator = createSwitchNavigator(
       },
     },
     TokenSignup: {
-      screen: TokenSignup,
+      screen: TokenSignupScreen,
       navigationOptions: {
         drawerLabel: () => {},
       },
@@ -322,7 +322,7 @@ const AppNavigator = createSwitchNavigator(
       },
     },
     TokenForgetPassword: {
-      screen: TokenForgetPassword,
+      screen: TokenForgetPasswordScreen,
       // navigationOptions: ({ navigation }) => ({
       //   header: (
       //     <Header title="View your Appointment" navigation={navigation} />

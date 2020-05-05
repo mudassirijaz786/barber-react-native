@@ -1,17 +1,24 @@
+//importing
 import * as yup from "yup";
 import { Formik } from "formik";
 import React, { Component, Fragment } from "react";
-import { StyleSheet, View } from "react-native";
-import {
-  TextInput,
-  Button,
-  Title,
-  ActivityIndicator,
-} from "react-native-paper";
-import { Block, theme, Text } from "galio-framework";
+import { ActivityIndicator } from "react-native-paper";
+import { Text } from "galio-framework";
 import { showMessage } from "react-native-flash-message";
+import {
+  Container,
+  InputField,
+  Title,
+  ForgetPasswordButton,
+  Blocked,
+  Error,
+  EmailLink,
+  SigninLink,
+  SignupLink,
+} from "../styling/TokenForgetPassword";
 
-export default class TokenForgetPassword extends Component {
+//exporting TokenForgetPasswordScreen
+export default class TokenForgetPasswordScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,10 +29,10 @@ export default class TokenForgetPassword extends Component {
       isLoading: false,
     };
   }
-  async loginCall(JsonObj) {
-    // const token = await AsyncStorage.getItem("x-auth-token");
-    this.setState({ isLoading: true });
 
+  //calling backend reset password
+  async resetPasswordCall(JsonObj) {
+    this.setState({ isLoading: true });
     const response = await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/verify_code/and/update_password",
       {
@@ -33,64 +40,63 @@ export default class TokenForgetPassword extends Component {
         headers: {
           Accept: "application/json, text/plain, */*",
           "Content-Type": "application/json",
-          // "x-auth-token": token,
         },
         body: JSON.stringify(JsonObj),
       }
     );
+
+    //checking if status is 200
     if (response.status === 200) {
       this.setState({ isLoading: false });
-
       showMessage({
         message: "Password reset successfully",
         type: "success",
       });
+
+      //moving to Login screen
       this.props.navigation.navigate("Login");
     } else {
       this.setState({ isLoading: false });
-
       showMessage({
         message: "There occured an error",
         type: "danger",
       });
     }
   }
+
+  //handling input fields
   async handleSubmit(values) {
     if (values) {
       var obj = {};
       obj["token"] = values.token;
       obj["newpassword"] = values.newpassword;
       obj["confirmpassword"] = values.confirmpassword;
-      // this.setState({ isLoading: true });
-
-      this.loginCall(obj);
-      // this.setState({ isLoading: false });
+      this.resetPasswordCall(obj);
     }
   }
+
+  //rendering
   render() {
     return (
-      <View style={styles.container}>
+      <Container>
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
             size="large"
-            color="#0000ff"
+            color="blueviolet"
           />
         ) : (
-          <Title
-            color="black"
-            size={28}
-            style={{ paddingBottom: 8, marginLeft: 120 }}
-          >
-            Token screen
-          </Title>
+          <Title>Reset Password</Title>
         )}
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
-            token: yup.string().required(),
-            newpassword: yup.string().min(3).required(),
+            token: yup
+              .string()
+              .required()
+              .matches(/^[0-9]{5}$/, "Token must be equal to 5 digit"),
+            newpassword: yup.string().min(8).required(),
             confirmpassword: yup
               .string()
               .required()
@@ -111,54 +117,42 @@ export default class TokenForgetPassword extends Component {
             handleSubmit,
           }) => (
             <Fragment>
-              <TextInput
-                label="token"
+              <InputField
+                label="Token"
                 value={values.token}
                 onChangeText={handleChange("token")}
                 onBlur={() => setFieldTouched("token")}
                 placeholder="please enter your token"
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
                 keyboardType={"phone-pad"}
               />
-              {touched.token && errors.token && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.token}
-                </Text>
-              )}
-              <TextInput
-                label="newpassword"
+              {touched.token && errors.token && <Error>{errors.token}</Error>}
+              <InputField
+                label="New Password"
                 value={values.newpassword}
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 onChangeText={handleChange("newpassword")}
                 onBlur={() => setFieldTouched("newpassword")}
                 placeholder="please enter your new password"
                 mode="flat"
                 secureTextEntry={true}
               />
-              {touched.password && errors.password && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.password}
-                </Text>
+              {touched.newpassword && errors.newpassword && (
+                <Error>{errors.newpassword}</Error>
               )}
-              <TextInput
-                label="confirmPassword"
+              <InputField
+                label="Confirm New Password"
                 value={values.confirmpassword}
                 onChangeText={handleChange("confirmpassword")}
                 onBlur={() => setFieldTouched("confirmpassword")}
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 placeholder="please confirm your new password"
                 mode="flat"
                 secureTextEntry={true}
               />
               {touched.confirmpassword && errors.confirmpassword && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.confirmpassword}
-                </Text>
+                <Error>{errors.confirmpassword}</Error>
               )}
-              <Button
-                style={{ marginTop: 30, borderRadius: 40 }}
-                icon="cached"
+              <ForgetPasswordButton
+                icon="key"
                 disabled={!isValid || this.state.isLoading}
                 mode="outlined"
                 loading={this.state.isLoading}
@@ -167,79 +161,37 @@ export default class TokenForgetPassword extends Component {
                 uppercase={false}
               >
                 Proceed further
-              </Button>
-
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 20,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Don't have an account? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+              </ForgetPasswordButton>
+              <Blocked row>
+                <Text size={18}>Don't have an account? </Text>
+                <SignupLink
                   onPress={() => this.props.navigation.navigate("Registration")}
                 >
                   Signup
-                </Text>
-              </Block>
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 2,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Have an account? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+                </SignupLink>
+              </Blocked>
+              <Blocked row>
+                <Text size={18}>Have an account? </Text>
+                <SigninLink
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
-                </Text>
-              </Block>
-
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 2,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Back to forget password screen? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+                </SigninLink>
+              </Blocked>
+              <Blocked row>
+                <Text size={18}>Did not get token yet? </Text>
+                <EmailLink
                   onPress={() =>
                     this.props.navigation.navigate("ForgetPassword")
                   }
                 >
-                  back
-                </Text>
-              </Block>
+                  Enter email again
+                </EmailLink>
+              </Blocked>
             </Fragment>
           )}
         </Formik>
-      </View>
+      </Container>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  input: {
-    margin: 10,
-  },
-});
