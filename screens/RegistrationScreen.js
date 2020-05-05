@@ -12,7 +12,7 @@ import {
 import { showMessage, hideMessage } from "react-native-flash-message";
 
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-export default class Registration extends Component {
+export default class RegistrationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {

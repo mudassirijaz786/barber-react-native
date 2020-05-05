@@ -6,7 +6,7 @@ import { StyleSheet, View, AsyncStorage } from "react-native";
 import { TextInput, Button, ActivityIndicator } from "react-native-paper";
 import { showMessage } from "react-native-flash-message";
 
-export default class Login extends Component {
+export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -129,6 +129,14 @@ export default class Login extends Component {
                 </Text>
               )}
 
+              <Text
+                color={theme.COLORS.PRIMARY}
+                style={{ marginTop: 20, textAlign: "right" }}
+                size={16}
+                onPress={() => this.props.navigation.navigate("ForgetPassword")}
+              >
+                Forgot password?
+              </Text>
               <Button
                 style={styles.button}
                 icon="login"
@@ -142,31 +150,21 @@ export default class Login extends Component {
                 Sign in
               </Button>
 
-              <Text
-                color={theme.COLORS.PRIMARY}
-                style={{ marginTop: 20, textAlign: "center" }}
-                size={16}
-                onPress={() => this.props.navigation.navigate("ForgetPassword")}
-              >
-                Forgot password?{" "}
-              </Text>
-
               <Block
                 row
                 style={{
                   paddingVertical: 3,
                   alignItems: "baseline",
-                  marginTop: 5,
+                  marginTop: 15,
                   marginLeft: 100,
                 }}
               >
-                <Text size={16}>Don't have an account</Text>
+                <Text size={16}>Don't have an account </Text>
                 <Text
-                  size={16}
+                  size={20}
                   color={theme.COLORS.PRIMARY}
                   onPress={() => this.props.navigation.navigate("Registration")}
                 >
-                  {" "}
                   Signup
                 </Text>
               </Block>

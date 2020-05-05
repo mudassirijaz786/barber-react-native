@@ -7,7 +7,10 @@ import * as geolib from "geolib";
 import { Title } from "react-native-paper";
 
 import MapViewDirections from "react-native-maps-directions";
-import { getLocation, geocodeLocationByName } from "./location-service";
+import {
+  getLocation,
+  geocodeLocationByName,
+} from "../components/location-service";
 import { Button } from "react-native-paper";
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
