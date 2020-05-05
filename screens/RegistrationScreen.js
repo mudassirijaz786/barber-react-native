@@ -1,17 +1,25 @@
+//importing
 import * as yup from "yup";
 import { Formik } from "formik";
-import { Block, Text, theme } from "galio-framework";
-import React, { Component, Fragment, Keyboard } from "react";
-import { Alert, StyleSheet, View, AsyncStorage } from "react-native";
+import { Text } from "galio-framework";
+import React, { Component, Fragment } from "react";
+import { AsyncStorage } from "react-native";
+import { ActivityIndicator } from "react-native-paper";
+import { showMessage } from "react-native-flash-message";
 import {
-  TextInput,
-  Button,
+  Container,
   Title,
-  ActivityIndicator,
-} from "react-native-paper";
-import { showMessage, hideMessage } from "react-native-flash-message";
+  LoginLink,
+  InputField,
+  SignupButton,
+  Blocked,
+  Error,
+} from "../styling/Registration";
 
+//checking phone number expression
 const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+
+//exporting class RegistrationScreen
 export default class RegistrationScreen extends Component {
   constructor(props) {
     super(props);
@@ -20,11 +28,11 @@ export default class RegistrationScreen extends Component {
       email: "ijazmudassir786@gmail.com",
       phone: "123123123123",
       password: "123123123",
-      errorMsg: "",
-      keyboardOffset: 0,
       isLoading: false,
     };
   }
+
+  //signup backend api call
   async SignupApiCall(JsonObj) {
     const response = await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
@@ -37,19 +45,22 @@ export default class RegistrationScreen extends Component {
         body: JSON.stringify(JsonObj),
       }
     );
+
+    //checking if status is 200
     if (response.status === 200) {
-      this.props.navigation.navigate("TokenSignup");
-      console.log("RESPONSE", response.headers.map["x-auth-token"]);
+      showMessage({
+        message: "Token sent to email successfully",
+        type: "success",
+      });
+
+      //setting token
       await AsyncStorage.setItem(
         "x-auth-token",
         response.headers.map["x-auth-token"]
-      )
-        .then((res) => {
-          console.log("Sign up token set");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      );
+
+      //moving to token screen for signup
+      this.props.navigation.navigate("TokenSignup");
     } else {
       showMessage({
         message: "Email or password already exists in system",
@@ -57,13 +68,11 @@ export default class RegistrationScreen extends Component {
       });
     }
   }
+
+  //handling input fields
   async handleSubmit(values) {
     if (values) {
       var obj = {};
-      console.log("NAME: ", values.name);
-      console.log("EMAIL: ", values.email);
-      console.log("PHONE: ", values.phone);
-      console.log("PASSWORD: ", values.password);
       obj["name"] = values.name;
       obj["email"] = values.email;
       obj["phnnbr"] = values.phone;
@@ -73,25 +82,20 @@ export default class RegistrationScreen extends Component {
       this.setState({ isLoading: false });
     }
   }
+
+  //rendering
   render() {
     return (
-      <View style={styles.container}>
+      <Container>
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
             size="large"
-            color="#0000ff"
+            color="blueviolet"
           />
         ) : (
-          <Text
-            color="black"
-            size={28}
-            style={{ paddingBottom: 8, marginLeft: 120 }}
-          >
-            Registration
-          </Text>
+          <Title>Registration</Title>
         )}
-
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
@@ -115,72 +119,49 @@ export default class RegistrationScreen extends Component {
             handleSubmit,
           }) => (
             <Fragment>
-              <TextInput
-                label="name"
+              <InputField
+                label="Name"
                 value={values.name}
                 onChangeText={handleChange("name")}
                 onBlur={() => setFieldTouched("name")}
-                //background color ?
-
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 placeholder="please enter your name"
                 mode="flat"
               />
-              {touched.name && errors.name && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.name}
-                </Text>
-              )}
-              <TextInput
-                label="email"
+              {touched.name && errors.name && <Error>{errors.name}</Error>}
+              <InputField
+                label="Email"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
-                //background color ?
                 placeholder="please enter your email"
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
               />
-              {touched.email && errors.email && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.email}
-                </Text>
-              )}
-              <TextInput
-                label="phone"
+              {touched.email && errors.email && <Error>{errors.email}</Error>}
+              <InputField
+                label="Phone"
                 value={values.phone}
                 onChangeText={handleChange("phone")}
                 onBlur={() => setFieldTouched("phone")}
                 formikKey="phone"
-                //background color ?
                 placeholder="please enter your phone"
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
                 keyboardType={"phone-pad"}
                 mode="flat"
               />
-              {touched.phone && errors.phone && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.phone}
-                </Text>
-              )}
-              <TextInput
-                label="password"
+              {touched.phone && errors.phone && <Error>{errors.phone}</Error>}
+              <InputField
+                label="Password"
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={() => setFieldTouched("password")}
                 secureTextEntry={true}
-                //background color ?
                 placeholder="please enter your password"
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
               />
               {touched.password && errors.password && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.password}
-                </Text>
+                <Error>{errors.password}</Error>
               )}
-              <Button
-                style={styles.button}
+              <SignupButton
                 icon="account-box"
                 disabled={!isValid || this.state.isLoading}
                 mode="outlined"
@@ -190,63 +171,19 @@ export default class RegistrationScreen extends Component {
                 uppercase={false}
               >
                 Sign up
-              </Button>
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 20,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Have an account? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+              </SignupButton>
+              <Blocked row>
+                <Text size={18}>Have an account? </Text>
+                <LoginLink
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
-                </Text>
-              </Block>
-
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 20,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Token signuo </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
-                  onPress={() => this.props.navigation.navigate("TokenSignup")}
-                >
-                  Signup token
-                </Text>
-              </Block>
+                </LoginLink>
+              </Blocked>
             </Fragment>
           )}
         </Formik>
-        {/* <PhoneInput ref={formikKey}/> */}
-      </View>
+      </Container>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  input: {
-    margin: 10,
-  },
-  button: {
-    marginTop: 30,
-    borderRadius: 40,
-  },
-});

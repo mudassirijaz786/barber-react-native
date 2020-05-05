@@ -10,7 +10,7 @@ import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
 import TokenSignup from "../screens/TokenSignup";
-import OnboardingScreen from "../screens/LoginScreen";
+import OnboardingScreen from "../screens/RegistrationScreen";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import RegistrationScreen from "../screens/RegistrationScreen";
