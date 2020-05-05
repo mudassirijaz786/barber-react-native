@@ -1,7 +1,7 @@
 import * as yup from "yup";
 import { Formik } from "formik";
 import React, { Component, Fragment } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, AsyncStorage } from "react-native";
 import {
   TextInput,
   Button,
@@ -27,7 +27,7 @@ export default class TokenSignup extends Component {
     this.setState({ isLoading: true });
 
     const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/verify_code/and/update_password",
+      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/verify/account/token",
       {
         method: "post",
         headers: {
@@ -40,12 +40,21 @@ export default class TokenSignup extends Component {
     );
     if (response.status === 200) {
       this.setState({ isLoading: false });
-
+      await AsyncStorage.setItem(
+        "x-auth-token",
+        response.headers.map["x-auth-token"]
+      )
+        .then((res) => {
+          console.log("Sign up token set");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
       showMessage({
-        message: "Password reset successfully",
+        message: "Token validated successfully",
         type: "success",
       });
-      this.props.navigation.navigate("Login");
+      this.props.navigation.navigate("Home");
     } else {
       this.setState({ isLoading: false });
 
@@ -173,7 +182,7 @@ export default class TokenSignup extends Component {
                 onPress={handleSubmit}
                 uppercase={false}
               >
-                Get token
+                Proceed further
               </Button>
 
               <Block
@@ -210,27 +219,6 @@ export default class TokenSignup extends Component {
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
-                </Text>
-              </Block>
-
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 2,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Back to forget password screen? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
-                  onPress={() =>
-                    this.props.navigation.navigate("ForgetPassword")
-                  }
-                >
-                  back
                 </Text>
               </Block>
             </Fragment>
