@@ -52,16 +52,12 @@ export default class RegistrationScreen extends Component {
         message: "Token sent to email successfully",
         type: "success",
       });
-
-      //setting token
-      await AsyncStorage.setItem(
-        "x-auth-token",
-        response.headers.map["x-auth-token"]
-      );
+      this.setState({ isLoading: false });
 
       //moving to token screen for signup
       this.props.navigation.navigate("TokenSignup");
     } else {
+      this.setState({ isLoading: false });
       showMessage({
         message: "Email or password already exists in system",
         type: "danger",
@@ -79,7 +75,6 @@ export default class RegistrationScreen extends Component {
       obj["password"] = values.password;
       this.setState({ isLoading: true });
       await this.SignupApiCall(obj);
-      this.setState({ isLoading: false });
     }
   }
 

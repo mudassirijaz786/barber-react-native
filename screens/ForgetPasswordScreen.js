@@ -1,17 +1,23 @@
+//importing
 import * as yup from "yup";
 import { Formik } from "formik";
-import React, { Component, Fragment, AsyncStorage } from "react";
-import { StyleSheet, View } from "react-native";
-import {
-  TextInput,
-  Button,
-  Title,
-  ActivityIndicator,
-} from "react-native-paper";
-import { Block, theme, Text } from "galio-framework";
+import React, { Component, Fragment } from "react";
+import { ActivityIndicator } from "react-native-paper";
+import { Text } from "galio-framework";
 import { showMessage } from "react-native-flash-message";
+import {
+  Container,
+  InputField,
+  Title,
+  ForgetPasswordButton,
+  Blocked,
+  Error,
+  SigninLink,
+  SignupLink,
+} from "../styling/ForgetPassword";
 
-export default class ForgetPassword extends Component {
+//exporting ForgetPasswordScreen
+export default class ForgetPasswordScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -20,10 +26,10 @@ export default class ForgetPassword extends Component {
       isLoading: false,
     };
   }
-  async loginCall(JsonObj) {
-    // const token = await AsyncStorage.getItem("x-auth-token");
-    this.setState({ isLoading: true });
 
+  //backend forget Token Call
+  async forgetTokenCall(JsonObj) {
+    this.setState({ isLoading: true });
     const response = await fetch(
       "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/forgot/password",
       {
@@ -35,53 +41,48 @@ export default class ForgetPassword extends Component {
         body: JSON.stringify(JsonObj),
       }
     );
+
+    //check if status is 200
     if (response.status === 200) {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Email sent successfully",
+        message: "Token sent successfully to your email",
         type: "success",
       });
 
+      //moving to TokenForgetPassword
       this.props.navigation.navigate("TokenForgetPassword");
     } else {
       this.setState({ isLoading: false });
-
       showMessage({
         message: "There occured an error",
         type: "danger",
       });
     }
   }
+
+  //handeling input field
   async handleSubmit(values) {
     if (values) {
       var obj = {};
       obj["email"] = values.email;
-      // this.setState({ isLoading: true });
-
-      this.loginCall(obj);
-      // this.setState({ isLoading: false });
+      this.forgetTokenCall(obj);
     }
   }
+
+  //rendering
   render() {
-    console.log(this.state.isLoading);
     return (
-      <View style={styles.container}>
+      <Container>
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
             size="large"
-            color="#0000ff"
+            color="blueviolet"
           />
         ) : (
-          <Title
-            color="black"
-            size={28}
-            style={{ paddingBottom: 8, marginLeft: 120 }}
-          >
-            Forget password
-          </Title>
+          <Title>Forget password</Title>
         )}
-
         <Formik
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
@@ -99,8 +100,8 @@ export default class ForgetPassword extends Component {
             handleSubmit,
           }) => (
             <Fragment>
-              <TextInput
-                label="email"
+              <InputField
+                label="Email"
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
@@ -108,13 +109,8 @@ export default class ForgetPassword extends Component {
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
                 mode="flat"
               />
-              {touched.email && errors.email && (
-                <Text style={{ fontSize: 12, color: "red" }}>
-                  {errors.email}
-                </Text>
-              )}
-              <Button
-                style={{ marginTop: 30, borderRadius: 40 }}
+              {touched.email && errors.email && <Error>{errors.email}</Error>}
+              <ForgetPasswordButton
                 icon="cached"
                 disabled={!isValid || this.state.isLoading}
                 mode="outlined"
@@ -124,58 +120,27 @@ export default class ForgetPassword extends Component {
                 uppercase={false}
               >
                 Get token
-              </Button>
-
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 20,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Don't have an account? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+              </ForgetPasswordButton>
+              <Blocked row>
+                <Text size={18}>Don't have an account? </Text>
+                <SignupLink
                   onPress={() => this.props.navigation.navigate("Registration")}
                 >
                   Signup
-                </Text>
-              </Block>
-              <Block
-                row
-                style={{
-                  paddingVertical: 3,
-                  alignItems: "baseline",
-                  marginTop: 2,
-                  marginLeft: 100,
-                }}
-              >
-                <Text size={16}>Have an account? </Text>
-                <Text
-                  size={16}
-                  color={theme.COLORS.PRIMARY}
+                </SignupLink>
+              </Blocked>
+              <Blocked row>
+                <Text size={18}>Have an account? </Text>
+                <SigninLink
                   onPress={() => this.props.navigation.navigate("Login")}
                 >
                   Login
-                </Text>
-              </Block>
+                </SigninLink>
+              </Blocked>
             </Fragment>
           )}
         </Formik>
-      </View>
+      </Container>
     );
   }
 }
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 100,
-    marginLeft: 10,
-    marginRight: 10,
-  },
-  input: {
-    margin: 10,
-  },
-});

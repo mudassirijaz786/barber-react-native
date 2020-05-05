@@ -4,23 +4,6 @@ import { Block, Text, theme } from "galio-framework";
 
 import React, { Component, Fragment } from "react";
 import { Alert, StyleSheet, View, AsyncStorage } from "react-native";
-import {
-  TextInput,
-  Button,
-  Title,
-  ActivityIndicator,
-  Colors,
-} from "react-native-paper";
-import {
-  createSwitchNavigator,
-  createStackNavigator,
-  createDrawerNavigator,
-  createAppContainer,
-} from "react-navigation";
-import Registration from "./RegistrationScreen";
-import ResetPassword from "./ResetPassword";
-import ForgetPassword from "./ForgetPassword";
-import HomeScreen from "./Home";
 
 export default class Logout extends Component {
   async logout() {
@@ -39,7 +22,6 @@ export default class Logout extends Component {
         <Text onPress={() => this.props.navigation.navigate("SignIn")}>
           Click to logout
         </Text>
-        {/* <Text onPress = {this.logout}>Click to logout</Text> */}
       </View>
     );
   }

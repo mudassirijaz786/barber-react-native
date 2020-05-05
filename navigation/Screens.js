@@ -10,12 +10,12 @@ import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import HomeScreen from "../screens/Home";
 import TokenSignup from "../screens/TokenSignup";
-import OnboardingScreen from "../screens/RegistrationScreen";
+import OnboardingScreen from "../screens/ForgetPasswordScreen";
 import MapandServices from "../screens/MapandServices";
 import ProfileScreen from "../screens/Profile";
 import RegistrationScreen from "../screens/RegistrationScreen";
 import ResetPassword from "../screens/ResetPassword";
-import ForgetPassword from "../screens/ForgetPassword";
+import ForgetPasswordScreen from "../screens/ForgetPasswordScreen";
 import SettingsScreen from "../screens/Settings";
 import TimePick from "../screens/TimePick";
 import Landing from "../screens/Landing";
@@ -316,7 +316,7 @@ const AppNavigator = createSwitchNavigator(
     },
 
     ForgetPassword: {
-      screen: ForgetPassword,
+      screen: ForgetPasswordScreen,
       navigationOptions: {
         drawerLabel: () => {},
       },
