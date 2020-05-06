@@ -3,7 +3,7 @@ import { Block, Text } from "galio-framework";
 import Cart from "../screens/Cart";
 import SalonsScreen from "../screens/SalonsScreen";
 import TokenSignupScreen from "../screens/TokenSignupScreen";
-import StartScreen from "../screens/LoginScreen";
+import StartScreen from "../screens/AppointedServicesScreen";
 import Logout from "../screens/Logout";
 import MapandServicesScreen from "../screens/MapandServicesScreen";
 import ProfileScreen from "../screens/ProfileScreen";

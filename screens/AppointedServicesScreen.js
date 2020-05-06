@@ -1,7 +1,7 @@
 //importing
 import React, { Component } from "react";
-import { Text, AsyncStorage } from "react-native";
-import { Left, Right, Body, CardItem, Icon } from "native-base";
+import { Text, AsyncStorage, TouchableOpacity } from "react-native";
+import { Body, CardItem, Icon } from "native-base";
 import moment from "moment";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
@@ -11,9 +11,11 @@ import {
   NoService,
   ContentForCard,
   ServiceName,
-  Category,
   CardPaper,
   Price,
+  Open,
+  AppointmentButton,
+  Close,
   Description,
 } from "../styling/AppointedServices";
 
@@ -97,37 +99,40 @@ export default class AppointedServicesScreen extends Component {
         {Object.keys(responseData).length === 0 && (
           <NoService>{noHistory}</NoService>
         )}
-        {Object.keys(responseData).length !== 0 && (
-          <ContentForCard>
-            <CardPaper>
+        <ContentForCard>
+          {Object.keys(responseData).length !== 0 && (
+            <CardPaper elevation={10} key={responseData}>
               <CardItem header>
-                <Left>
-                  <ServiceName>{responseData.service_id}</ServiceName>
-                </Left>
-                <Right>
-                  <Category>{responseData.customer_id}</Category>
-                </Right>
-              </CardItem>
-              <CardItem>
                 <Body>
-                  <Category>{responseData.stating_time}</Category>
-                  <Category>{responseData.stating_time}</Category>
-                </Body>
-                <ServiceName>{responseData.Salon_id}</ServiceName>
-              </CardItem>
-              <CardItem>
-                <Left>
-                  <Description muted>{responseData.booking_date}</Description>
-                </Left>
-                <Right>
+                  <ServiceName>{responseData.Salon_id}</ServiceName>
+                  <Price>{responseData.service_id}</Price>
                   <Text>
-                    <Price>{responseData.service_status}</Price>
+                    Booking date
+                    <Description> {responseData.booking_date}</Description>
                   </Text>
-                </Right>
+                  <Text>
+                    Starting time
+                    <Open> {responseData.stating_time}</Open>
+                  </Text>
+
+                  <Text>
+                    Ending time
+                    <Close> {responseData.ending_time}</Close>
+                  </Text>
+                  <TouchableOpacity>
+                    <AppointmentButton
+                      mode="outlined"
+                      uppercase={false}
+                      contentStyle={{ height: 30 }}
+                    >
+                      {responseData.service_status}
+                    </AppointmentButton>
+                  </TouchableOpacity>
+                </Body>
               </CardItem>
             </CardPaper>
-          </ContentForCard>
-        )}
+          )}
+        </ContentForCard>
       </Container>
     );
   }

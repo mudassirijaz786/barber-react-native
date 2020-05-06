@@ -35,7 +35,6 @@ export default class AppointmentScreen extends Component {
     ],
     minute: ["15", "30", "45"],
     slot: ["am", "pm"],
-    concatDate: "",
     selecthour: "",
     slectmin: "",
     selectslot: "",
@@ -58,90 +57,26 @@ export default class AppointmentScreen extends Component {
     };
   };
 
-  fun = () => {
-    console.log("moment.fn.format");
-    const h = this.state.selecthour;
-    const i = this.state.slectmin;
-    const j = this.state.selectslot;
-    const f = h + ":" + i + " " + j;
-    this.setState({ c: f });
-    console.log("DATE", f);
-  };
-
+  //date picked
   datePick = (date) => {
     this.setState({ booking_date: date });
-    console.log("DATE", date);
   };
 
-  async timeSelect(JsonObj) {
-    value = await AsyncStorage.getItem("x-auth-token");
-
-    await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-        " this.props.navigation.state.params.items._id",
-      {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-          "x-auth-token": value,
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    )
-      .then((response) => {
-        showMessage({
-          message: "Appointment is booked message",
-          type: "info",
-        });
-        console.log("RESPONSE APPOINTMENT", response);
-      })
-      .catch((err) => {
-        showMessage({
-          message: "Appoitnment is not booked",
-          type: "danger",
-        });
-        console.log(err);
-      });
-  }
-
-  componentDidMount() {
-    console.log("Service id", "this.props.navigation.state.params.items._id");
-  }
-
-  async getToken() {
-    try {
-      const value = await AsyncStorage.getItem("x-auth-token");
-      if (value !== null) {
-        console.log(value);
-      }
-    } catch (error) {}
-  }
-  okTime = () => {
-    const h = this.state.selecthour;
-    const i = this.state.slectmin;
-    const j = this.state.selectslot;
-    const f = h + ":" + i + " " + j;
-    this.setState({ stating_time: f });
-  };
+  //handling date submission
   handleSubmit = async () => {
     var obj = {};
-    console.log("moment.fn.format");
     const h = this.state.selecthour;
     const i = this.state.slectmin;
     const j = this.state.selectslot;
     const f = h + ":" + i + " " + j;
-    console.log("before starting time", this.state.stating_time);
     this.setState({ stating_time: f }, async () => {
       obj["booking_date"] = this.state.booking_date;
       obj["stating_time"] = this.state.stating_time;
-
-      console.log("Data which is going to be post", obj);
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
         url:
           "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-          "this.props.navigation.state.params.items._id",
+          this.props.navigation.state.params.items._id,
         method: "POST",
         headers: {
           Accept: "application/json, text/plain, */*",
@@ -151,7 +86,6 @@ export default class AppointmentScreen extends Component {
         data: obj,
       })
         .then((response) => {
-          console.log("RESPONSE OBJECT", response.data);
           showMessage({
             message: "Appointment is booked",
             type: "success",
@@ -168,26 +102,9 @@ export default class AppointmentScreen extends Component {
     });
   };
 
-  prit = () => {
-    console.log("stating_time: ", this.state.stating_time);
-  };
-  concatDate = (e) => {
-    console.log("concatDAte ");
-    console.log(this.state.selecthour);
-    console.log(this.state.slectmin);
-    console.log(this.state.selectslot);
-
-    const concate = { ...this.state.selecthour };
-    const concat2 = { ...this.state.slectmin };
-    const concat3 = { ...this.state.selectslot };
-    let jsonStringfy = JSON.stringify(concate);
-    console.log(jsonStringfy.split(":")[0]);
-    console.log(jsonStringfy.split(":")[1]);
-  };
+  //rendering
   render() {
     const { date } = this.state;
-
-    console.log(date);
     return (
       <Container>
         <Title>Appoint this service</Title>

@@ -42,6 +42,10 @@ export const Select = styled.Text`
 
 export const Description = styled(Text)`
   margin-top: 5px;
+  color: #eb6709;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
 `;
 
 export const ContentForCard = styled(Content)`
@@ -57,6 +61,7 @@ export const CardPaper = styled(Card)`
 export const Price = styled.Text`
   color: #eb6709;
   text-align: center;
+  margin-bottom: 15px;
   font-size: 24px;
   font-weight: 500;
 `;
@@ -76,15 +81,17 @@ export const NoService = styled.Text`
 `;
 
 export const Open = styled.Text`
-  color: #eb6709;
+  color: blueviolet;
+  margin-top: 20px;
   text-align: center;
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 14px;
+  font-weight: 300;
 `;
 
 export const Close = styled.Text`
-  color: #eb6709;
+  color: blueviolet;
   text-align: center;
-  font-size: 24px;
-  font-weight: 500;
+  margin-top: 20px;
+  font-size: 14px;
+  font-weight: 300;
 `;

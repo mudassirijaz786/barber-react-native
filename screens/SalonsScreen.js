@@ -2,7 +2,7 @@
 import React from "react";
 import { AsyncStorage, TouchableOpacity } from "react-native";
 import { Text } from "galio-framework";
-import { ActivityIndicator, Button } from "react-native-paper";
+import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
 import { showMessage } from "react-native-flash-message";
 import Axios from "axios";
