@@ -1,37 +1,31 @@
-import * as yup from "yup";
-import { Formik } from "formik";
-import { Block, Text, theme } from "galio-framework";
+//importing
+import { Container, Title } from "../styling/Logout";
+import React, { Component } from "react";
+import { AsyncStorage } from "react-native";
 
-import React, { Component, Fragment } from "react";
-import { Alert, StyleSheet, View, AsyncStorage } from "react-native";
-
+//exporting logout screen
 export default class Logout extends Component {
-  async logout() {
-    const token = await AsyncStorage.getItem("x-auth-token");
-    console.log("before deletion", token);
-    await AsyncStorage.removeItem("x-auth-token")
-      .then((res) => console.log("removed successfullly"))
-      .catch((err) => console.log("not remove"));
-    const token2 = await AsyncStorage.getItem("x-auth-token");
-    console.log("after deletion", token2);
+  constructor(props) {
+    super(props);
+  }
+
+  //logging out
+  logout = async () => {
+    this.setState({ loading: true });
+    await AsyncStorage.removeItem("x-auth-token");
+    this.props.navigation.navigate("Login");
+  };
+
+  //calling logout
+  componentDidMount() {
+    this.logout();
   }
 
   render() {
     return (
-      <View style={styles.container}>
-        <Text onPress={() => this.props.navigation.navigate("SignIn")}>
-          Click to logout
-        </Text>
-      </View>
+      <Container>
+        <Title>Logging off</Title>
+      </Container>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 200,
-  },
-  input: {
-    margin: 10,
-  },
-});

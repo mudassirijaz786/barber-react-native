@@ -1,62 +1,50 @@
+//importing
 import React, { Component } from "react";
-import { Dimensions, StyleSheet, View, Text } from "react-native";
-
+import { Dimensions, StyleSheet, Text } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import MapView, { Marker } from "react-native-maps";
 import * as geolib from "geolib";
-import { Title } from "react-native-paper";
-
 import MapViewDirections from "react-native-maps-directions";
+import { getLocation } from "../components/location-service";
 import {
-  getLocation,
-  geocodeLocationByName,
-} from "../components/location-service";
-import { Button } from "react-native-paper";
+  Container,
+  Title,
+  Distance,
+  Blocked,
+  View,
+} from "../styling/SalonTracking";
+
+//some constants
 const { width, height } = Dimensions.get("window");
 const ASPECT_RATIO = width / height;
-const LATITUDE = 37.771707;
-const LONGITUDE = -122.4053769;
 const LATITUDE_DELTA = 0.0922;
 const LONGITUDE_DELTA = LATITUDE_DELTA * ASPECT_RATIO;
-
 const GOOGLE_MAPS_APIKEY = "AIzaSyARjyRyPhNoOKCNv4bS1W7zP-1reTQElFs";
 
+//styling of view
 const styles = StyleSheet.create({
-  versionBox: {
-    position: "absolute",
-    bottom: 0,
-    right: 0,
-    flexDirection: "row",
-    justifyContent: "flex-end",
-  },
-  versionText: {
-    padding: 4,
-    backgroundColor: "#FFF",
-    color: "#000",
-  },
   container: {
     flex: 1,
   },
 });
 
-class DistanceAlongServices extends Component {
+//class SalonTracking
+class SalonTrackingScreen extends Component {
   constructor(props) {
     super(props);
-
     this.state = {
       currentPosition: {},
       coordinatesEnd: {},
       distance: null,
-      // jb distance krna ho bs
       latitude: this.props.items.Latitude,
       longitude: this.props.items.Longitude,
-      // jb nearest krna ho bs
       items: this.props.items,
-      points: [123],
+      points: [],
     };
-
     this.mapView = null;
   }
+
+  //showing nearest salon or salon
   componentDidMount() {
     {
       this.state.items ? this.getNearestState() : null;
@@ -68,6 +56,7 @@ class DistanceAlongServices extends Component {
     }
   }
 
+  //map ready
   onReady = (result) => {
     this.mapView.fitToCoordinates(result.coordinates, {
       edgePadding: {
@@ -79,75 +68,67 @@ class DistanceAlongServices extends Component {
     });
   };
 
+  //error in maps
   onError = (errorMessage) => {
-    console.log(errorMessage); // eslint-disable-line no-console
+    console.log(errorMessage);
   };
 
-  setDistance = (distance, duration_in_traffic) => {
-    this.setState({
-      distance: parseFloat(distance),
-      durationInTraffic: parseInt(duration_in_traffic),
-    });
-  };
-
+  //getting data of current location
   getInitialState = () => {
     getLocation().then((data) => {
-      // console.log("Current lat", data.latitude);
-      // console.log("Current lng", data.longitude);
-
       var obj = {};
-
       obj["latitude"] = data.latitude;
       obj["longitude"] = data.longitude;
-
-      // console.log("Current Position", data);
-
       objDestination = {};
-      // objDestination["latitude"] =  31.472692;
-      // objDestination["longitude"] =  74.278677;
       objDestination["latitude"] = this.state.latitude;
       objDestination["longitude"] = this.state.longitude;
-      // console.log("Destination Position", objDestination);
 
+      //measuring distance
       const distanceInM = geolib.getDistance(obj, objDestination);
 
+      //converting distance from meters to kilometers
       const distance = geolib.convertDistance(distanceInM, "km");
-      // console.log("Distance", distanceInKM / 1000);
+
+      //setting states
       this.setState({
         currentPosition: data,
         coordinatesEnd: objDestination,
         distance,
       });
-      // console.log("obj destination", objDestination);
     });
   };
 
+  //getting current position
   getNearestState = () => {
     getLocation().then((data) => {
-      //   console.log("data current location", data);
       var obj = {};
-
       obj["latitude"] = data.latitude;
       obj["longitude"] = data.longitude;
-      //   console.log("obj current location", obj);
-
       let points = [];
       let obj1 = {};
 
+      //getting and setting latitude and longitude of all salons
       for (let i = 0; i < this.state.items.length; i++) {
         obj1["latitude"] = this.state.items[i].Latitude;
         obj1["longitude"] = this.state.items[i].Longitude;
+
+        //pushing created object in array
         points.push(obj1);
+
+        //get the object as empty to fill it again
         obj1 = {};
       }
-      //   console.log("array points", points);
 
+      //find the nearest coordinate
       const bounds1 = geolib.findNearest(obj, points);
-      //   console.log(bounds1);
+
+      //measuring distance from current location to that nearest coordinate
       const distanceInM = geolib.getDistance(obj, bounds1);
+
+      //converting distance from meters to kilometers
       const distance = geolib.convertDistance(distanceInM, "km");
 
-      //   console.log(distance);
+      //setting states
       this.setState({
         currentPosition: obj,
         coordinatesEnd: bounds1,
@@ -157,34 +138,32 @@ class DistanceAlongServices extends Component {
     });
   };
 
+  //rendering
   render() {
     const { longitude, latitude } = this.state.coordinatesEnd;
     const { currentPosition, distance } = this.state;
     const { items, points } = this.state;
     const length = Object.keys(items).length;
-    // const { language, longitude } = this.state.currentPosition;
-
-    // console.log("lng ", longitude);
-    // console.log("items ", items);
-
     return (
-      <View style={styles.container}>
-        <Title>Maps</Title>
-
+      <Container>
+        <Title>Locating Salon</Title>
         {length == 6 && (
-          <View style={styles.container}>
+          <View>
             {latitude && longitude && (
-              <View style={styles.container}>
-                <Text>Distance: {distance} km</Text>
+              <View>
+                <Blocked row>
+                  <Text> Salon is locating at Distance of</Text>
+                  <Distance> {distance} km</Distance>
+                  <Text> from your current location</Text>
+                </Blocked>
                 {!currentPosition.latitude && !currentPosition.longitude && (
                   <ActivityIndicator
                     animating={this.state.isLoading}
                     size="large"
-                    color="#0000ff"
+                    color="blueviolet"
                     style={{ top: 250 }}
                   />
                 )}
-
                 {currentPosition.latitude && currentPosition.longitude && (
                   <MapView
                     initialRegion={{
@@ -194,18 +173,17 @@ class DistanceAlongServices extends Component {
                       longitudeDelta: LONGITUDE_DELTA,
                     }}
                     style={styles.container}
-                    ref={(c) => (this.mapView = c)} // eslint-disable-line react/jsx-no-bind
+                    ref={(c) => (this.mapView = c)}
                     onPress={this.onMapPress}
                   >
                     <MapViewDirections
                       origin={this.state.currentPosition}
                       destination={this.state.coordinatesEnd}
-                      // waypoints={this.state}
                       mode="DRIVING"
                       apikey={GOOGLE_MAPS_APIKEY}
                       language="en"
                       strokeWidth={4}
-                      strokeColor="black"
+                      strokeColor="blueviolet"
                       onStart={(params) => {
                         console.log(
                           `Started routing between "${params.origin}" and "${params.destination}"`
@@ -218,17 +196,16 @@ class DistanceAlongServices extends Component {
                       resetOnChange={false}
                     />
                     <Marker
-                      title={distance.toString()}
-                      description="This is a description"
+                      title={`Distance`}
+                      description={`Distance is ${distance.toString()}`}
                       coordinate={{
                         latitude: latitude,
                         longitude: longitude,
                       }}
                     />
-
                     <MapView.Marker
-                      title="This is a title"
-                      description="This is a description"
+                      title="Current location"
+                      description="This is your current location"
                       coordinate={{
                         latitude: currentPosition.latitude,
                         longitude: currentPosition.longitude,
@@ -238,23 +215,24 @@ class DistanceAlongServices extends Component {
                 )}
               </View>
             )}
-
-            {/* <Text>dasdasdddddd</Text> */}
           </View>
         )}
 
         {length != 6 && (
-          <View style={styles.container}>
-            <Text>Distance: {distance} km</Text>
+          <View>
+            <Blocked row>
+              <Text> Nearest Salon is locating at Distance of</Text>
+              <Distance> {distance} km</Distance>
+              <Text> from your current location</Text>
+            </Blocked>
             {!currentPosition.latitude && !currentPosition.longitude && (
               <ActivityIndicator
                 animating={this.state.isLoading}
                 size="large"
-                color="#0000ff"
+                color="blueviolet"
                 style={{ top: 250 }}
               />
             )}
-
             {currentPosition.latitude && currentPosition.longitude && (
               <MapView
                 initialRegion={{
@@ -264,18 +242,17 @@ class DistanceAlongServices extends Component {
                   longitudeDelta: LONGITUDE_DELTA,
                 }}
                 style={styles.container}
-                ref={(c) => (this.mapView = c)} // eslint-disable-line react/jsx-no-bind
+                ref={(c) => (this.mapView = c)}
                 onPress={this.onMapPress}
               >
                 <MapViewDirections
                   origin={this.state.currentPosition}
                   destination={this.state.coordinatesEnd}
-                  // waypoints={this.state}
                   mode="DRIVING"
                   apikey={GOOGLE_MAPS_APIKEY}
                   language="en"
                   strokeWidth={4}
-                  strokeColor="black"
+                  strokeColor="blueviolet"
                   onStart={(params) => {
                     console.log(
                       `Started Nearest routing between "${params.origin}" and "${params.destination}"`
@@ -288,17 +265,16 @@ class DistanceAlongServices extends Component {
                   resetOnChange={false}
                 />
                 <Marker
-                  title={distance.toString()}
-                  description="This is a description"
+                  title={`Distance`}
+                  description={`Distance is ${distance.toString()}`}
                   coordinate={{
                     latitude: latitude,
                     longitude: longitude,
                   }}
                 />
-
                 <MapView.Marker
-                  title="This is a title"
-                  description="This is a description"
+                  title="Current location"
+                  description="This is your current location"
                   coordinate={{
                     latitude: currentPosition.latitude,
                     longitude: currentPosition.longitude,
@@ -311,9 +287,10 @@ class DistanceAlongServices extends Component {
             )}
           </View>
         )}
-      </View>
+      </Container>
     );
   }
 }
 
-export default DistanceAlongServices;
+//exporting class SalonTrackingScreen
+export default SalonTrackingScreen;

@@ -1,123 +1,78 @@
 import React from "react";
-import { Easing, Animated } from "react-native";
+import { Block, Text } from "galio-framework";
+import Cart from "../screens/Cart";
+import SalonsScreen from "../screens/SalonsScreen";
+import TokenSignupScreen from "../screens/TokenSignupScreen";
+import StartScreen from "../screens/LoginScreen";
+import Logout from "../screens/Logout";
+import MapandServicesScreen from "../screens/MapandServicesScreen";
+import ProfileScreen from "../screens/ProfileScreen";
+import RegistrationScreen from "../screens/RegistrationScreen";
+import UpdatePasswordScreen from "../screens/UpdatePasswordScreen";
+import ForgetPasswordScreen from "../screens/ForgetPasswordScreen";
+import AppointmentScreen from "../screens/AppointmentScreen";
+import Schedules from "../screens/Schedules";
+import UpdateProfileScreen from "../screens/UpdateProfileScreen";
+import TokenForgetPasswordScreen from "../screens/TokenForgetPasswordScreen";
+import Menu from "./Menu";
+import { Drawer } from "../components/";
+import OneServiceScreen from "../screens/OneServiceScreen";
+import AppointedServicesScreen from "../screens/AppointedServicesScreen";
 import {
   createStackNavigator,
   createDrawerNavigator,
   createSwitchNavigator,
   createAppContainer,
 } from "react-navigation";
-import { Block, Text } from "galio-framework";
-import Cart from "../screens/Cart";
-import HomeScreen from "../screens/Home";
-import TokenSignupScreen from "../screens/TokenSignupScreen";
-import OnboardingScreen from "../screens/TokenSignupScreen";
-import MapandServices from "../screens/MapandServices";
-import ProfileScreen from "../screens/Profile";
-import RegistrationScreen from "../screens/RegistrationScreen";
-import ResetPassword from "../screens/ResetPassword";
-import ForgetPasswordScreen from "../screens/ForgetPasswordScreen";
-import SettingsScreen from "../screens/Settings";
-import TimePick from "../screens/TimePick";
-import Landing from "../screens/Landing";
-import Logout from "../screens/Logout";
-import Schedules from "../screens/Schedules";
-import UpdateProfile from "../screens/UpdateProfile";
-import TokenForgetPasswordScreen from "../screens/TokenForgetPasswordScreen";
-import Menu from "./Menu";
-import Header from "../components/Header";
-import { Drawer } from "../components/";
-import OneServiceScreen from "../screens/OneService";
-import SlotsAvailing from "../screens/SlotsAvailing";
-import ServicesScreen from "../screens/ServicesScreen";
-
-const transitionConfig = (transitionProps, prevTransitionProps) => ({
-  transitionSpec: {
-    duration: 400,
-    easing: Easing.out(Easing.poly(4)),
-    timing: Animated.timing,
-  },
-});
 
 const ProfileStack = createStackNavigator(
   {
     Profile: {
       screen: ProfileScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header white transparent title="Profile" navigation={navigation} />
-        ),
-        headerTransparent: true,
-      }),
     },
     UpdateProfile: {
-      screen: UpdateProfile,
-      navigationOptions: ({ navigation }) => ({
-        title: "Update Profile",
-        headerStyle: {
-          backgroundColor: "orange",
-          alignSelf: "center",
-        },
-        headerTintColor: "#fff",
-        headerTitleStyle: {
-          fontWeight: "bold",
-        },
-        headerTransparent: true,
-      }),
+      screen: UpdateProfileScreen,
+    },
+    ResetPassword: {
+      screen: UpdatePasswordScreen,
     },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig,
   }
 );
 
-const MapandServicesStack = createStackNavigator(
+const SlotsAvailingStack = createStackNavigator(
   {
+    SlotsAvailing: {
+      screen: AppointedServicesScreen,
+    },
+  },
+  {
+    cardStyle: { backgroundColor: "#EEEEEE" },
+  }
+);
+
+const HomeStack = createStackNavigator(
+  {
+    Home: {
+      screen: SalonsScreen,
+    },
+
     MapandServices: {
-      screen: MapandServices,
-      navigationOptions: ({ navigation }) => ({
-        title: "Maps and services",
-      }),
+      screen: MapandServicesScreen,
     },
     Service: {
       screen: OneServiceScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: "Service",
-      }),
-      // navigationOptions: ({ navigation }) => ({
-      //   // header: <Header title="Service" navigation={navigation} />,
-      //   drawerLabel: () => {},
-      // }),
     },
     TimePick: {
-      screen: TimePick,
-      navigationOptions: ({ navigation }) => ({
-        title: "time picker",
-      }),
-      // navigationOptions: ({ navigation }) => ({
-      //   // header: <Header title="Appointment" navigation={navigation} />,
-      //   drawerLabel: () => {},
-      // }),
+      screen: AppointmentScreen,
     },
   },
   {
-    cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig,
-  }
-);
-
-const SettingsStack = createStackNavigator(
-  {
-    Settings: {
-      screen: SettingsScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Settings" navigation={navigation} />,
-      }),
+    cardStyle: {
+      backgroundColor: "#EEEEEE",
     },
-  },
-  {
-    cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig,
   }
 );
 
@@ -125,89 +80,10 @@ const CartStack = createStackNavigator(
   {
     Cart: {
       screen: Cart,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Your Cart" navigation={navigation} />,
-      }),
     },
   },
   {
     cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig,
-  }
-);
-
-const SlotsAvailingStack = createStackNavigator(
-  {
-    SlotsAvailing: {
-      screen: SlotsAvailing,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Slots History" navigation={navigation} />,
-      }),
-    },
-  },
-  {
-    cardStyle: { backgroundColor: "#EEEEEE" },
-    transitionConfig,
-  }
-);
-
-const HomeStack = createStackNavigator(
-  {
-    Home: {
-      screen: HomeScreen,
-      navigationOptions: ({ navigation }) => ({
-        header: <Header title="Home" navigation={navigation} />,
-      }),
-    },
-
-    MapandServices: {
-      screen: MapandServices,
-      navigationOptions: ({ navigation }) => ({
-        title: "Maps and services",
-      }),
-    },
-    Service: {
-      screen: OneServiceScreen,
-      navigationOptions: ({ navigation }) => ({
-        title: "Service",
-      }),
-      // navigationOptions: ({ navigation }) => ({
-      //   // header: <Header title="Service" navigation={navigation} />,
-      //   drawerLabel: () => {},
-      // }),
-    },
-    TimePick: {
-      screen: TimePick,
-      navigationOptions: ({ navigation }) => ({
-        title: "time picker",
-      }),
-      // navigationOptions: ({ navigation }) => ({
-      //   // header: <Header title="Appointment" navigation={navigation} />,
-      //   drawerLabel: () => {},
-      // }),
-    },
-
-    Landing: {
-      screen: Landing,
-      navigationOptions: ({ navigation }) => ({
-        header: (
-          <Header
-            back
-            white
-            transparent
-            title="Landing"
-            navigation={navigation}
-          />
-        ),
-        headerTransparent: true,
-      }),
-    },
-  },
-  {
-    cardStyle: {
-      backgroundColor: "#EEEEEE", //this is the backgroundColor for the app
-    },
-    transitionConfig,
   }
 );
 
@@ -217,31 +93,13 @@ const AppStack = createDrawerNavigator(
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Home" title="Home" />
+          <Drawer focused={focused} screen="SalonsScreen" title="Salons" />
         ),
       },
     },
-
-    Cart: {
-      screen: CartStack,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Cart" title="Customer Cart" />
-        ),
-      }),
-    },
-    Schedules: {
-      screen: Schedules,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Schedules" title="Schedules" />
-        ),
-      }),
-    },
-
     Profile: {
       screen: ProfileStack,
-      navigationOptions: (navOpt) => ({
+      navigationOptions: () => ({
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Profile" title="Profile" />
         ),
@@ -249,13 +107,29 @@ const AppStack = createDrawerNavigator(
     },
     SlotsAvailing: {
       screen: SlotsAvailingStack,
-      navigationOptions: (navOpt) => ({
+      navigationOptions: () => ({
         drawerLabel: ({ focused }) => (
           <Drawer
             focused={focused}
             screen="SlotsAvailing"
             title="Slots Availing"
           />
+        ),
+      }),
+    },
+    Cart: {
+      screen: CartStack,
+      navigationOptions: () => ({
+        drawerLabel: ({ focused }) => (
+          <Drawer focused={focused} screen="Cart" title="Customer Cart" />
+        ),
+      }),
+    },
+    Schedules: {
+      screen: Schedules,
+      navigationOptions: () => ({
+        drawerLabel: ({ focused }) => (
+          <Drawer focused={focused} screen="Schedules" title="Schedules" />
         ),
       }),
     },
@@ -271,22 +145,9 @@ const AppStack = createDrawerNavigator(
       },
     },
 
-    ResetPassword: {
-      screen: ResetPassword,
-      navigationOptions: (navOpt) => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer
-            focused={focused}
-            screen="ResetPassword"
-            title="Reset Password"
-          />
-        ),
-      }),
-    },
-
     Logout: {
       screen: Logout,
-      navigationOptions: (navOpt) => ({
+      navigationOptions: () => ({
         drawerLabel: ({ focused }) => (
           <Drawer focused={focused} screen="Logout" title="Logout" />
         ),
@@ -300,34 +161,20 @@ const AppNavigator = createSwitchNavigator(
   {
     App: AppStack,
     Login: {
-      screen: OnboardingScreen,
+      screen: StartScreen,
     },
     Registration: {
       screen: RegistrationScreen,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
     },
     TokenSignup: {
       screen: TokenSignupScreen,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
     },
 
     ForgetPassword: {
       screen: ForgetPasswordScreen,
-      navigationOptions: {
-        drawerLabel: () => {},
-      },
     },
     TokenForgetPassword: {
       screen: TokenForgetPasswordScreen,
-      // navigationOptions: ({ navigation }) => ({
-      //   header: (
-      //     <Header title="View your Appointment" navigation={navigation} />
-      //   ),
-      // }),
     },
   },
   {
