@@ -23,7 +23,7 @@ export default class LoginScreen extends Component {
     super(props);
     this.state = {
       email: "ijazmudassir786@gmail.com",
-      password: "123123",
+      password: "123123123",
       isLoading: false,
     };
   }

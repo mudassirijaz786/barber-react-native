@@ -92,7 +92,7 @@ export default class OneServiceScreen extends Component {
               </Left>
               <Right>
                 <Text>
-                  <Price> {items.servicePrice} Rs</Price>
+                  <Price> {items.servicePrice} </Price> Rs
                 </Text>
               </Right>
             </CardItem>

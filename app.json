@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "rn-material-kit-free",
-    "description": "React Native - Material Kit Free",
-    "slug": "rn-material-kit-free",
+    "name": "salon",
+    "description": "React Native -salon",
+    "slug": "salon",
     "privacy": "unlisted",
     "sdkVersion": "35.0.0",
     "android": {
@@ -10,7 +10,8 @@
         "googleMaps": {
           "apiKey": "AIzaSyARjyRyPhNoOKCNv4bS1W7zP-1reTQElFs"
         }
-      }
+      },
+      "package": "com.mi.salon"
     },
     "platforms": ["ios", "android"],
     "version": "1.4.0",

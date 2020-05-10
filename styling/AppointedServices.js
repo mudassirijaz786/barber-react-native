@@ -23,7 +23,7 @@ export const Title = styled.Text`
 export const ServiceName = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 24px;
+  font-size: 28px;
   font-weight: 400;
 `;
 

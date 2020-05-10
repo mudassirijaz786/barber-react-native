@@ -1,10 +1,10 @@
 //importing
 import React, { Component } from "react";
 import { Text, AsyncStorage, TouchableOpacity } from "react-native";
-import { Body, CardItem, Icon } from "native-base";
-import moment from "moment";
+import { Body, CardItem, Icon, Right, Left } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
+import { showMessage } from "react-native-flash-message";
 import {
   Container,
   Title,
@@ -14,7 +14,6 @@ import {
   CardPaper,
   Price,
   Open,
-  AppointmentButton,
   Close,
   Description,
 } from "../styling/AppointedServices";
@@ -24,12 +23,8 @@ export default class AppointedServicesScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: "",
       isLoading: false,
-      responseData: {},
-      search: "",
-      arrayholder: {},
-      noHistory: "",
+      appointedServices: [],
     };
   }
 
@@ -51,19 +46,14 @@ export default class AppointedServicesScreen extends Component {
   //getting current appointed service
   async componentDidMount() {
     this.setState({ isLoading: true });
-    var date = moment().utcOffset("PST").format("YYYY-MM-DD hh:mm:ss a");
-    this.setState({
-      date,
-    });
 
     //getting token from local storage
     value = await AsyncStorage.getItem("x-auth-token");
     var obj = {};
-    obj["current_date"] = date;
-    const request = await Axios({
+    obj["current_date"] = new Date();
+    await Axios({
       url:
         "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/customer/schedule",
-
       method: "POST",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -73,65 +63,107 @@ export default class AppointedServicesScreen extends Component {
       data: obj,
     })
       .then((response) => {
-        this.setState({ responseData: response.data });
-        console.log("response", response);
+        this.setState({
+          appointedServices: response.data,
+        });
+        console.log("appointed services", this.state.appointedServices);
       })
       .catch((error) => {
         console.log("error", error);
-        this.setState({ noHistory: "No appointment" });
       });
     this.setState({ isLoading: false });
   }
 
+  //deleting an appointed service from list of appointments
+  deleteAppointedService = async (id) => {
+    value = await AsyncStorage.getItem("x-auth-token");
+    Axios({
+      url:
+        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
+        id,
+      method: "DELETE",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+    })
+      .then((res) => {
+        showMessage({
+          message: "Appointment is deleted successfully",
+          type: "success",
+        });
+        const { appointedServices } = this.state;
+        const result = appointedServices.filter((item) => item._id !== id);
+        this.setState({ appointedServices: result });
+      })
+      .catch((err) => {
+        showMessage({
+          message: "There occured an error",
+          type: "danger",
+        });
+      });
+  };
+
   //rendering
   render() {
-    const { isLoading, responseData, noHistory } = this.state;
+    const { isLoading, appointedServices } = this.state;
     return (
       <Container>
-        <Title>Availible services</Title>
+        <Title>Availible services for today</Title>
         {isLoading && (
           <ActivityIndicator
-            animating={this.state.isLoading}
+            animating={isLoading}
             size="large"
             color="blueviolet"
           />
         )}
-        {Object.keys(responseData).length === 0 && (
-          <NoService>{noHistory}</NoService>
+        {appointedServices.length === 0 && (
+          <NoService>you have no service appointmented for today</NoService>
         )}
         <ContentForCard>
-          {Object.keys(responseData).length !== 0 && (
-            <CardPaper elevation={10} key={responseData}>
-              <CardItem header>
-                <Body>
-                  <ServiceName>{responseData.Salon_id}</ServiceName>
-                  <Price>{responseData.service_id}</Price>
-                  <Text>
-                    Booking date
-                    <Description> {responseData.booking_date}</Description>
-                  </Text>
-                  <Text>
-                    Starting time
-                    <Open> {responseData.stating_time}</Open>
-                  </Text>
+          {appointedServices.length !== 0 &&
+            appointedServices.map((items, index) => {
+              return (
+                <CardPaper elevation={10} key={index}>
+                  <CardItem header>
+                    <Body>
+                      <ServiceName>{items.Salon_id}</ServiceName>
+                      <Price>
+                        <Text>
+                          Starting time
+                          <Open> {items.stating_time}</Open>
+                        </Text>
+                      </Price>
 
-                  <Text>
-                    Ending time
-                    <Close> {responseData.ending_time}</Close>
-                  </Text>
-                  <TouchableOpacity>
-                    <AppointmentButton
-                      mode="outlined"
-                      uppercase={false}
-                      contentStyle={{ height: 30 }}
-                    >
-                      {responseData.service_status}
-                    </AppointmentButton>
-                  </TouchableOpacity>
-                </Body>
-              </CardItem>
-            </CardPaper>
-          )}
+                      <Price>
+                        <Text>
+                          Ending time
+                          <Close> {items.ending_time}</Close>
+                        </Text>
+                      </Price>
+                    </Body>
+                  </CardItem>
+                  <CardItem>
+                    <Left>
+                      <Text>
+                        Booking date:
+                        <Description> {items.booking_date}</Description>
+                      </Text>
+                    </Left>
+                    <Right>
+                      <TouchableOpacity>
+                        <Icon
+                          onPress={() => this.deleteAppointedService(items._id)}
+                          name="delete-outline"
+                          type="MaterialCommunityIcons"
+                        />
+                      </TouchableOpacity>
+                    </Right>
+                  </CardItem>
+                </CardPaper>
+              );
+            })}
         </ContentForCard>
       </Container>
     );

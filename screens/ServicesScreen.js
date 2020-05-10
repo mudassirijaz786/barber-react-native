@@ -119,11 +119,9 @@ export default class ServicesScreen extends Component {
                         <Body>
                           <ServiceName>{items.serviceName}</ServiceName>
                           <Text muted>{items.serviceDescription}</Text>
+                          <Category>{items.service_category}</Category>
                         </Body>
                       </Left>
-                      <Right>
-                        <Category>{items.service_category}</Category>
-                      </Right>
                     </CardItem>
                     <CardItem>
                       <Left>
@@ -140,7 +138,7 @@ export default class ServicesScreen extends Component {
                       </Left>
                       <Right>
                         <Text>
-                          <Price> {items.servicePrice} Rs</Price>
+                          <Price> {items.servicePrice} </Price> Rs
                         </Text>
                       </Right>
                     </CardItem>

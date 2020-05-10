@@ -82,7 +82,6 @@ export default class SalonsScreen extends React.Component {
 
   //moving to MapsAndService
   onPressed(items) {
-    console.log("clicked");
     this.props.navigation.navigate("MapandServices", { items: items });
   }
 

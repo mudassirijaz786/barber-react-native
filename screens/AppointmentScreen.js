@@ -17,7 +17,6 @@ import {
 //exporting AppointmentScreen
 export default class AppointmentScreen extends Component {
   state = {
-    date: "",
     hours: [
       "00",
       "01",
@@ -72,6 +71,9 @@ export default class AppointmentScreen extends Component {
     this.setState({ stating_time: f }, async () => {
       obj["booking_date"] = this.state.booking_date;
       obj["stating_time"] = this.state.stating_time;
+      obj["current_date"] = new Date();
+      obj["salon_id"] = this.props.navigation.state.params.items.Salon_id;
+      console.log(obj);
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
         url:
@@ -104,7 +106,6 @@ export default class AppointmentScreen extends Component {
 
   //rendering
   render() {
-    const { date } = this.state;
     return (
       <Container>
         <Title>Appoint this service</Title>
