@@ -22,9 +22,9 @@ export default class UpdateProfileScreen extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "dasdasd",
-      email: "ijazmudassir786@gmail.com",
-      phnnbr: "23423213123",
+      name: "",
+      email: "",
+      phnnbr: "",
       errorMsg: "",
       isLoading: false,
     };
@@ -70,6 +70,7 @@ export default class UpdateProfileScreen extends React.Component {
         message: "Profile updated successfully",
         type: "success",
       });
+      this.props.navigation.navigate("Profile");
     } else {
       this.setState({ isLoading: false });
       showMessage({

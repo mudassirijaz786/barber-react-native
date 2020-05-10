@@ -1,16 +1,14 @@
+//importing
 import React from "react";
 import { StyleSheet } from "react-native";
 import { Block, Text, theme } from "galio-framework";
-
 import Icon from "./Icon";
 import materialTheme from "../constants/Theme";
 
-const proScreens = [];
-
+//class DrawerItem
 class DrawerItem extends React.Component {
   renderIcon = () => {
     const { title, focused } = this.props;
-
     switch (title) {
       case "Salons":
         return (
@@ -30,39 +28,13 @@ class DrawerItem extends React.Component {
             color={focused ? "white" : materialTheme.COLORS.MUTED}
           />
         );
-      case "Schedules":
-        return (
-          <Icon
-            size={16}
-            name="schedule"
-            family="material"
-            color={focused ? "white" : materialTheme.COLORS.MUTED}
-          />
-        );
-      case "Customer Cart":
-        return (
-          <Icon
-            size={16}
-            name="ios-cart"
-            family="ionicon"
-            color={focused ? "white" : materialTheme.COLORS.MUTED}
-          />
-        );
-      case "Slots Availing":
+
+      case "Appointed Services":
         return (
           <Icon
             size={16}
             name="ios-timer"
             family="ionicon"
-            color={focused ? "white" : materialTheme.COLORS.MUTED}
-          />
-        );
-      case "Reset Password":
-        return (
-          <Icon
-            size={16}
-            name="spellcheck"
-            family="material"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
           />
         );
@@ -80,25 +52,9 @@ class DrawerItem extends React.Component {
     }
   };
 
-  renderLabel = () => {
-    const { title } = this.props;
-
-    if (proScreens.includes(title)) {
-      return (
-        <Block middle style={styles.pro}>
-          <Text size={12} color="white">
-            PRO
-          </Text>
-        </Block>
-      );
-    }
-
-    return null;
-  };
-
+  //rendering
   render() {
     const { focused, title } = this.props;
-    const proScreen = proScreens.includes(title);
     return (
       <Block
         flex
@@ -112,35 +68,27 @@ class DrawerItem extends React.Component {
           {this.renderIcon()}
         </Block>
         <Block row center flex={0.9}>
-          <Text
-            size={18}
-            color={
-              focused
-                ? "white"
-                : proScreen
-                ? materialTheme.COLORS.MUTED
-                : "black"
-            }
-          >
+          <Text size={18} color={focused ? "white" : "blueviolet"}>
             {title}
           </Text>
-          {this.renderLabel()}
         </Block>
       </Block>
     );
   }
 }
 
+//exporting DrawerItem
 export default DrawerItem;
 
+//styling
 const styles = StyleSheet.create({
   defaultStyle: {
     paddingVertical: 16,
     paddingHorizontal: 16,
   },
   activeStyle: {
-    backgroundColor: materialTheme.COLORS.ACTIVE,
-    borderRadius: 4,
+    backgroundColor: "blueviolet",
+    borderRadius: 60,
   },
   shadow: {
     shadowColor: theme.COLORS.BLACK,
@@ -150,13 +98,5 @@ const styles = StyleSheet.create({
     },
     shadowRadius: 8,
     shadowOpacity: 0.2,
-  },
-  pro: {
-    backgroundColor: materialTheme.COLORS.LABEL,
-    paddingHorizontal: 6,
-    marginLeft: 8,
-    borderRadius: 2,
-    height: 16,
-    width: 36,
   },
 });

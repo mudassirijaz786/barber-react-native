@@ -24,10 +24,10 @@ export default class RegistrationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      name: "mudassir",
-      email: "ijazmudassir786@gmail.com",
-      phone: "123123123123",
-      password: "123123123",
+      name: "",
+      email: "",
+      phone: "",
+      password: "",
       isLoading: false,
     };
   }

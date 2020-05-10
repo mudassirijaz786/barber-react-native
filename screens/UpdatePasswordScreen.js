@@ -19,9 +19,9 @@ export default class UpdatePasswordScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      oldpassword: "123123123",
-      password: "123123",
-      confirmpassword: "123123",
+      oldpassword: "",
+      password: "",
+      confirmpassword: "",
       errorMsg: "",
       isLoading: false,
     };
@@ -67,7 +67,7 @@ export default class UpdatePasswordScreen extends Component {
         message: "Password updated successfully",
         type: "success",
       });
-      this.props.navigation.navigate("Home");
+      this.props.navigation.navigate("Profile");
     } else {
       this.setState({ isLoading: false });
       showMessage({

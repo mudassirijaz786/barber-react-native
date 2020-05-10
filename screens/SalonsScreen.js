@@ -87,7 +87,7 @@ export default class SalonsScreen extends React.Component {
 
   //moving filtered salon to MapsAndService
   onFilter(items) {
-    this.props.navigation.navigate("MapandServices", { items: items });
+    this.props.navigation.navigate("NearestSalonMap", { items: items });
   }
 
   //updating search field
@@ -105,17 +105,16 @@ export default class SalonsScreen extends React.Component {
 
   //rendering
   render() {
-    const { focused } = this.props;
     const { search } = this.state;
     return (
       <Container>
         <Blocked row>
-          <Filter>Filter by near location</Filter>
+          <Filter>Nearest Salon</Filter>
           <Icon
             size={30}
             name="filter-outline"
             type="MaterialCommunityIcons"
-            color={focused ? "white" : "#eb6709"}
+            style={{ color: "#eb6709" }}
             onPress={() => this.onFilter(this.state.salons)}
           />
         </Blocked>

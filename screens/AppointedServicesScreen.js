@@ -111,60 +111,64 @@ export default class AppointedServicesScreen extends Component {
     return (
       <Container>
         <Title>Availible services for today</Title>
-        {isLoading && (
+        {appointedServices.length === 0 && (
+          <NoService>you have no service appointmented for today</NoService>
+        )}
+
+        {isLoading ? (
           <ActivityIndicator
             animating={isLoading}
             size="large"
             color="blueviolet"
           />
-        )}
-        {appointedServices.length === 0 && (
-          <NoService>you have no service appointmented for today</NoService>
-        )}
-        <ContentForCard>
-          {appointedServices.length !== 0 &&
-            appointedServices.map((items, index) => {
-              return (
-                <CardPaper elevation={10} key={index}>
-                  <CardItem header>
-                    <Body>
-                      <ServiceName>{items.Salon_id}</ServiceName>
-                      <Price>
-                        <Text>
-                          Starting time
-                          <Open> {items.stating_time}</Open>
-                        </Text>
-                      </Price>
+        ) : (
+          <ContentForCard>
+            {appointedServices.length !== 0 &&
+              appointedServices.map((items, index) => {
+                return (
+                  <CardPaper elevation={10} key={index}>
+                    <CardItem header>
+                      <Body>
+                        <ServiceName>{items.Salon_id}</ServiceName>
+                        <Price>
+                          <Text>
+                            Starting time
+                            <Open> {items.stating_time}</Open>
+                          </Text>
+                        </Price>
 
-                      <Price>
+                        <Price>
+                          <Text>
+                            Ending time
+                            <Close> {items.ending_time}</Close>
+                          </Text>
+                        </Price>
+                      </Body>
+                    </CardItem>
+                    <CardItem>
+                      <Left>
                         <Text>
-                          Ending time
-                          <Close> {items.ending_time}</Close>
+                          Booking date:
+                          <Description> {items.booking_date}</Description>
                         </Text>
-                      </Price>
-                    </Body>
-                  </CardItem>
-                  <CardItem>
-                    <Left>
-                      <Text>
-                        Booking date:
-                        <Description> {items.booking_date}</Description>
-                      </Text>
-                    </Left>
-                    <Right>
-                      <TouchableOpacity>
-                        <Icon
-                          onPress={() => this.deleteAppointedService(items._id)}
-                          name="delete-outline"
-                          type="MaterialCommunityIcons"
-                        />
-                      </TouchableOpacity>
-                    </Right>
-                  </CardItem>
-                </CardPaper>
-              );
-            })}
-        </ContentForCard>
+                      </Left>
+                      <Right>
+                        <TouchableOpacity>
+                          <Icon
+                            onPress={() =>
+                              this.deleteAppointedService(items._id)
+                            }
+                            name="delete-outline"
+                            type="MaterialCommunityIcons"
+                          />
+                        </TouchableOpacity>
+                      </Right>
+                    </CardItem>
+                  </CardPaper>
+                );
+              })}
+          </ContentForCard>
+        )}
       </Container>
     );
   }

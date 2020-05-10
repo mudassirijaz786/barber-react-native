@@ -2,6 +2,7 @@
 import React, { Component } from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
+import { Icon } from "native-base";
 import MapView, { Marker } from "react-native-maps";
 import * as geolib from "geolib";
 import MapViewDirections from "react-native-maps-directions";
@@ -11,6 +12,7 @@ import {
   Title,
   Distance,
   Blocked,
+  Category,
   View,
 } from "../styling/SalonTracking";
 
@@ -35,25 +37,40 @@ class SalonTrackingScreen extends Component {
     this.state = {
       currentPosition: {},
       coordinatesEnd: {},
+      isLoading: false,
       distance: null,
-      latitude: this.props.items.Latitude,
-      longitude: this.props.items.Longitude,
-      items: this.props.items,
+      latitude: this.props.navigation.state.params.items.Latitude,
+      longitude: this.props.navigation.state.params.items.Longitude,
+      items: this.props.navigation.state.params.items,
       points: [],
     };
     this.mapView = null;
   }
 
+  //header SalonTrackingServices
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Maps",
+      headerLeft: (
+        <Icon
+          onPress={() => navigation.goBack()}
+          name="back"
+          type="AntDesign"
+          style={{ marginLeft: 10 }}
+        />
+      ),
+    };
+  };
+
   //showing nearest salon or salon
   componentDidMount() {
-    {
-      this.state.items ? this.getNearestState() : null;
-    }
+    this.setState({ isLoading: true });
     {
       this.state.latitude && this.state.longitude
         ? this.getInitialState()
         : null;
     }
+    this.setState({ isLoading: false });
   }
 
   //map ready
@@ -98,56 +115,21 @@ class SalonTrackingScreen extends Component {
     });
   };
 
-  //getting current position
-  getNearestState = () => {
-    getLocation().then((data) => {
-      var obj = {};
-      obj["latitude"] = data.latitude;
-      obj["longitude"] = data.longitude;
-      let points = [];
-      let obj1 = {};
-
-      //getting and setting latitude and longitude of all salons
-      for (let i = 0; i < this.state.items.length; i++) {
-        obj1["latitude"] = this.state.items[i].Latitude;
-        obj1["longitude"] = this.state.items[i].Longitude;
-
-        //pushing created object in array
-        points.push(obj1);
-
-        //get the object as empty to fill it again
-        obj1 = {};
-      }
-
-      //find the nearest coordinate
-      const bounds1 = geolib.findNearest(obj, points);
-
-      //measuring distance from current location to that nearest coordinate
-      const distanceInM = geolib.getDistance(obj, bounds1);
-
-      //converting distance from meters to kilometers
-      const distance = geolib.convertDistance(distanceInM, "km");
-
-      //setting states
-      this.setState({
-        currentPosition: obj,
-        coordinatesEnd: bounds1,
-        distance,
-        points,
-      });
-    });
-  };
-
   //rendering
   render() {
     const { longitude, latitude } = this.state.coordinatesEnd;
-    const { currentPosition, distance } = this.state;
+    const { currentPosition, distance, isLoading } = this.state;
     const { items, points } = this.state;
-    const length = Object.keys(items).length;
+    console.log(this.props.navigation.state.params.items);
+    const salonName = this.props.navigation.state.params.items.SalonName;
+
     return (
       <Container>
         <Title>Locating Salon</Title>
-        {length == 6 && (
+        <Category>{salonName}</Category>
+        {isLoading ? (
+          <ActivityIndicator size="large" color="blueviolet" />
+        ) : (
           <View>
             {latitude && longitude && (
               <View>
@@ -156,14 +138,6 @@ class SalonTrackingScreen extends Component {
                   <Distance> {distance} km</Distance>
                   <Text> from your current location</Text>
                 </Blocked>
-                {!currentPosition.latitude && !currentPosition.longitude && (
-                  <ActivityIndicator
-                    animating={this.state.isLoading}
-                    size="large"
-                    color="blueviolet"
-                    style={{ top: 250 }}
-                  />
-                )}
                 {currentPosition.latitude && currentPosition.longitude && (
                   <MapView
                     initialRegion={{
@@ -214,76 +188,6 @@ class SalonTrackingScreen extends Component {
                   </MapView>
                 )}
               </View>
-            )}
-          </View>
-        )}
-
-        {length != 6 && (
-          <View>
-            <Blocked row>
-              <Text> Nearest Salon is locating at Distance of</Text>
-              <Distance> {distance} km</Distance>
-              <Text> from your current location</Text>
-            </Blocked>
-            {!currentPosition.latitude && !currentPosition.longitude && (
-              <ActivityIndicator
-                animating={this.state.isLoading}
-                size="large"
-                color="blueviolet"
-                style={{ top: 250 }}
-              />
-            )}
-            {currentPosition.latitude && currentPosition.longitude && (
-              <MapView
-                initialRegion={{
-                  latitude: this.state.currentPosition.latitude,
-                  longitude: this.state.currentPosition.longitude,
-                  latitudeDelta: LATITUDE_DELTA,
-                  longitudeDelta: LONGITUDE_DELTA,
-                }}
-                style={styles.container}
-                ref={(c) => (this.mapView = c)}
-                onPress={this.onMapPress}
-              >
-                <MapViewDirections
-                  origin={this.state.currentPosition}
-                  destination={this.state.coordinatesEnd}
-                  mode="DRIVING"
-                  apikey={GOOGLE_MAPS_APIKEY}
-                  language="en"
-                  strokeWidth={4}
-                  strokeColor="blueviolet"
-                  onStart={(params) => {
-                    console.log(
-                      `Started Nearest routing between "${params.origin}" and "${params.destination}"`
-                    );
-                  }}
-                  onReady={this.onReady}
-                  onError={(errorMessage) => {
-                    console.log(errorMessage);
-                  }}
-                  resetOnChange={false}
-                />
-                <Marker
-                  title={`Distance`}
-                  description={`Distance is ${distance.toString()}`}
-                  coordinate={{
-                    latitude: latitude,
-                    longitude: longitude,
-                  }}
-                />
-                <MapView.Marker
-                  title="Current location"
-                  description="This is your current location"
-                  coordinate={{
-                    latitude: currentPosition.latitude,
-                    longitude: currentPosition.longitude,
-                  }}
-                />
-                {points.map((point) => (
-                  <Marker coordinate={point} title="Other Salon" />
-                ))}
-              </MapView>
             )}
           </View>
         )}

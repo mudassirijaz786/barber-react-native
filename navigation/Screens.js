@@ -1,30 +1,34 @@
+//importing
 import React from "react";
 import { Block, Text } from "galio-framework";
-import Cart from "../screens/Cart";
 import SalonsScreen from "../screens/SalonsScreen";
 import TokenSignupScreen from "../screens/TokenSignupScreen";
-import StartScreen from "../screens/SalonsScreen";
+import StartScreen from "../screens/LoginScreen";
 import Logout from "../screens/Logout";
-import MapandServicesScreen from "../screens/MapandServicesScreen";
+import { Icon } from "native-base";
+import SalonTrackingScreen from "../screens/SalonTrackingScreen";
+import ServicesScreen from "../screens/ServicesScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import RegistrationScreen from "../screens/RegistrationScreen";
 import UpdatePasswordScreen from "../screens/UpdatePasswordScreen";
 import ForgetPasswordScreen from "../screens/ForgetPasswordScreen";
 import AppointmentScreen from "../screens/AppointmentScreen";
-import Schedules from "../screens/Schedules";
 import UpdateProfileScreen from "../screens/UpdateProfileScreen";
 import TokenForgetPasswordScreen from "../screens/TokenForgetPasswordScreen";
 import Menu from "./Menu";
-import { Drawer } from "../components/";
+import NearestSalonMapScreen from "../screens/NearestSalonMapScreen";
+import Drawer from "../components/Drawer";
 import OneServiceScreen from "../screens/OneServiceScreen";
 import AppointedServicesScreen from "../screens/AppointedServicesScreen";
 import {
   createStackNavigator,
   createDrawerNavigator,
+  createBottomTabNavigator,
   createSwitchNavigator,
   createAppContainer,
 } from "react-navigation";
 
+//stack for profile
 const ProfileStack = createStackNavigator(
   {
     Profile: {
@@ -42,6 +46,7 @@ const ProfileStack = createStackNavigator(
   }
 );
 
+//stack for appointed services
 const SlotsAvailingStack = createStackNavigator(
   {
     SlotsAvailing: {
@@ -53,14 +58,50 @@ const SlotsAvailingStack = createStackNavigator(
   }
 );
 
+//tab for maps and services
+const MapsAndServiceTab = createBottomTabNavigator({
+  SalonTrackingScreen: {
+    screen: SalonTrackingScreen,
+    navigationOptions: {
+      tabBarLabel: false,
+      tabBarIcon: () => (
+        <Icon
+          name="map-marker-outline"
+          type="MaterialCommunityIcons"
+          style={{ color: "blueviolet" }}
+        />
+      ),
+      header: { visible: true },
+    },
+  },
+  ServicesScreen: {
+    screen: ServicesScreen,
+    navigationOptions: {
+      tabBarLabel: false,
+      tabBarIcon: () => (
+        <Icon
+          name="shopping"
+          type="MaterialCommunityIcons"
+          style={{ color: "blueviolet" }}
+        />
+      ),
+      header: { visible: true },
+    },
+  },
+});
+
+//stack for home
 const HomeStack = createStackNavigator(
   {
     Home: {
       screen: SalonsScreen,
     },
 
+    NearestSalonMap: {
+      screen: NearestSalonMapScreen,
+    },
     MapandServices: {
-      screen: MapandServicesScreen,
+      screen: MapsAndServiceTab,
     },
     Service: {
       screen: OneServiceScreen,
@@ -76,17 +117,7 @@ const HomeStack = createStackNavigator(
   }
 );
 
-const CartStack = createStackNavigator(
-  {
-    Cart: {
-      screen: Cart,
-    },
-  },
-  {
-    cardStyle: { backgroundColor: "#EEEEEE" },
-  }
-);
-
+//stack for drawer
 const AppStack = createDrawerNavigator(
   {
     Home: {
@@ -97,6 +128,7 @@ const AppStack = createDrawerNavigator(
         ),
       },
     },
+
     Profile: {
       screen: ProfileStack,
       navigationOptions: () => ({
@@ -105,31 +137,16 @@ const AppStack = createDrawerNavigator(
         ),
       }),
     },
+
     SlotsAvailing: {
       screen: SlotsAvailingStack,
       navigationOptions: () => ({
         drawerLabel: ({ focused }) => (
           <Drawer
             focused={focused}
-            screen="SlotsAvailing"
-            title="Slots Availing"
+            screen="Appointed Services"
+            title="Appointed Services"
           />
-        ),
-      }),
-    },
-    Cart: {
-      screen: CartStack,
-      navigationOptions: () => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Cart" title="Customer Cart" />
-        ),
-      }),
-    },
-    Schedules: {
-      screen: Schedules,
-      navigationOptions: () => ({
-        drawerLabel: ({ focused }) => (
-          <Drawer focused={focused} screen="Schedules" title="Schedules" />
         ),
       }),
     },
@@ -138,7 +155,7 @@ const AppStack = createDrawerNavigator(
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: () => (
-          <Block style={{ marginVertical: 30 }}>
+          <Block style={{ marginVertical: 70 }}>
             <Text>{` `}</Text>
           </Block>
         ),
@@ -157,6 +174,7 @@ const AppStack = createDrawerNavigator(
   Menu
 );
 
+//switch navigation for application
 const AppNavigator = createSwitchNavigator(
   {
     App: AppStack,
@@ -182,5 +200,8 @@ const AppNavigator = createSwitchNavigator(
   }
 );
 
+//creating application container
 const AppContainer = createAppContainer(AppNavigator);
+
+//exporting AppContainer
 export default AppContainer;

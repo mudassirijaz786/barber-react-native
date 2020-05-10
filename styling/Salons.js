@@ -42,7 +42,7 @@ export const Close = styled.Text`
 `;
 
 export const Filter = styled.Text`
-  color: #eb6709;
+  color: blueviolet;
   text-align: center;
   font-size: 24px;
   font-weight: 200;

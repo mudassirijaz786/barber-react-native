@@ -4,7 +4,7 @@ import React, { Component } from "react";
 import { TouchableOpacity, AsyncStorage } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
-import { Left, Right, CardItem, Body } from "native-base";
+import { Left, Right, CardItem, Body, Icon } from "native-base";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import {
@@ -28,9 +28,24 @@ export default class ServicesScreen extends Component {
       services: [],
       isLoading: false,
       search: "",
-      filterTheServices: [123],
+      filterTheServices: [],
     };
   }
+
+  //header Services
+  static navigationOptions = ({ navigation }) => {
+    return {
+      title: "Services",
+      headerLeft: (
+        <Icon
+          onPress={() => navigation.goBack()}
+          name="back"
+          type="AntDesign"
+          style={{ marginLeft: 10 }}
+        />
+      ),
+    };
+  };
 
   //getting services from salon id in props
   async componentDidMount() {
@@ -41,7 +56,7 @@ export default class ServicesScreen extends Component {
     await Axios({
       url:
         "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/salonservices/" +
-        this.props.items._id,
+        this.props.navigation.state.params.items._id,
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -88,7 +103,10 @@ export default class ServicesScreen extends Component {
     const { search } = this.state;
     return (
       <Container>
-        <Title>Availible services</Title>
+        <Title>Availible Services</Title>
+        <Category>
+          {this.props.navigation.state.params.items.SalonName}
+        </Category>
         <SearchBar
           round
           placeholderTextColor="blueviolet"

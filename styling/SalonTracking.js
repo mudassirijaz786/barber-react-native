@@ -21,6 +21,12 @@ export const Distance = styled.Text`
   font-weight: 600;
 `;
 
+export const Category = styled.Text`
+  color: #eb6709;
+  font-size: 24px;
+  font-weight: 500;
+`;
+
 export const Blocked = styled(Block)`
   align-content: center;
   justify-content: center;

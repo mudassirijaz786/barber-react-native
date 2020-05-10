@@ -22,7 +22,7 @@ export default class TokenSignupScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: "69775",
+      token: "",
       isLoading: false,
     };
   }

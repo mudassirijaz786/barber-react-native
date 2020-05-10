@@ -22,10 +22,10 @@ export default class TokenForgetPasswordScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      token: "69775",
+      token: "",
       errorMsg: "",
-      newpassword: "123123",
-      confirmpassword: "123123",
+      newpassword: "",
+      confirmpassword: "",
       isLoading: false,
     };
   }
