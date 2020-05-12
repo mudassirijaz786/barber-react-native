@@ -1,6 +1,6 @@
 //importing
 import React, { Component } from "react";
-import { Text, AsyncStorage, TouchableOpacity } from "react-native";
+import { Text, AsyncStorage, TouchableOpacity, FlatList } from "react-native";
 import { Body, CardItem, Icon, Right, Left } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
@@ -25,6 +25,7 @@ export default class AppointedServicesScreen extends Component {
     this.state = {
       isLoading: false,
       appointedServices: [],
+      isFetching: false,
     };
   }
 
@@ -45,6 +46,11 @@ export default class AppointedServicesScreen extends Component {
 
   //getting current appointed service
   async componentDidMount() {
+    this.gettingAppointedServices();
+  }
+
+  // loading data from backend
+  gettingAppointedServices = async () => {
     this.setState({ isLoading: true });
 
     //getting token from local storage
@@ -66,13 +72,10 @@ export default class AppointedServicesScreen extends Component {
         this.setState({
           appointedServices: response.data,
         });
-        console.log("appointed services", this.state.appointedServices);
       })
-      .catch((error) => {
-        console.log("error", error);
-      });
+      .catch((error) => {});
     this.setState({ isLoading: false });
-  }
+  };
 
   //deleting an appointed service from list of appointments
   deleteAppointedService = async (id) => {
@@ -105,9 +108,59 @@ export default class AppointedServicesScreen extends Component {
       });
   };
 
+  onRefresh = async () => {
+    this.setState({ isFetching: true });
+    await this.gettingAppointedServices();
+    this.setState({ isFetching: false });
+  };
+
+  renderingAppointedServices = ({ item }) => {
+    return (
+      <ContentForCard>
+        <CardPaper elevation={10}>
+          <CardItem header>
+            <Body>
+              <ServiceName>{item.Salon_id}</ServiceName>
+              <Price>
+                <Text>
+                  Starting time
+                  <Open> {item.stating_time}</Open>
+                </Text>
+              </Price>
+
+              <Price>
+                <Text>
+                  Ending time
+                  <Close> {item.ending_time}</Close>
+                </Text>
+              </Price>
+            </Body>
+          </CardItem>
+          <CardItem>
+            <Left>
+              <Text>
+                Booking date:
+                <Description> {item.booking_date}</Description>
+              </Text>
+            </Left>
+            <Right>
+              <TouchableOpacity>
+                <Icon
+                  onPress={() => this.deleteAppointedService(item._id)}
+                  name="delete-outline"
+                  type="MaterialCommunityIcons"
+                />
+              </TouchableOpacity>
+            </Right>
+          </CardItem>
+        </CardPaper>
+      </ContentForCard>
+    );
+  };
+
   //rendering
   render() {
-    const { isLoading, appointedServices } = this.state;
+    const { isLoading, appointedServices, isFetching } = this.state;
     return (
       <Container>
         <Title>Availible services for today</Title>
@@ -122,52 +175,13 @@ export default class AppointedServicesScreen extends Component {
             color="blueviolet"
           />
         ) : (
-          <ContentForCard>
-            {appointedServices.length !== 0 &&
-              appointedServices.map((items, index) => {
-                return (
-                  <CardPaper elevation={10} key={index}>
-                    <CardItem header>
-                      <Body>
-                        <ServiceName>{items.Salon_id}</ServiceName>
-                        <Price>
-                          <Text>
-                            Starting time
-                            <Open> {items.stating_time}</Open>
-                          </Text>
-                        </Price>
-
-                        <Price>
-                          <Text>
-                            Ending time
-                            <Close> {items.ending_time}</Close>
-                          </Text>
-                        </Price>
-                      </Body>
-                    </CardItem>
-                    <CardItem>
-                      <Left>
-                        <Text>
-                          Booking date:
-                          <Description> {items.booking_date}</Description>
-                        </Text>
-                      </Left>
-                      <Right>
-                        <TouchableOpacity>
-                          <Icon
-                            onPress={() =>
-                              this.deleteAppointedService(items._id)
-                            }
-                            name="delete-outline"
-                            type="MaterialCommunityIcons"
-                          />
-                        </TouchableOpacity>
-                      </Right>
-                    </CardItem>
-                  </CardPaper>
-                );
-              })}
-          </ContentForCard>
+          <FlatList
+            data={appointedServices}
+            renderItem={this.renderingAppointedServices}
+            onRefresh={this.onRefresh}
+            refreshing={isFetching}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
       </Container>
     );
