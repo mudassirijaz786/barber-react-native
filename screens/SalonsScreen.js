@@ -1,6 +1,6 @@
 //importing
 import React from "react";
-import { AsyncStorage, TouchableOpacity } from "react-native";
+import { AsyncStorage, TouchableOpacity, FlatList } from "react-native";
 import { Text } from "galio-framework";
 import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
@@ -29,7 +29,8 @@ export default class SalonsScreen extends React.Component {
       salons: [],
       isLoading: false,
       search: "",
-      filterTheSalons: [],
+      filterSalons: [],
+      isFetching: false,
     };
   }
 
@@ -48,7 +49,13 @@ export default class SalonsScreen extends React.Component {
     };
   };
 
-  async componentDidMount() {
+  //getting salons method
+  componentDidMount() {
+    this.gettingSalons();
+  }
+
+  //getting data from backend
+  gettingSalons = async () => {
     //getting token from local storage
     const value = await AsyncStorage.getItem("x-auth-token");
     this.setState({ isLoading: true });
@@ -68,7 +75,7 @@ export default class SalonsScreen extends React.Component {
         //setting salons to state
         this.setState({
           salons: response.data,
-          filterTheSalons: response.data,
+          filterSalons: response.data,
         });
       })
       .catch((error) => {
@@ -78,7 +85,7 @@ export default class SalonsScreen extends React.Component {
         });
       });
     this.setState({ isLoading: false });
-  }
+  };
 
   //moving to MapsAndService
   onPressed(items) {
@@ -90,9 +97,16 @@ export default class SalonsScreen extends React.Component {
     this.props.navigation.navigate("NearestSalonMap", { items: items });
   }
 
+  //implement pulling request on refresh
+  onRefresh = async () => {
+    this.setState({ isFetching: true });
+    await this.gettingSalons();
+    this.setState({ isFetching: false });
+  };
+
   //updating search field
   updateSearch = (search) => {
-    const newData = this.state.filterTheSalons.filter((item) => {
+    const newData = this.state.filterSalons.filter((item) => {
       //applying filter by salon name
       const itemData = item.SalonName
         ? item.SalonName.toLowerCase()
@@ -103,9 +117,44 @@ export default class SalonsScreen extends React.Component {
     this.setState({ search, salons: newData });
   };
 
+  renderingSalon = ({ item }) => {
+    return (
+      <ContentForCard>
+        <CardPaper elevation={10}>
+          <CardItem header>
+            <SalonName>{item.SalonName}</SalonName>
+          </CardItem>
+          <CardItem>
+            <Left>
+              <Text>
+                Opening at <Open>{item.Salon_opening_hours}</Open>
+              </Text>
+            </Left>
+            <Right>
+              <Text>
+                Closing at <Close> {item.Salon_closing_hours}</Close>
+              </Text>
+            </Right>
+          </CardItem>
+          <CardItem>
+            <TouchableOpacity>
+              <SalonButton
+                mode="outlined"
+                uppercase={false}
+                contentStyle={{ height: 30 }}
+                onPress={() => this.onPressed(item)}
+              >
+                See services
+              </SalonButton>
+            </TouchableOpacity>
+          </CardItem>
+        </CardPaper>
+      </ContentForCard>
+    );
+  };
   //rendering
   render() {
-    const { search } = this.state;
+    const { search, salons, isLoading, isFetching } = this.state;
     return (
       <Container>
         <Blocked row>
@@ -115,7 +164,7 @@ export default class SalonsScreen extends React.Component {
             name="filter-outline"
             type="MaterialCommunityIcons"
             style={{ color: "#eb6709" }}
-            onPress={() => this.onFilter(this.state.salons)}
+            onPress={() => this.onFilter(salons)}
           />
         </Blocked>
         <Title>Availible salons</Title>
@@ -129,54 +178,23 @@ export default class SalonsScreen extends React.Component {
           placeholder="Search salon by name..."
           onChangeText={this.updateSearch}
           value={search}
-          showLoading={this.state.isLoading}
+          showLoading={isLoading}
         />
-        {this.state.isLoading ? (
+        {salons.length === 0 && <NoSalon>Sorry, No salon to display</NoSalon>}
+        {isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
             size="large"
             color="blueviolet"
           />
         ) : (
-          <ContentForCard>
-            {this.state.salons.length !== 0 &&
-              this.state.salons.map((items, index) => {
-                return (
-                  <CardPaper elevation={10} key={index}>
-                    <CardItem header>
-                      <SalonName>{items.SalonName}</SalonName>
-                    </CardItem>
-                    <CardItem>
-                      <Left>
-                        <Text>
-                          Opening at <Open>{items.Salon_opening_hours}</Open>
-                        </Text>
-                      </Left>
-                      <Right>
-                        <Text>
-                          Closing at <Close> {items.Salon_closing_hours}</Close>
-                        </Text>
-                      </Right>
-                    </CardItem>
-                    <CardItem>
-                      <TouchableOpacity>
-                        <SalonButton
-                          mode="outlined"
-                          uppercase={false}
-                          contentStyle={{ height: 30 }}
-                          onPress={() => this.onPressed(items)}
-                        >
-                          See services
-                        </SalonButton>
-                      </TouchableOpacity>
-                    </CardItem>
-                  </CardPaper>
-                );
-              })}
-            {this.state.salons.length == 0 && (
-              <NoSalon>Sorry, No salon to display</NoSalon>
-            )}
-          </ContentForCard>
+          <FlatList
+            data={salons}
+            renderItem={this.renderingSalon}
+            onRefresh={this.onRefresh}
+            refreshing={isFetching}
+            keyExtractor={(item, index) => index.toString()}
+          />
         )}
       </Container>
     );

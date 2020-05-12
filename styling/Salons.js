@@ -6,7 +6,6 @@ import { Card } from "react-native-paper";
 
 export const Container = styled.View`
   flex: 1;
-  justify-content: center;
   align-content: center;
   background-color: whitesmoke;
   padding-left: 15px;
