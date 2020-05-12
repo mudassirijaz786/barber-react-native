@@ -149,6 +149,7 @@ export default class AppointedServicesScreen extends Component {
                   onPress={() => this.deleteAppointedService(item._id)}
                   name="delete-outline"
                   type="MaterialCommunityIcons"
+                  style={{ color: "red", fontSize: 30 }}
                 />
               </TouchableOpacity>
             </Right>
@@ -167,7 +168,6 @@ export default class AppointedServicesScreen extends Component {
         {appointedServices.length === 0 && (
           <NoService>you have no service appointmented for today</NoService>
         )}
-
         {isLoading ? (
           <ActivityIndicator
             animating={isLoading}

@@ -1,12 +1,11 @@
 import styled from "styled-components/native";
 import { Button } from "react-native-paper";
-import { Block, Text } from "galio-framework";
+import { Text } from "galio-framework";
 import { Content } from "native-base";
 import { Card } from "react-native-paper";
 
 export const Container = styled.View`
   flex: 1;
-  justify-content: center;
   align-content: center;
   background-color: whitesmoke;
   padding-left: 15px;

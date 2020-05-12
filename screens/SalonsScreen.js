@@ -117,6 +117,7 @@ export default class SalonsScreen extends React.Component {
     this.setState({ search, salons: newData });
   };
 
+  //rendering salons
   renderingSalon = ({ item }) => {
     return (
       <ContentForCard>
@@ -152,6 +153,7 @@ export default class SalonsScreen extends React.Component {
       </ContentForCard>
     );
   };
+
   //rendering
   render() {
     const { search, salons, isLoading, isFetching } = this.state;
