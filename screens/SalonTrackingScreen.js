@@ -85,11 +85,6 @@ class SalonTrackingScreen extends Component {
     });
   };
 
-  //error in maps
-  onError = (errorMessage) => {
-    console.log(errorMessage);
-  };
-
   //getting data of current location
   getInitialState = () => {
     getLocation().then((data) => {
@@ -120,7 +115,6 @@ class SalonTrackingScreen extends Component {
     const { longitude, latitude } = this.state.coordinatesEnd;
     const { currentPosition, distance, isLoading } = this.state;
     const { items, points } = this.state;
-    console.log(this.props.navigation.state.params.items);
     const salonName = this.props.navigation.state.params.items.SalonName;
 
     return (
@@ -158,15 +152,7 @@ class SalonTrackingScreen extends Component {
                       language="en"
                       strokeWidth={4}
                       strokeColor="blueviolet"
-                      onStart={(params) => {
-                        console.log(
-                          `Started routing between "${params.origin}" and "${params.destination}"`
-                        );
-                      }}
                       onReady={this.onReady}
-                      onError={(errorMessage) => {
-                        console.log(errorMessage);
-                      }}
                       resetOnChange={false}
                     />
                     <Marker

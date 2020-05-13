@@ -77,11 +77,6 @@ class NearestSalonMapScreen extends Component {
     });
   };
 
-  //error in maps
-  onError = (errorMessage) => {
-    console.log(errorMessage);
-  };
-
   //getting current position
   getNearestState = () => {
     getLocation().then((data) => {
@@ -160,15 +155,7 @@ class NearestSalonMapScreen extends Component {
                 language="en"
                 strokeWidth={4}
                 strokeColor="blueviolet"
-                onStart={(params) => {
-                  console.log(
-                    `Started Nearest routing between "${params.origin}" and "${params.destination}"`
-                  );
-                }}
                 onReady={this.onReady}
-                onError={(errorMessage) => {
-                  console.log(errorMessage);
-                }}
                 resetOnChange={false}
               />
               <Marker

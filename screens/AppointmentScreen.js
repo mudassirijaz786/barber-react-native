@@ -73,7 +73,6 @@ export default class AppointmentScreen extends Component {
       obj["stating_time"] = this.state.stating_time;
       obj["current_date"] = new Date();
       obj["salon_id"] = this.props.navigation.state.params.items.Salon_id;
-      console.log(obj);
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
         url:
@@ -95,7 +94,6 @@ export default class AppointmentScreen extends Component {
           this.props.navigation.navigate("SlotsAvailing");
         })
         .catch((error) => {
-          console.log(error);
           showMessage({
             message: "Appoitnment is not booked",
             type: "danger",

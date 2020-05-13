@@ -1,7 +1,7 @@
 {
   "expo": {
     "name": "salon",
-    "description": "React Native -salon",
+    "description": "salon",
     "slug": "salon",
     "privacy": "unlisted",
     "sdkVersion": "35.0.0",
@@ -16,11 +16,11 @@
     "platforms": ["ios", "android"],
     "version": "1.4.0",
     "orientation": "portrait",
-    "icon": "./assets/images/icon.png",
+    "icon": "./assets/images/expo.png",
     "splash": {
-      "image": "./assets/images/splash.png",
+      "image": "./assets/images/expo.png",
       "resizeMode": "cover",
-      "backgroundColor": "#6C24AA"
+      "backgroundColor": "#f7f7f7"
     },
     "updates": {
       "fallbackToCacheTimeout": 0

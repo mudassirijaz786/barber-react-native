@@ -23,17 +23,17 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
     flexDirection: "row",
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   versionText: {
     padding: 4,
     backgroundColor: "#FFF",
-    color: "#000"
+    color: "#000",
   },
   container: {
     flex: 1,
-    top: 30
-  }
+    top: 30,
+  },
 });
 
 class NearestDistanceAlongService extends Component {
@@ -46,7 +46,7 @@ class NearestDistanceAlongService extends Component {
       distance: null,
       listOfLatlng: [123],
       Latlng: [123],
-      points: [123]
+      points: [123],
     };
 
     this.mapView = null;
@@ -64,49 +64,49 @@ class NearestDistanceAlongService extends Component {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
         "x-auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6dHJ1ZSwiaWQiOiI1ZTcwYTliODAyZDc0MjAwMTdjYzkyNjMiLCJpYXQiOjE1ODU3MzUwNzN9.ALDXfQ6lhQ9GAZPo2eO4Tdu-QwSHq2r3xIK9g2eaZxg"
-      }
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6dHJ1ZSwiaWQiOiI1ZTcwYTliODAyZDc0MjAwMTdjYzkyNjMiLCJpYXQiOjE1ODU3MzUwNzN9.ALDXfQ6lhQ9GAZPo2eO4Tdu-QwSHq2r3xIK9g2eaZxg",
+      },
     })
-      .then(response => {
+      .then((response) => {
         // console.log("RESPONSE OBJECT", response.data);
 
         this.setState({ listOfLatlng: response.data });
       })
 
-      .catch(error => {
+      .catch((error) => {
         showMessage({
           message: { error },
-          type: "danger"
+          type: "danger",
         });
       });
     this.setState({ isLoading: false });
     this.getInitialState();
   }
 
-  onReady = result => {
+  onReady = (result) => {
     this.mapView.fitToCoordinates(result.coordinates, {
       edgePadding: {
         right: width / 10,
         bottom: height / 10,
         left: width / 10,
-        top: height / 10
-      }
+        top: height / 10,
+      },
     });
   };
 
-  onError = errorMessage => {
+  onError = (errorMessage) => {
     console.log(errorMessage); // eslint-disable-line no-console
   };
 
   setDistance = (distance, duration_in_traffic) => {
     this.setState({
       distance: parseFloat(distance),
-      durationInTraffic: parseInt(duration_in_traffic)
+      durationInTraffic: parseInt(duration_in_traffic),
     });
   };
 
   getInitialState = () => {
-    getLocation().then(data => {
+    getLocation().then((data) => {
       //   console.log("data current location", data);
       var obj = {};
 
@@ -134,7 +134,7 @@ class NearestDistanceAlongService extends Component {
         currentPosition: obj,
         coordinatesEnd: bounds1,
         distance,
-        points
+        points,
       });
     });
   };
@@ -145,7 +145,7 @@ class NearestDistanceAlongService extends Component {
       coordinatesEnd,
       distance,
       points,
-      listOfLatlng
+      listOfLatlng,
     } = this.state;
     console.log("points in render", points);
     return (
@@ -174,10 +174,10 @@ class NearestDistanceAlongService extends Component {
               latitude: this.state.currentPosition.latitude,
               longitude: this.state.currentPosition.longitude,
               latitudeDelta: LATITUDE_DELTA,
-              longitudeDelta: LONGITUDE_DELTA
+              longitudeDelta: LONGITUDE_DELTA,
             }}
             style={styles.container}
-            ref={c => (this.mapView = c)} // eslint-disable-line react/jsx-no-bind
+            ref={(c) => (this.mapView = c)} // eslint-disable-line react/jsx-no-bind
             onPress={this.onMapPress}
           >
             <MapViewDirections
@@ -189,15 +189,7 @@ class NearestDistanceAlongService extends Component {
               language="en"
               strokeWidth={4}
               strokeColor="black"
-              onStart={params => {
-                console.log(
-                  `Started routing between "${params.origin}" and "${params.destination}"`
-                );
-              }}
               onReady={this.onReady}
-              onError={errorMessage => {
-                console.log(errorMessage);
-              }}
               resetOnChange={false}
             />
             <Marker
@@ -205,7 +197,7 @@ class NearestDistanceAlongService extends Component {
               description="This is a description"
               coordinate={{
                 latitude: currentPosition.latitude,
-                longitude: currentPosition.longitude
+                longitude: currentPosition.longitude,
               }}
             />
 
@@ -214,11 +206,11 @@ class NearestDistanceAlongService extends Component {
               description="This is a description"
               coordinate={{
                 latitude: coordinatesEnd.latitude,
-                longitude: coordinatesEnd.longitude
+                longitude: coordinatesEnd.longitude,
               }}
             />
 
-            {points.map(point => (
+            {points.map((point) => (
               <Marker coordinate={point} title="Other Salon" />
             ))}
           </MapView>

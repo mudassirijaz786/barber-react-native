@@ -3,7 +3,7 @@ import React from "react";
 import { Block, Text } from "galio-framework";
 import SalonsScreen from "../screens/SalonsScreen";
 import TokenSignupScreen from "../screens/TokenSignupScreen";
-import StartScreen from "../screens/LoginScreen";
+import StartScreen from "../screens/StartScreen";
 import Logout from "../screens/Logout";
 import { Icon } from "native-base";
 import SalonTrackingScreen from "../screens/SalonTrackingScreen";
@@ -20,6 +20,7 @@ import NearestSalonMapScreen from "../screens/NearestSalonMapScreen";
 import Drawer from "../components/Drawer";
 import OneServiceScreen from "../screens/OneServiceScreen";
 import AppointedServicesScreen from "../screens/AppointedServicesScreen";
+import LoginScreen from "../screens/LoginScreen";
 import {
   createStackNavigator,
   createDrawerNavigator,
@@ -179,6 +180,9 @@ const AppNavigator = createSwitchNavigator(
   {
     App: AppStack,
     Login: {
+      screen: LoginScreen,
+    },
+    Start: {
       screen: StartScreen,
     },
     Registration: {
@@ -196,7 +200,7 @@ const AppNavigator = createSwitchNavigator(
     },
   },
   {
-    initialRouteName: "Login",
+    initialRouteName: "Start",
   }
 );
 
