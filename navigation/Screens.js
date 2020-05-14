@@ -156,7 +156,7 @@ const AppStack = createDrawerNavigator(
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: () => (
-          <Block style={{ marginVertical: 70 }}>
+          <Block style={{ marginVertical: 200 }}>
             <Text>{` `}</Text>
           </Block>
         ),

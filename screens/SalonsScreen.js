@@ -7,6 +7,7 @@ import { SearchBar } from "react-native-elements";
 import { showMessage } from "react-native-flash-message";
 import Axios from "axios";
 import { Left, Right, CardItem, Icon } from "native-base";
+import decode from "jwt-decode";
 import {
   Container,
   Title,
@@ -58,6 +59,7 @@ export default class SalonsScreen extends React.Component {
   gettingSalons = async () => {
     //getting token from local storage
     const value = await AsyncStorage.getItem("x-auth-token");
+    const decoded = decode(value);
     this.setState({ isLoading: true });
 
     //getting salons from backend

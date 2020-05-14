@@ -1,39 +1,91 @@
 //import
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { DrawerItems } from "react-navigation";
+import { ActivityIndicator } from "react-native-paper";
 import { Block, Text, theme } from "galio-framework";
 const { width } = Dimensions.get("screen");
+import Axios from "axios";
 import {
   TouchableWithoutFeedback,
   ScrollView,
   StyleSheet,
+  AsyncStorage,
   Dimensions,
 } from "react-native";
 
 //Drawer
-const Drawer = (props) => (
-  <Block
-    style={styles.container}
-    forceInset={{ top: "always", horizontal: "never" }}
-  >
-    <Block flex={0.2} style={styles.header}>
-      <TouchableWithoutFeedback
-        onPress={() => props.navigation.navigate("Profile")}
-      >
-        <Block style={styles.profile}>
-          <Text h3 color="white">
-            Customer
-          </Text>
-        </Block>
-      </TouchableWithoutFeedback>
+const Drawer = (props) => {
+  const [users, setUsers] = useState([]);
+  const [load, setLoad] = useState(false);
+
+  const gettingCustomer = useCallback(async () => {
+    const value = await AsyncStorage.getItem("x-auth-token");
+    setLoad(true);
+    await Axios({
+      url:
+        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
+      method: "GET",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+    })
+      .then((response) => {
+        console.log(response.data);
+        setUsers(response.data);
+        setLoad(false);
+      })
+      .catch((error) => {
+        console.log(error);
+        setLoad(false);
+      });
+  }, []);
+
+  useEffect(() => {
+    gettingCustomer();
+  }, [gettingCustomer]);
+
+  return (
+    <Block
+      style={styles.container}
+      forceInset={{ top: "always", horizontal: "never" }}
+    >
+      {load ? (
+        <ActivityIndicator size="large" color="blueviolet" />
+      ) : (
+        users.map((user) => {
+          return (
+            <Block flex={0.2} style={styles.header} key={user.UserEmail}>
+              <TouchableWithoutFeedback
+                onPress={() => props.navigation.navigate("Profile")}
+              >
+                <Block style={styles.profile}>
+                  <Text h2 color="white">
+                    {user.UserName}
+                  </Text>
+                </Block>
+              </TouchableWithoutFeedback>
+              <Block flex>
+                <Text size={18} style={{ color: "orange" }}>
+                  {user.UserEmail}
+                </Text>
+                <Text size={16} style={{ color: "white" }}>
+                  {user.phoneNumber}
+                </Text>
+              </Block>
+            </Block>
+          );
+        })
+      )}
+      <Block flex>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+          <DrawerItems {...props} />
+        </ScrollView>
+      </Block>
     </Block>
-    <Block flex>
-      <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
-        <DrawerItems {...props} />
-      </ScrollView>
-    </Block>
-  </Block>
-);
+  );
+};
 
 //Menu
 const Menu = {
@@ -74,12 +126,11 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "blueviolet",
     paddingHorizontal: 28,
-    paddingBottom: theme.SIZES.BASE,
-    paddingTop: theme.SIZES.BASE * 2,
+    paddingTop: theme.SIZES.BASE * 5,
     justifyContent: "center",
   },
   profile: {
-    marginBottom: theme.SIZES.BASE / 2,
+    marginBottom: theme.SIZES.BASE,
   },
 });
 
