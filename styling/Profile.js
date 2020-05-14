@@ -10,11 +10,35 @@ export const Container = styled.View`
   padding-right: 15px;
 `;
 
+export const Information = styled.View`
+  background-color: whitesmoke;
+`;
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
   font-size: 36px;
   font-weight: 700;
+`;
+
+export const Name = styled.Text`
+  color: blueviolet;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
+`;
+
+export const Email = styled.Text`
+  color: #eb6709;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
+`;
+
+export const Phone = styled.Text`
+  color: black;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 400;
 `;
 
 export const ProfileButton = styled(Button)`

@@ -1,13 +1,24 @@
 //importing
 import React from "react";
-import { Container, Title, ProfileButton } from "../styling/Profile";
+import {
+  Container,
+  Title,
+  ProfileButton,
+  Name,
+  Phone,
+  Information,
+  Email,
+} from "../styling/Profile";
 import { Icon } from "native-base";
+import { ActivityIndicator } from "react-native-paper";
+import { AsyncStorage } from "react-native";
+import Axios from "axios";
 
 //exporting class ProfileScreen
 export default class ProfileScreen extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = { isLoading: false, customer: [] };
   }
 
   //header profile
@@ -25,10 +36,55 @@ export default class ProfileScreen extends React.Component {
     };
   };
 
+  //getting customer information
+  componentDidMount() {
+    this.gettingCustomer();
+  }
+  //getting data from backend
+  gettingCustomer = async () => {
+    //getting token from local storage
+    const value = await AsyncStorage.getItem("x-auth-token");
+    this.setState({ isLoading: true });
+
+    //getting salons from backend
+    await Axios({
+      url:
+        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
+      method: "GET",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+    })
+      .then((response) => {
+        //setting salons to state
+        this.setState({
+          customer: response.data,
+        });
+      })
+      .catch((error) => {});
+    this.setState({ isLoading: false });
+  };
+
+  //rendering
   render() {
     return (
       <Container>
         <Title>Your Profile</Title>
+        {this.state.isLoading ? (
+          <ActivityIndicator size="large" color="blueviolet" />
+        ) : (
+          this.state.customer.map((customer) => {
+            return (
+              <Information key={customer.UserEmail}>
+                <Name>{customer.UserName}</Name>
+                <Email>{customer.UserEmail}</Email>
+                <Phone>{customer.phoneNumber}</Phone>
+              </Information>
+            );
+          })
+        )}
         <ProfileButton
           contentStyle={{ height: 50 }}
           mode="outlined"
