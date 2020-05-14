@@ -32,12 +32,10 @@ const Drawer = (props) => {
       },
     })
       .then((response) => {
-        console.log(response.data);
         setUsers(response.data);
         setLoad(false);
       })
       .catch((error) => {
-        console.log(error);
         setLoad(false);
       });
   }, []);

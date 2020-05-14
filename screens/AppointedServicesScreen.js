@@ -58,11 +58,11 @@ export default class AppointedServicesScreen extends Component {
       [
         {
           text: "Ask me later",
-          onPress: () => console.log("Ask me later pressed"),
+          onPress: () => console.log(),
         },
         {
           text: "Cancel",
-          onPress: () => console.log("Cancel Pressed"),
+          onPress: () => console.log(),
           style: "cancel",
         },
         //if user press delete then call to deleteAppointedService
