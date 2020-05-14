@@ -1,10 +1,16 @@
 //importing
 import React, { Component } from "react";
-import { Text, AsyncStorage, TouchableOpacity, FlatList } from "react-native";
 import { Body, CardItem, Icon, Right, Left } from "native-base";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
+import {
+  Text,
+  AsyncStorage,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+} from "react-native";
 import {
   Container,
   Title,
@@ -42,6 +48,28 @@ export default class AppointedServicesScreen extends Component {
         />
       ),
     };
+  };
+
+  //confirmation message before deletion
+  confirmationBeforDeletion = (id, date) => {
+    Alert.alert(
+      "Do you wanna delete an appointment?",
+      `appointed on ${date}`,
+      [
+        {
+          text: "Ask me later",
+          onPress: () => console.log("Ask me later pressed"),
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log("Cancel Pressed"),
+          style: "cancel",
+        },
+        //if user press delete then call to deleteAppointedService
+        { text: "Delete", onPress: () => this.deleteAppointedService(id) },
+      ],
+      { cancelable: false }
+    );
   };
 
   //getting current appointed service
@@ -146,7 +174,9 @@ export default class AppointedServicesScreen extends Component {
             <Right>
               <TouchableOpacity>
                 <Icon
-                  onPress={() => this.deleteAppointedService(item._id)}
+                  onPress={() =>
+                    this.confirmationBeforDeletion(item._id, item.booking_date)
+                  }
                   name="delete-outline"
                   type="MaterialCommunityIcons"
                   style={{ color: "red", fontSize: 30 }}
