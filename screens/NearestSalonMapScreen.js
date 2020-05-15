@@ -12,6 +12,7 @@ import {
   Title,
   Distance,
   Blocked,
+  Category,
   View,
 } from "../styling/SalonTracking";
 
@@ -39,6 +40,7 @@ class NearestSalonMapScreen extends Component {
       distance: null,
       items: this.props.navigation.state.params.items,
       points: [],
+      filteredResult: [],
     };
     this.mapView = null;
   }
@@ -100,6 +102,12 @@ class NearestSalonMapScreen extends Component {
 
       //find the nearest coordinate
       const bounds1 = geolib.findNearest(obj, points);
+      const filtered = this.state.items.filter((item) => {
+        return item.Latitude === bounds1.latitude;
+      });
+
+      // console.log(filtered._id);
+      const filteredResult = filtered[0];
 
       //measuring distance from current location to that nearest coordinate
       const distanceInM = geolib.getDistance(obj, bounds1);
@@ -113,24 +121,42 @@ class NearestSalonMapScreen extends Component {
         coordinatesEnd: bounds1,
         distance,
         points,
+        filteredResult,
       });
     });
   };
 
+  filterServices(filteredResult) {
+    console.log(filteredResult);
+    this.props.navigation.navigate("NearestSalonServices", {
+      item: filteredResult,
+    });
+  }
+
   //rendering
   render() {
     const { longitude, latitude } = this.state.coordinatesEnd;
-    const { currentPosition, distance } = this.state;
-    const { items, points } = this.state;
+    const {
+      currentPosition,
+      distance,
+      filteredResult,
+      items,
+      points,
+    } = this.state;
+    console.log(filteredResult.SalonName);
 
     return (
       <Container>
-        <Title>Nearest Salon</Title>
+        <Title>Nearest Salon is</Title>
         <View>
-          <Blocked row>
-            <Text> Nearest Salon is locating at Distance of</Text>
-            <Distance>{distance.toFixed(2)} km</Distance>
-            <Text> from your current location</Text>
+          <Blocked flex={0.18}>
+            <Text style={{ textAlign: "center" }}>
+              Tap on salon name to see services
+            </Text>
+            <Category onPress={() => this.filterServices(filteredResult)}>
+              {filteredResult.SalonName}
+            </Category>
+            <Distance> at {distance} km </Distance>
           </Blocked>
           {!currentPosition.latitude && !currentPosition.longitude && (
             <ActivityIndicator size="large" color="blueviolet" />

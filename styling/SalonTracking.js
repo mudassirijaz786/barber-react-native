@@ -16,7 +16,7 @@ export const Title = styled.Text`
 `;
 
 export const Distance = styled.Text`
-  color: #eb6709;
+  color: blueviolet;
   text-align: center;
   font-weight: 600;
 `;

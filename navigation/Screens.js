@@ -21,6 +21,7 @@ import Drawer from "../components/Drawer";
 import OneServiceScreen from "../screens/OneServiceScreen";
 import AppointedServicesScreen from "../screens/AppointedServicesScreen";
 import LoginScreen from "../screens/LoginScreen";
+import NearestSalonServicesScreen from "../screens/NearestSalonServicesScreen";
 import {
   createStackNavigator,
   createDrawerNavigator,
@@ -100,6 +101,9 @@ const HomeStack = createStackNavigator(
 
     NearestSalonMap: {
       screen: NearestSalonMapScreen,
+    },
+    NearestSalonServices: {
+      screen: NearestSalonServicesScreen,
     },
     MapandServices: {
       screen: MapsAndServiceTab,
