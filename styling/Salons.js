@@ -53,7 +53,7 @@ export const ContentForCard = styled(Content)`
 `;
 
 export const CardPaper = styled(Card)`
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 export const SalonButton = styled(Button)`
