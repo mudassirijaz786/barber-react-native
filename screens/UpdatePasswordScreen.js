@@ -14,6 +14,9 @@ import {
   Error,
 } from "../styling/UpdatePassword";
 
+//some constants
+const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
 //exporting UpdatePasswordScreen
 export default class UpdatePasswordScreen extends Component {
   constructor(props) {
@@ -109,21 +112,21 @@ export default class UpdatePasswordScreen extends Component {
               .string()
               .required()
               .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                passwordReg,
                 "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
             password: yup
               .string()
               .required()
               .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                passwordReg,
                 "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
             confirmpassword: yup
               .string()
               .required()
               .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                passwordReg,
                 "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               )
               .test("passwords-match", "Passwords must match", function (

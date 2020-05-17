@@ -18,6 +18,9 @@ import {
   Error,
 } from "../styling/Login";
 
+//constants
+const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
 //exporting class LoginScreen
 export default class LoginScreen extends Component {
   constructor(props) {
@@ -94,7 +97,7 @@ export default class LoginScreen extends Component {
               .string()
               .required()
               .matches(
-                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                passwordReg,
                 "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
           })}
