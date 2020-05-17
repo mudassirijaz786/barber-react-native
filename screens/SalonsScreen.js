@@ -7,6 +7,8 @@ import { SearchBar } from "react-native-elements";
 import { showMessage } from "react-native-flash-message";
 import Axios from "axios";
 import { Left, Right, CardItem, Icon } from "native-base";
+import { getLocation } from "../components/location-service";
+import * as geolib from "geolib";
 import {
   Container,
   Title,
@@ -52,7 +54,26 @@ export default class SalonsScreen extends React.Component {
   //getting salons method
   componentDidMount() {
     this.gettingSalons();
+    this.getInitialState();
   }
+
+  //getting data of current location
+  getInitialState = () => {
+    getLocation().then((data) => {
+      var obj = {};
+      obj["latitude"] = data.latitude;
+      obj["longitude"] = data.longitude;
+
+      //measuring distance
+      const distanceInM = geolib.getDistance(obj, 112);
+
+      //converting distance from meters to kilometers
+      const distance = geolib.convertDistance(distanceInM, "km");
+
+      //setting states
+      this.setState({});
+    });
+  };
 
   //getting data from backend
   gettingSalons = async () => {
@@ -128,12 +149,12 @@ export default class SalonsScreen extends React.Component {
           <CardItem>
             <Left>
               <Text>
-                Opening at <Open>{item.Salon_opening_hours}</Open>
+                Opens <Open>{item.Salon_opening_hours}</Open>
               </Text>
             </Left>
             <Right>
               <Text>
-                Closing at <Close> {item.Salon_closing_hours}</Close>
+                Close <Close> {item.Salon_closing_hours}</Close>
               </Text>
             </Right>
           </CardItem>
@@ -157,6 +178,7 @@ export default class SalonsScreen extends React.Component {
   //rendering
   render() {
     const { search, salons, isLoading, isFetching } = this.state;
+    console.log(salons);
     return (
       <Container>
         <Blocked row>

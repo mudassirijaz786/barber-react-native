@@ -1,6 +1,7 @@
 //importing
 import React, { Component } from "react";
 import { Body, CardItem, Icon, Right, Left } from "native-base";
+import { Block } from "galio-framework";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
@@ -19,9 +20,8 @@ import {
   ServiceName,
   CardPaper,
   Price,
-  Open,
+  SalonName,
   Close,
-  Description,
 } from "../styling/AppointedServices";
 
 //exporting class AppointedServicesScreen
@@ -54,7 +54,7 @@ export default class AppointedServicesScreen extends Component {
   confirmationBeforDeletion = (id, date) => {
     Alert.alert(
       "Do you wanna delete an appointment?",
-      `appointed on ${date}`,
+      `Appointed on ${date}`,
       [
         {
           text: "Ask me later",
@@ -145,31 +145,23 @@ export default class AppointedServicesScreen extends Component {
   renderingAppointedServices = ({ item }) => {
     return (
       <ContentForCard>
-        <CardPaper elevation={10}>
+        <CardPaper containerStyle={{ elevation: 16 }}>
           <CardItem header>
-            <Body>
-              <ServiceName>{item.Salon_id}</ServiceName>
-              <Price>
-                <Text>
-                  Starting time
-                  <Open> {item.stating_time}</Open>
-                </Text>
-              </Price>
-              <Price>{item.service_id}</Price>
-              <Price>
-                <Text>
-                  Ending time
-                  <Close> {item.ending_time}</Close>
-                </Text>
-              </Price>
-            </Body>
+            <SalonName>{item.Salon_id}</SalonName>
           </CardItem>
-          <CardItem>
+          <CardItem style={{ marginLeft: 73 }}>
+            <Block>
+              <Close>
+                Timings: from {item.stating_time} to {item.ending_time}
+              </Close>
+              <ServiceName>
+                Booked at: {item.booking_date.split("", 10)}
+              </ServiceName>
+            </Block>
+          </CardItem>
+          <CardItem footer>
             <Left>
-              <Text>
-                Booking date:
-                <Description> {item.booking_date}</Description>
-              </Text>
+              <Price>{item.service_id}</Price>
             </Left>
             <Right>
               <TouchableOpacity>

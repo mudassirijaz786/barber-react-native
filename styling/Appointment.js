@@ -35,8 +35,8 @@ export const Select = styled.Text`
 `;
 
 export const ContentForCard = styled(Content)`
+  background-color: whitesmoke;
   align-content: center;
-  background-color: transparent;
   text-align: center;
 `;
 

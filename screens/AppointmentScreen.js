@@ -128,6 +128,7 @@ export default class AppointmentScreen extends Component {
                         marginLeft: 0,
                       },
                       dateInput: {
+                        borderColor: "transparent",
                         marginLeft: 36,
                       },
                     }}

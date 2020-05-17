@@ -19,11 +19,17 @@ export const Title = styled.Text`
   font-weight: 700;
 `;
 
-export const ServiceName = styled.Text`
+export const SalonName = styled.Text`
   color: blueviolet;
   text-align: center;
   font-size: 28px;
   font-weight: 400;
+`;
+export const ServiceName = styled.Text`
+  color: burlywood;
+  text-align: center;
+  font-size: 20px;
+  font-weight: 700;
 `;
 
 export const Category = styled.Text`
@@ -39,28 +45,18 @@ export const Select = styled.Text`
   font-weight: 100;
 `;
 
-export const Description = styled(Text)`
-  margin-top: 5px;
-  color: #eb6709;
-  text-align: center;
-  font-size: 14px;
-  font-weight: 500;
-`;
-
 export const ContentForCard = styled(Content)`
   align-content: center;
-  background-color: transparent;
   text-align: center;
 `;
 
 export const CardPaper = styled(Card)`
-  margin-top: 5px;
+  margin-top: 10px;
 `;
 
 export const Price = styled.Text`
   color: #eb6709;
-  text-align: center;
-  margin-bottom: 15px;
+  margin-bottom: 10px;
   font-size: 24px;
   font-weight: 500;
 `;
@@ -90,7 +86,6 @@ export const Open = styled.Text`
 export const Close = styled.Text`
   color: blueviolet;
   text-align: center;
-  margin-top: 20px;
-  font-size: 14px;
-  font-weight: 300;
+  font-size: 18px;
+  font-weight: 700;
 `;

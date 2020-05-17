@@ -92,7 +92,7 @@ class NearestSalonMapScreen extends Component {
       for (let i = 0; i < this.state.items.length; i++) {
         obj1["latitude"] = this.state.items[i].Latitude;
         obj1["longitude"] = this.state.items[i].Longitude;
-
+        obj1["name"] = this.state.items[i].SalonName;
         //pushing created object in array
         points.push(obj1);
 
@@ -185,14 +185,16 @@ class NearestSalonMapScreen extends Component {
                 resetOnChange={false}
               />
               <Marker
-                title={`Distance`}
-                description={`Distance is ${distance.toString()}`}
+                pinColor="orange"
+                title={filteredResult.SalonName}
+                description={`Distance is ${distance.toFixed(2).toString()}`}
                 coordinate={{
                   latitude: latitude,
                   longitude: longitude,
                 }}
               />
               <MapView.Marker
+                pinColor="green"
                 title="Current location"
                 description="This is your current location"
                 coordinate={{
@@ -201,7 +203,12 @@ class NearestSalonMapScreen extends Component {
                 }}
               />
               {points.map((point) => (
-                <Marker coordinate={point} title="Other Salon" />
+                <Marker
+                  pinColor="aqua"
+                  coordinate={point}
+                  title={point.name}
+                  description="This is other salon"
+                />
               ))}
             </MapView>
           )}

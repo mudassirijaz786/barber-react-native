@@ -156,14 +156,18 @@ class SalonTrackingScreen extends Component {
                       resetOnChange={false}
                     />
                     <Marker
-                      title={`Distance`}
-                      description={`Distance is ${distance.toString()}`}
+                      pinColor="orange"
+                      title={salonName}
+                      description={`Distance is ${distance
+                        .toFixed(2)
+                        .toString()}`}
                       coordinate={{
                         latitude: latitude,
                         longitude: longitude,
                       }}
                     />
                     <MapView.Marker
+                      pinColor="green"
                       title="Current location"
                       description="This is your current location"
                       coordinate={{
