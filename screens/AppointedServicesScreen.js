@@ -156,6 +156,7 @@ export default class AppointedServicesScreen extends Component {
                 </Text>
               </Price>
 
+              <Price>{service_id}</Price>
               <Price>
                 <Text>
                   Ending time
