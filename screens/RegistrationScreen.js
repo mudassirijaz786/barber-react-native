@@ -16,9 +16,8 @@ import {
   Error,
 } from "../styling/Registration";
 
-//checking phone number expression
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
-
+const phoneReg = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
+const passwordReg = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 //exporting class RegistrationScreen
 export default class RegistrationScreen extends Component {
   constructor(props) {
@@ -100,8 +99,14 @@ export default class RegistrationScreen extends Component {
             phone: yup
               .string()
               .required()
-              .matches(phoneRegExp, "Phone number is not valid"),
-            password: yup.string().min(8).max(25).required(),
+              .matches(phoneReg, "Phone number is not valid"),
+            password: yup
+              .string()
+              .required()
+              .matches(
+                passwordReg,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+              ),
           })}
         >
           {({

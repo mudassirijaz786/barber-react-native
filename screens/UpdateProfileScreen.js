@@ -15,7 +15,7 @@ import {
 } from "../styling/UpdateProfile";
 
 //some constants
-const phoneRegExp = /^((\\+[1-9]{1,4}[ \\-]*)|(\\([0-9]{2,3}\\)[ \\-]*)|([0-9]{2,4})[ \\-]*)*?[0-9]{3,4}?[ \\-]*[0-9]{3,4}?$/;
+const phoneReg = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
 
 //exporting class UpdateProfileScreen
 export default class UpdateProfileScreen extends React.Component {
@@ -113,7 +113,7 @@ export default class UpdateProfileScreen extends React.Component {
             phone: yup
               .string()
               .required()
-              .matches(phoneRegExp, "Phone number is not valid"),
+              .matches(phoneReg, "Phone number is not valid"),
           })}
         >
           {({

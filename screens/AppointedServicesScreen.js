@@ -155,8 +155,7 @@ export default class AppointedServicesScreen extends Component {
                   <Open> {item.stating_time}</Open>
                 </Text>
               </Price>
-
-              <Price>{service_id}</Price>
+              <Price>{item.service_id}</Price>
               <Price>
                 <Text>
                   Ending time
@@ -193,6 +192,7 @@ export default class AppointedServicesScreen extends Component {
   //rendering
   render() {
     const { isLoading, appointedServices, isFetching } = this.state;
+    console.log(appointedServices);
     return (
       <Container>
         <Title>Availible services for today</Title>

@@ -6,6 +6,7 @@ import React, { Component, Fragment } from "react";
 import { AsyncStorage } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { showMessage } from "react-native-flash-message";
+
 import {
   Container,
   Title,
@@ -89,7 +90,13 @@ export default class LoginScreen extends Component {
           onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
             email: yup.string().email().required(),
-            password: yup.string().min(3).required(),
+            password: yup
+              .string()
+              .required()
+              .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+              ),
           })}
         >
           {({

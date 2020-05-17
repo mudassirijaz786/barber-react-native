@@ -105,11 +105,27 @@ export default class UpdatePasswordScreen extends Component {
           initialValues={this.state}
           onSubmit={this.handleSubmit.bind(this)}
           validationSchema={yup.object().shape({
-            oldpassword: yup.string().required(),
-            password: yup.string().min(3).required(),
+            oldpassword: yup
+              .string()
+              .required()
+              .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+              ),
+            password: yup
+              .string()
+              .required()
+              .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+              ),
             confirmpassword: yup
               .string()
               .required()
+              .matches(
+                /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
+                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+              )
               .test("passwords-match", "Passwords must match", function (
                 value
               ) {
@@ -128,7 +144,7 @@ export default class UpdatePasswordScreen extends Component {
           }) => (
             <Fragment>
               <InputField
-                label="old password"
+                label="Old Password"
                 value={values.oldpassword}
                 onChangeText={handleChange("oldpassword")}
                 onBlur={() => setFieldTouched("oldpassword")}
@@ -140,7 +156,7 @@ export default class UpdatePasswordScreen extends Component {
                 <Error>{errors.oldpassword}</Error>
               )}
               <InputField
-                label="password"
+                label="Password"
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={() => setFieldTouched("password")}
@@ -152,7 +168,7 @@ export default class UpdatePasswordScreen extends Component {
                 <Error>{errors.password}</Error>
               )}
               <InputField
-                label="confirmPassword"
+                label="Confirm Password"
                 value={values.confirmpassword}
                 onChangeText={handleChange("confirmpassword")}
                 onBlur={() => setFieldTouched("confirmpassword")}
