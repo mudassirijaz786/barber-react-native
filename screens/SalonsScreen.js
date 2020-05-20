@@ -101,7 +101,9 @@ export default class SalonsScreen extends React.Component {
       })
       .catch((error) => {
         showMessage({
-          message: { error },
+          message: "Error in getting salons",
+          description:
+            "We are sorry, but salon cannot be listed at this moment",
           type: "danger",
         });
       });
@@ -178,7 +180,6 @@ export default class SalonsScreen extends React.Component {
   //rendering
   render() {
     const { search, salons, isLoading, isFetching } = this.state;
-    console.log(salons);
     return (
       <Container>
         <Blocked row>

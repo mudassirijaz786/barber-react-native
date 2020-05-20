@@ -24,6 +24,18 @@ export const ServiceName = styled.Text`
   font-weight: 400;
 `;
 
+export const Reviews = styled.Text`
+  color: #089920;
+  font-size: 24px;
+  font-weight: 400;
+`;
+
+export const Time = styled.Text`
+  color: #089920;
+  font-size: 12px;
+  font-weight: 700;
+`;
+
 export const Price = styled.Text`
   color: #eb6709;
   text-align: center;

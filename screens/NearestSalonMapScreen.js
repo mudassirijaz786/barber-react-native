@@ -127,7 +127,6 @@ class NearestSalonMapScreen extends Component {
   };
 
   filterServices(filteredResult) {
-    console.log(filteredResult);
     this.props.navigation.navigate("NearestSalonServices", {
       item: filteredResult,
     });
@@ -143,11 +142,10 @@ class NearestSalonMapScreen extends Component {
       items,
       points,
     } = this.state;
-    console.log(filteredResult.SalonName);
 
     return (
       <Container>
-        <Title>Nearest Salon is</Title>
+        <Title>Nearest Salon </Title>
         <View>
           <Blocked flex={0.18}>
             <Text style={{ textAlign: "center" }}>

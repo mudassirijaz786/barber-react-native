@@ -67,14 +67,17 @@ export default class UpdatePasswordScreen extends Component {
     if (response.status === 200) {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Password updated successfully",
+        message: "Updated password",
+        description: "Your password is updated successfully",
         type: "success",
       });
       this.props.navigation.navigate("Profile");
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Password is not updated",
+        message: "Error in updation",
+        description:
+          "Password cannot be updated, your old password might not be correct",
         type: "danger",
       });
     }

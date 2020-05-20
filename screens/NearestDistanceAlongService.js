@@ -63,13 +63,10 @@ class NearestDistanceAlongService extends Component {
       headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
-        "x-auth-token":
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsb2dpbiI6dHJ1ZSwiaWQiOiI1ZTcwYTliODAyZDc0MjAwMTdjYzkyNjMiLCJpYXQiOjE1ODU3MzUwNzN9.ALDXfQ6lhQ9GAZPo2eO4Tdu-QwSHq2r3xIK9g2eaZxg",
+        "x-auth-token": value,
       },
     })
       .then((response) => {
-        // console.log("RESPONSE OBJECT", response.data);
-
         this.setState({ listOfLatlng: response.data });
       })
 
@@ -95,7 +92,7 @@ class NearestDistanceAlongService extends Component {
   };
 
   onError = (errorMessage) => {
-    console.log(errorMessage); // eslint-disable-line no-console
+    console.log();
   };
 
   setDistance = (distance, duration_in_traffic) => {
@@ -147,7 +144,6 @@ class NearestDistanceAlongService extends Component {
       points,
       listOfLatlng,
     } = this.state;
-    console.log("points in render", points);
     return (
       //   <View style={{ top: 100 }}>
       //     <Text>distance {distance}</Text>

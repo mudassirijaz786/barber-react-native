@@ -22,6 +22,7 @@
     "galio-framework": "^0.6.3",
     "geolib": "^3.2.1",
     "jwt-decode": "^2.2.0",
+    "moment": "^2.25.3",
     "native-base": "^2.13.12",
     "react": "16.8.3",
     "react-native": "https://github.com/expo/react-native/archive/sdk-35.0.0.tar.gz",

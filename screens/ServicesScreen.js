@@ -16,6 +16,8 @@ import {
   ContentForCard,
   Category,
   ServiceButton,
+  Time,
+  Reviews,
   ServiceImage,
   Price,
 } from "../styling/Services";
@@ -78,7 +80,9 @@ export default class ServicesScreen extends Component {
       })
       .catch((error) => {
         showMessage({
-          message: { error },
+          message: "Error in getting services",
+          description:
+            "We are sorry but there exists error while fetching services",
           type: "danger",
         });
       });
@@ -121,6 +125,9 @@ export default class ServicesScreen extends Component {
                 <ServiceName>{item.serviceName}</ServiceName>
                 <Text muted>{item.serviceDescription}</Text>
                 <Category>{item.service_category}</Category>
+                <Text muted>
+                  Service time <Time>{item.service_time}</Time> minutes
+                </Text>
               </Body>
             </Left>
           </CardItem>
@@ -137,6 +144,9 @@ export default class ServicesScreen extends Component {
                 </ServiceButton>
               </TouchableOpacity>
             </Left>
+            <Body>
+              <Reviews>Reviews: {item.ServiceAvgRating}</Reviews>
+            </Body>
             <Right>
               <Text>
                 <Price> {item.servicePrice} </Price> Rs

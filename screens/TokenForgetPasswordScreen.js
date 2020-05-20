@@ -52,7 +52,8 @@ export default class TokenForgetPasswordScreen extends Component {
     if (response.status === 200) {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Password reset successfully",
+        message: "Reset password",
+        description: "Password has reset successfully",
         type: "success",
       });
 
@@ -61,7 +62,8 @@ export default class TokenForgetPasswordScreen extends Component {
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "There occured an error",
+        message: "Error reset password",
+        description: "There exists an error while sending token to your email",
         type: "danger",
       });
     }

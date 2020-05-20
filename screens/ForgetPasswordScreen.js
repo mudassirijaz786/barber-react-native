@@ -46,7 +46,8 @@ export default class ForgetPasswordScreen extends Component {
     if (response.status === 200) {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Token sent successfully to your email",
+        message: "Token sent",
+        description: "Token sent successfully to your email",
         type: "success",
       });
 
@@ -55,7 +56,8 @@ export default class ForgetPasswordScreen extends Component {
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "There occured an error",
+        message: "Error occured",
+        description: "There occured an error while sending token to your email",
         type: "danger",
       });
     }

@@ -75,6 +75,9 @@ class StartScreen extends Component {
           <Text style={styles.logoTextOne}>Welcome to </Text>
           <Text style={styles.logoTextTwo}>To</Text>
           <Text style={styles.logoTextThree}>Digital Salon Mobile App</Text>
+          <Text style={styles.logoTextFour}>
+            Design and developed by Mudassir Ijaz
+          </Text>
         </Animated.View>
       </View>
     );
@@ -101,13 +104,19 @@ const styles = StyleSheet.create({
   logoTextTwo: {
     color: "orange",
     textAlign: "center",
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "200",
   },
   logoTextThree: {
     color: "blueviolet",
     textAlign: "center",
     fontSize: 30,
+    fontWeight: "700",
+  },
+  logoTextFour: {
+    color: "blueviolet",
+    textAlign: "center",
+    fontSize: 16,
     fontWeight: "700",
   },
 });

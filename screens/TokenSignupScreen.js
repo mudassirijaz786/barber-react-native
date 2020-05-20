@@ -52,14 +52,16 @@ export default class TokenSignupScreen extends Component {
         response.headers.map["x-auth-token"]
       );
       showMessage({
-        message: "Token validated successfully",
+        message: "Token validated",
+        description: "Token validated successfully",
         type: "success",
       });
       this.props.navigation.navigate("Home");
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "There occured an error",
+        message: "Token validation error",
+        description: "There occured an error while validating token",
         type: "danger",
       });
     }

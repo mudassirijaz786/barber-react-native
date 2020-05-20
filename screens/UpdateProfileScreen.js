@@ -67,14 +67,16 @@ export default class UpdateProfileScreen extends React.Component {
     if (response.status === 200) {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Profile updated successfully",
+        message: "Updated profile",
+        description: "Your profile is updated successfully",
         type: "success",
       });
       this.props.navigation.navigate("Profile");
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Profile could not be updated",
+        message: "Error in updation",
+        description: "Profile cannot be updated due to some reasons",
         type: "danger",
       });
     }

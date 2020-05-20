@@ -5,6 +5,8 @@ import { Block } from "galio-framework";
 import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
+import { AirbnbRating } from "react-native-elements";
+import moment from "moment";
 import {
   Text,
   AsyncStorage,
@@ -31,6 +33,7 @@ export default class AppointedServicesScreen extends Component {
     this.state = {
       isLoading: false,
       appointedServices: [],
+      ratingGiven: false,
       isFetching: false,
     };
   }
@@ -80,28 +83,36 @@ export default class AppointedServicesScreen extends Component {
   // loading data from backend
   gettingAppointedServices = async () => {
     this.setState({ isLoading: true });
-
-    //getting token from local storage
     value = await AsyncStorage.getItem("x-auth-token");
     var obj = {};
-    obj["current_date"] = new Date();
+    obj["current_date"] = moment().format("YYYY-MM-DD");
+    // obj["current_date"] = new Date();
+
     await Axios({
       url:
         "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/customer/schedule",
       method: "POST",
+      data: obj,
       headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
         "x-auth-token": value,
       },
-      data: obj,
     })
       .then((response) => {
         this.setState({
           appointedServices: response.data,
         });
       })
-      .catch((error) => {});
+      .catch((error) => {
+        showMessage({
+          message: "There might be no appoinments",
+          description:
+            "There occured an error getting appointments from backend",
+          type: "info",
+        });
+      });
+
     this.setState({ isLoading: false });
   };
 
@@ -119,9 +130,10 @@ export default class AppointedServicesScreen extends Component {
         "x-auth-token": value,
       },
     })
-      .then((res) => {
+      .then((response) => {
         showMessage({
-          message: "Appointment is deleted successfully",
+          message: "Appointment is deleted",
+          description: "You have deleted the appointment successfully",
           type: "success",
         });
         const { appointedServices } = this.state;
@@ -130,53 +142,139 @@ export default class AppointedServicesScreen extends Component {
       })
       .catch((err) => {
         showMessage({
-          message: "There occured an error",
+          message: "Error in appointment deletion",
+          description: "There occured an error while deleting appointment",
           type: "danger",
         });
       });
   };
 
+  //refreshing appointments
   onRefresh = async () => {
     this.setState({ isFetching: true });
     await this.gettingAppointedServices();
     this.setState({ isFetching: false });
   };
 
+  //confirmation message before giving rating
+  confirmationBeforRating = (rating, id) => {
+    Alert.alert(
+      "Do you wanna rate an availed service?",
+      `You have selected rating as ${rating} out of 5`,
+      [
+        {
+          text: "Ask me later",
+          onPress: () => console.log(),
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log(),
+          style: "cancel",
+        },
+        //if user press rate it now then call to ratingCompleted
+        {
+          text: "Rate it now",
+          onPress: () => this.ratingCompleted(rating, id),
+        },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  ratingCompleted = async (rating, id) => {
+    value = await AsyncStorage.getItem("x-auth-token");
+    var obj = {};
+    obj["rating"] = rating;
+
+    await Axios({
+      url:
+        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/service/rating/" +
+        id,
+      method: "POST",
+      data: obj,
+
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+    })
+      .then((response) => {
+        showMessage({
+          message: "Rating to an availed appointment",
+          description: "You have successfully given rating to an Appointment",
+          type: "success",
+        });
+        const { appointedServices } = this.state;
+        const result = appointedServices.filter((item) => item._id !== id);
+        this.setState({ appointedServices: result, ratingGiven: true });
+      })
+      .catch((error) => {
+        showMessage({
+          message: "Error in giving rating to appoitment",
+          description: "Appointment cannot be rated due to some issue",
+          type: "danger",
+        });
+      });
+  };
+
   renderingAppointedServices = ({ item }) => {
     return (
       <ContentForCard>
-        <CardPaper containerStyle={{ elevation: 16 }}>
-          <CardItem header>
-            <SalonName>{item.Salon_id}</SalonName>
-          </CardItem>
-          <CardItem style={{ marginLeft: 73 }}>
-            <Block>
-              <Close>
-                Timings: from {item.stating_time} to {item.ending_time}
-              </Close>
-              <ServiceName>
-                Booked at: {item.booking_date.split("", 10)}
-              </ServiceName>
-            </Block>
-          </CardItem>
-          <CardItem footer>
-            <Left>
-              <Price>{item.service_id}</Price>
-            </Left>
-            <Right>
-              <TouchableOpacity>
-                <Icon
-                  onPress={() =>
-                    this.confirmationBeforDeletion(item._id, item.booking_date)
-                  }
-                  name="delete-outline"
-                  type="MaterialCommunityIcons"
-                  style={{ color: "red", fontSize: 30 }}
-                />
-              </TouchableOpacity>
-            </Right>
-          </CardItem>
-        </CardPaper>
+        {item.service_status ? (
+          <CardPaper containerStyle={{ elevation: 16 }}>
+            <CardItem header style={{ marginLeft: 80 }}>
+              <CardItem header>
+                <SalonName>Please give rating</SalonName>
+              </CardItem>
+              <AirbnbRating
+                count={5}
+                reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
+                defaultRating={4}
+                onFinishRating={(rating, id) =>
+                  this.confirmationBeforRating(rating, item._id)
+                }
+                size={30}
+              />
+            </CardItem>
+          </CardPaper>
+        ) : (
+          <CardPaper containerStyle={{ elevation: 16 }}>
+            <CardItem header>
+              <SalonName>{item.Salon_id}</SalonName>
+            </CardItem>
+            <CardItem style={{ marginLeft: 73 }}>
+              <Block>
+                <Close>
+                  Timings: from {item.stating_time} to {item.ending_time}
+                </Close>
+                <ServiceName>
+                  Booked at: {item.booking_date.split("", 10)}
+                </ServiceName>
+              </Block>
+            </CardItem>
+            <CardItem footer>
+              <Left>
+                <Price>{item.service_id}</Price>
+              </Left>
+              <Right>
+                <TouchableOpacity>
+                  <Icon
+                    onPress={() =>
+                      this.confirmationBeforDeletion(
+                        item._id,
+                        item.booking_date
+                      )
+                    }
+                    name="delete-outline"
+                    type="MaterialCommunityIcons"
+                    style={{ color: "red", fontSize: 30 }}
+                  />
+                </TouchableOpacity>
+              </Right>
+            </CardItem>
+          </CardPaper>
+        )}
       </ContentForCard>
     );
   };
@@ -184,7 +282,6 @@ export default class AppointedServicesScreen extends Component {
   //rendering
   render() {
     const { isLoading, appointedServices, isFetching } = this.state;
-    console.log(appointedServices);
     return (
       <Container>
         <Title>Availible services for today</Title>

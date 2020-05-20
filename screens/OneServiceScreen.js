@@ -14,6 +14,7 @@ import {
   Description,
   CardPaper,
   ServiceButton,
+  Reviews,
 } from "../styling/OneServiceScreen";
 
 //exporting OneServiceScreen
@@ -74,6 +75,7 @@ export default class OneServiceScreen extends Component {
                     uri: items.image_url,
                   }}
                 />
+                <Reviews>Reviews: {items.ServiceAvgRating}</Reviews>
                 <Description muted>{items.serviceDescription}</Description>
               </Body>
             </CardItem>

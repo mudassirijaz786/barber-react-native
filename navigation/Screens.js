@@ -3,7 +3,7 @@ import React from "react";
 import { Block, Text } from "galio-framework";
 import SalonsScreen from "../screens/SalonsScreen";
 import TokenSignupScreen from "../screens/TokenSignupScreen";
-import StartScreen from "../screens/LoginScreen";
+import StartScreen from "../screens/StartScreen";
 import Logout from "../screens/Logout";
 import { Icon } from "native-base";
 import SalonTrackingScreen from "../screens/SalonTrackingScreen";

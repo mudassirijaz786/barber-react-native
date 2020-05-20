@@ -5,6 +5,7 @@ import { CardItem, Left, Body, Right, Icon } from "native-base";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { Picker, AsyncStorage } from "react-native";
+import moment from "moment";
 import {
   Container,
   Title,
@@ -71,7 +72,7 @@ export default class AppointmentScreen extends Component {
     this.setState({ stating_time: f }, async () => {
       obj["booking_date"] = this.state.booking_date;
       obj["stating_time"] = this.state.stating_time;
-      obj["current_date"] = new Date();
+      obj["current_date"] = moment().format("YYYY-MM-DD");
       obj["salon_id"] = this.props.navigation.state.params.items.Salon_id;
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
@@ -88,14 +89,17 @@ export default class AppointmentScreen extends Component {
       })
         .then((response) => {
           showMessage({
-            message: "Appointment is booked",
+            message: "",
+            description: "You have successfully booked Appointment",
             type: "success",
           });
           this.props.navigation.navigate("SlotsAvailing");
         })
         .catch((error) => {
           showMessage({
-            message: "Appoitnment is not booked",
+            message: "Error in scheduling a service",
+            description:
+              "Appoitnment is not booked due to wrong time selection",
             type: "danger",
           });
         });

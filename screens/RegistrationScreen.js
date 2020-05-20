@@ -3,7 +3,6 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import { Text } from "galio-framework";
 import React, { Component, Fragment } from "react";
-import { AsyncStorage } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { showMessage } from "react-native-flash-message";
 import {
@@ -16,8 +15,10 @@ import {
   Error,
 } from "../styling/Registration";
 
+//some regular expressions
 const phoneReg = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
-const passwordReg = /^((\+92)|(0092))-{0,1}\d{3}-{0,1}\d{7}$|^\d{11}$|^\d{4}-\d{7}$/;
+const passwordReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/;
+
 //exporting class RegistrationScreen
 export default class RegistrationScreen extends Component {
   constructor(props) {
@@ -48,7 +49,8 @@ export default class RegistrationScreen extends Component {
     //checking if status is 200
     if (response.status === 200) {
       showMessage({
-        message: "Token sent to email successfully",
+        message: "Token sent",
+        description: "Token has been sent to email successfully",
         type: "success",
       });
       this.setState({ isLoading: false });
@@ -58,7 +60,8 @@ export default class RegistrationScreen extends Component {
     } else {
       this.setState({ isLoading: false });
       showMessage({
-        message: "Email or password already exists in system",
+        message: "User might be in system",
+        description: "Email or Contact might already exists in our system",
         type: "danger",
       });
     }

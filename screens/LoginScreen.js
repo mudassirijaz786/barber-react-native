@@ -6,7 +6,6 @@ import React, { Component, Fragment } from "react";
 import { AsyncStorage } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { showMessage } from "react-native-flash-message";
-
 import {
   Container,
   Title,
@@ -55,9 +54,16 @@ export default class LoginScreen extends Component {
       );
       //jumping to Home
       this.props.navigation.navigate("Home");
+      showMessage({
+        message: "Loggedin",
+        description: "You have successfully loggedin",
+        type: "info",
+      });
     } else {
       showMessage({
-        message: "Invalid username or password",
+        message: "Error in getting login",
+        description:
+          "Username or Password might be invalid, please double check it",
         type: "danger",
       });
     }
