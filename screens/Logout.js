@@ -11,31 +11,13 @@ export default class Logout extends Component {
 
   //logging out
   logout = async () => {
-    this.setState({ loading: true });
     await AsyncStorage.removeItem("x-auth-token");
     this.props.navigation.navigate("Login");
   };
 
   //calling logout
   componentDidMount() {
-    Alert.alert(
-      "Logout",
-      `Please confirm before logging out`,
-      [
-        {
-          text: "Ask me later",
-          onPress: () => console.log(),
-        },
-        {
-          text: "Cancel",
-          onPress: () => console.log(),
-          style: "cancel",
-        },
-        //if user press delete then call to deleteAppointedService
-        { text: "Logout", onPress: () => this.logout() },
-      ],
-      { cancelable: false }
-    );
+    this.logout();
   }
 
   render() {
