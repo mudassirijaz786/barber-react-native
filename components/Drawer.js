@@ -33,6 +33,16 @@ class DrawerItem extends React.Component {
         return (
           <Icon
             size={16}
+            name="ios-heart-empty"
+            family="ionicon"
+            color={focused ? "white" : materialTheme.COLORS.MUTED}
+          />
+        );
+
+      case "Favourite Services":
+        return (
+          <Icon
+            size={16}
             name="ios-timer"
             family="ionicon"
             color={focused ? "white" : materialTheme.COLORS.MUTED}

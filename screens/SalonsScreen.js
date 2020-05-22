@@ -1,6 +1,6 @@
 //importing
 import React from "react";
-import { AsyncStorage, TouchableOpacity, FlatList } from "react-native";
+import { AsyncStorage, TouchableOpacity, FlatList, Alert } from "react-native";
 import { Text } from "galio-framework";
 import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
@@ -19,6 +19,7 @@ import {
   NoSalon,
   ContentForCard,
   SalonButton,
+  Distance,
   Open,
   Close,
 } from "../styling/Salons";
@@ -52,26 +53,28 @@ export default class SalonsScreen extends React.Component {
   };
 
   //getting salons method
-  componentDidMount() {
-    this.gettingSalons();
-    this.getInitialState();
+  async componentDidMount() {
+    await this.gettingSalons();
+    await this.getInitialState();
   }
 
-  //getting data of current location
-  getInitialState = () => {
+  //getting data of current location and setting distance in salon
+  getInitialState = async () => {
+    const { salons } = { ...this.state };
     getLocation().then((data) => {
-      var obj = {};
-      obj["latitude"] = data.latitude;
-      obj["longitude"] = data.longitude;
-
-      //measuring distance
-      const distanceInM = geolib.getDistance(obj, 112);
-
-      //converting distance from meters to kilometers
-      const distance = geolib.convertDistance(distanceInM, "km");
-
-      //setting states
-      this.setState({});
+      var currentLocation = {};
+      currentLocation["latitude"] = data.latitude;
+      currentLocation["longitude"] = data.longitude;
+      for (let i = 0; i < salons.length; i++) {
+        const element = salons[i];
+        var salonLocation = {};
+        salonLocation["latitude"] = element.Latitude;
+        salonLocation["longitude"] = element.Longitude;
+        const distanceInM = geolib.getDistance(currentLocation, salonLocation);
+        const distance = geolib.convertDistance(distanceInM, "km");
+        salons[salons.indexOf(element)]["distance"] = distance.toFixed(2);
+      }
+      this.setState({ salons, isLoading: false });
     });
   };
 
@@ -107,7 +110,7 @@ export default class SalonsScreen extends React.Component {
           type: "danger",
         });
       });
-    this.setState({ isLoading: false });
+    // this.setState({ isLoading: false });
   };
 
   //moving to MapsAndService
@@ -116,7 +119,7 @@ export default class SalonsScreen extends React.Component {
   }
 
   //moving filtered salon to MapsAndService
-  onFilter(items) {
+  onLocationFilter(items) {
     this.props.navigation.navigate("NearestSalonMap", { items: items });
   }
 
@@ -140,6 +143,34 @@ export default class SalonsScreen extends React.Component {
     this.setState({ search, salons: newData });
   };
 
+  //confirmation message before sorting on the basis of distance
+  confirmationBeforSorting = (salons) => {
+    Alert.alert(
+      "Do you want to sort salons?",
+      `On distance basis?`,
+      [
+        {
+          text: "Ask me later",
+          onPress: () => console.log(),
+        },
+        {
+          text: "Cancel",
+          onPress: () => console.log(),
+          style: "cancel",
+        },
+        //if user press delete then call to deleteAppointedService
+        { text: "Sort", onPress: () => this.onDistanceSort(salons) },
+      ],
+      { cancelable: false }
+    );
+  };
+
+  //sorting salons on distance basis
+  onDistanceSort(salons) {
+    salons.sort();
+    this.setState({ salons });
+  }
+
   //rendering salons
   renderingSalon = ({ item }) => {
     return (
@@ -160,17 +191,23 @@ export default class SalonsScreen extends React.Component {
               </Text>
             </Right>
           </CardItem>
+
           <CardItem>
-            <TouchableOpacity>
-              <SalonButton
-                mode="outlined"
-                uppercase={false}
-                contentStyle={{ height: 30 }}
-                onPress={() => this.onPressed(item)}
-              >
-                See services
-              </SalonButton>
-            </TouchableOpacity>
+            <Left>
+              <TouchableOpacity>
+                <SalonButton
+                  mode="outlined"
+                  uppercase={false}
+                  contentStyle={{ height: 30 }}
+                  onPress={() => this.onPressed(item)}
+                >
+                  Explore maps and services
+                </SalonButton>
+              </TouchableOpacity>
+            </Left>
+            <Right>
+              <Distance>{item.distance}</Distance>
+            </Right>
           </CardItem>
         </CardPaper>
       </ContentForCard>
@@ -183,13 +220,13 @@ export default class SalonsScreen extends React.Component {
     return (
       <Container>
         <Blocked row>
-          <Filter>Nearest Salon</Filter>
+          <Filter>See Nearest Salon</Filter>
           <Icon
             size={30}
             name="filter-outline"
             type="MaterialCommunityIcons"
             style={{ color: "#eb6709" }}
-            onPress={() => this.onFilter(salons)}
+            onPress={() => this.onLocationFilter(salons)}
           />
         </Blocked>
         <Title>Availible salons</Title>
@@ -205,6 +242,17 @@ export default class SalonsScreen extends React.Component {
           value={search}
           showLoading={isLoading}
         />
+        <Blocked row>
+          <Filter>Sort by distance</Filter>
+          <Icon
+            size={30}
+            name="sort"
+            type="MaterialIcons"
+            style={{ color: "#eb6709" }}
+            onPress={() => this.onDistanceSort(salons)}
+          />
+        </Blocked>
+
         {salons.length === 0 && <NoSalon>Sorry, No salon to display</NoSalon>}
         {isLoading ? (
           <ActivityIndicator

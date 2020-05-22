@@ -22,6 +22,7 @@ import OneServiceScreen from "../screens/OneServiceScreen";
 import AppointedServicesScreen from "../screens/AppointedServicesScreen";
 import LoginScreen from "../screens/LoginScreen";
 import NearestSalonServicesScreen from "../screens/NearestSalonServicesScreen";
+import FavouriteServices from "../screens/FavouriteServices";
 import {
   createStackNavigator,
   createDrawerNavigator,
@@ -53,6 +54,18 @@ const SlotsAvailingStack = createStackNavigator(
   {
     SlotsAvailing: {
       screen: AppointedServicesScreen,
+    },
+  },
+  {
+    cardStyle: { backgroundColor: "#EEEEEE" },
+  }
+);
+
+//stack for favourite services
+const FavouriteServicesStack = createStackNavigator(
+  {
+    FavouriteServicesStack: {
+      screen: FavouriteServices,
     },
   },
   {
@@ -156,11 +169,24 @@ const AppStack = createDrawerNavigator(
       }),
     },
 
+    FavouriteServices: {
+      screen: FavouriteServicesStack,
+      navigationOptions: () => ({
+        drawerLabel: ({ focused }) => (
+          <Drawer
+            focused={focused}
+            screen="Favourite Services"
+            title="Favourite Services"
+          />
+        ),
+      }),
+    },
+
     MenuDivider: {
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: () => (
-          <Block style={{ marginVertical: 170 }}>
+          <Block style={{ marginVertical: 145 }}>
             <Text>{` `}</Text>
           </Block>
         ),

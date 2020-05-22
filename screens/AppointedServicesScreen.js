@@ -20,6 +20,7 @@ import {
   NoService,
   ContentForCard,
   ServiceName,
+  RatingText,
   CardPaper,
   Price,
   SalonName,
@@ -185,14 +186,12 @@ export default class AppointedServicesScreen extends Component {
     value = await AsyncStorage.getItem("x-auth-token");
     var obj = {};
     obj["rating"] = rating;
-
     await Axios({
       url:
         "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/service/rating/" +
         id,
       method: "POST",
       data: obj,
-
       headers: {
         Accept: "application/json, text/plain, */*",
         "Content-Type": "application/json",
@@ -205,9 +204,6 @@ export default class AppointedServicesScreen extends Component {
           description: "You have successfully given rating to an Appointment",
           type: "success",
         });
-        const { appointedServices } = this.state;
-        const result = appointedServices.filter((item) => item._id !== id);
-        this.setState({ appointedServices: result, ratingGiven: true });
       })
       .catch((error) => {
         showMessage({
@@ -223,20 +219,16 @@ export default class AppointedServicesScreen extends Component {
       <ContentForCard>
         {item.service_status ? (
           <CardPaper containerStyle={{ elevation: 16 }}>
-            <CardItem header style={{ marginLeft: 80 }}>
-              <CardItem header>
-                <SalonName>Please give rating</SalonName>
-              </CardItem>
-              <AirbnbRating
-                count={5}
-                reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
-                defaultRating={4}
-                onFinishRating={(rating, id) =>
-                  this.confirmationBeforRating(rating, item._id)
-                }
-                size={30}
-              />
-            </CardItem>
+            <RatingText>Please give rating on availed service</RatingText>
+            <AirbnbRating
+              count={5}
+              reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
+              defaultRating={4}
+              onFinishRating={(rating, id) =>
+                this.confirmationBeforRating(rating, item._id)
+              }
+              size={30}
+            />
           </CardPaper>
         ) : (
           <CardPaper containerStyle={{ elevation: 16 }}>

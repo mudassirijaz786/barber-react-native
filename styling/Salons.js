@@ -29,15 +29,15 @@ export const SalonName = styled.Text`
 export const Open = styled.Text`
   color: #eb6709;
   text-align: center;
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 700;
 `;
 
 export const Close = styled.Text`
   color: #eb6709;
   text-align: center;
-  font-size: 24px;
-  font-weight: 500;
+  font-size: 18px;
+  font-weight: 700;
 `;
 
 export const Filter = styled.Text`
@@ -45,6 +45,13 @@ export const Filter = styled.Text`
   text-align: center;
   font-size: 24px;
   font-weight: 200;
+`;
+
+export const Distance = styled.Text`
+  color: blueviolet;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 700;
 `;
 
 export const ContentForCard = styled(Content)`
