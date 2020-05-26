@@ -50,7 +50,7 @@ export const Filter = styled.Text`
 export const Distance = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 24px;
+  font-size: 16px;
   font-weight: 700;
 `;
 

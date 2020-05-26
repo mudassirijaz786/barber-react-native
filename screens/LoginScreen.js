@@ -55,9 +55,9 @@ export default class LoginScreen extends Component {
       //jumping to Home
       this.props.navigation.navigate("Home");
       showMessage({
-        message: "Loggedin",
+        message: "Congratulation",
         description: "You have successfully loggedin",
-        type: "info",
+        type: "success",
       });
     } else {
       showMessage({
@@ -124,7 +124,7 @@ export default class LoginScreen extends Component {
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
                 mode="flat"
-                placeholder="please enter your email"
+                placeholder="Please enter your email"
               />
               {touched.email && errors.email && <Error>{errors.email}</Error>}
               <InputField
@@ -134,7 +134,7 @@ export default class LoginScreen extends Component {
                 onBlur={() => setFieldTouched("password")}
                 secureTextEntry={true}
                 mode="flat"
-                placeholder="please enter your password"
+                placeholder="Please enter your password"
               />
               {touched.password && errors.password && (
                 <Error>{errors.password}</Error>

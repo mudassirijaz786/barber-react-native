@@ -1,6 +1,12 @@
 //importing
 import React from "react";
-import { AsyncStorage, TouchableOpacity, FlatList, Alert } from "react-native";
+import {
+  AsyncStorage,
+  TouchableOpacity,
+  FlatList,
+  Alert,
+  TouchableHighlight,
+} from "react-native";
 import { Text } from "galio-framework";
 import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
@@ -8,6 +14,7 @@ import { showMessage } from "react-native-flash-message";
 import Axios from "axios";
 import { Left, Right, CardItem, Icon } from "native-base";
 import { getLocation } from "../components/location-service";
+import _ from "lodash";
 import * as geolib from "geolib";
 import {
   Container,
@@ -167,8 +174,14 @@ export default class SalonsScreen extends React.Component {
 
   //sorting salons on distance basis
   onDistanceSort(salons) {
-    salons.sort();
-    this.setState({ salons });
+    const salons1 = _.sortBy(this.state.salons, [
+      function (salon) {
+        return salon.distance;
+      },
+    ]);
+
+    console.log(salons1);
+    this.setState({ salons: salons1 });
   }
 
   //rendering salons
@@ -177,17 +190,19 @@ export default class SalonsScreen extends React.Component {
       <ContentForCard>
         <CardPaper elevation={10}>
           <CardItem header>
-            <SalonName>{item.SalonName}</SalonName>
+            <TouchableOpacity onPress={() => this.onPressed(item)}>
+              <SalonName>{item.SalonName}</SalonName>
+            </TouchableOpacity>
           </CardItem>
           <CardItem>
             <Left>
               <Text>
-                Opens <Open>{item.Salon_opening_hours}</Open>
+                Shop Open Time<Open>{item.Salon_opening_hours}</Open>
               </Text>
             </Left>
             <Right>
               <Text>
-                Close <Close> {item.Salon_closing_hours}</Close>
+                Shop Close Time<Close> {item.Salon_closing_hours}</Close>
               </Text>
             </Right>
           </CardItem>
@@ -206,7 +221,7 @@ export default class SalonsScreen extends React.Component {
               </TouchableOpacity>
             </Left>
             <Right>
-              <Distance>{item.distance}</Distance>
+              <Distance>{item.distance} km away</Distance>
             </Right>
           </CardItem>
         </CardPaper>
@@ -232,12 +247,11 @@ export default class SalonsScreen extends React.Component {
         <Title>Availible salons</Title>
         <SearchBar
           round
-          placeholderTextColor="blueviolet"
-          underlineColorAndroid="blueviolet"
+          placeholderTextColor="#808080"
           lightTheme
-          inputContainerStyle={{ backgroundColor: "transparent" }}
           containerStyle={{ backgroundColor: "transparent" }}
-          placeholder="Search salon by name..."
+          inputContainerStyle={{ backgroundColor: "#e4e4e5", borderRadius: 50 }}
+          placeholder="Search salon by name"
           onChangeText={this.updateSearch}
           value={search}
           showLoading={isLoading}
@@ -252,8 +266,9 @@ export default class SalonsScreen extends React.Component {
             onPress={() => this.onDistanceSort(salons)}
           />
         </Blocked>
-
-        {salons.length === 0 && <NoSalon>Sorry, No salon to display</NoSalon>}
+        {salons.length === 0 && isLoading && (
+          <NoSalon>Sorry, No salon to display</NoSalon>
+        )}
         {isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}

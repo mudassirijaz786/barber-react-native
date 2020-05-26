@@ -116,21 +116,21 @@ export default class UpdatePasswordScreen extends Component {
               .required()
               .matches(
                 passwordReg,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "Old password must contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
             password: yup
               .string()
               .required()
               .matches(
                 passwordReg,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "New password must contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
             confirmpassword: yup
               .string()
               .required()
               .matches(
                 passwordReg,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "Confirm new password must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               )
               .test("passwords-match", "Passwords must match", function (
                 value
@@ -156,7 +156,7 @@ export default class UpdatePasswordScreen extends Component {
                 onBlur={() => setFieldTouched("oldpassword")}
                 secureTextEntry={true}
                 mode="flat"
-                placeholder="please enter your old password"
+                placeholder="Please enter your old password"
               />
               {touched.oldpassword && errors.oldpassword && (
                 <Error>{errors.oldpassword}</Error>
@@ -166,7 +166,7 @@ export default class UpdatePasswordScreen extends Component {
                 value={values.password}
                 onChangeText={handleChange("password")}
                 onBlur={() => setFieldTouched("password")}
-                placeholder="please enter your new password"
+                placeholder="Please enter your new password"
                 mode="flat"
                 secureTextEntry={true}
               />
@@ -178,7 +178,7 @@ export default class UpdatePasswordScreen extends Component {
                 value={values.confirmpassword}
                 onChangeText={handleChange("confirmpassword")}
                 onBlur={() => setFieldTouched("confirmpassword")}
-                placeholder="please confirm your new password"
+                placeholder="Please confirm your new password"
                 mode="flat"
                 secureTextEntry={true}
               />

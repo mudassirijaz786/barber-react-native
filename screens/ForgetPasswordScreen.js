@@ -107,8 +107,7 @@ export default class ForgetPasswordScreen extends Component {
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
-                placeholder="please enter your email"
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
+                placeholder="Please enter your email"
                 mode="flat"
               />
               {touched.email && errors.email && <Error>{errors.email}</Error>}

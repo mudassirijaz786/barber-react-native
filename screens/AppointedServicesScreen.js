@@ -104,6 +104,7 @@ export default class AppointedServicesScreen extends Component {
         this.setState({
           appointedServices: response.data,
         });
+        console.log(this.state.app);
       })
       .catch((error) => {
         showMessage({
@@ -204,6 +205,7 @@ export default class AppointedServicesScreen extends Component {
           description: "You have successfully given rating to an Appointment",
           type: "success",
         });
+        this.setState({ ratingGiven: true });
       })
       .catch((error) => {
         showMessage({
@@ -219,16 +221,22 @@ export default class AppointedServicesScreen extends Component {
       <ContentForCard>
         {item.service_status ? (
           <CardPaper containerStyle={{ elevation: 16 }}>
-            <RatingText>Please give rating on availed service</RatingText>
-            <AirbnbRating
-              count={5}
-              reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
-              defaultRating={4}
-              onFinishRating={(rating, id) =>
-                this.confirmationBeforRating(rating, item._id)
-              }
-              size={30}
-            />
+            {this.state.ratingGiven ? (
+              <Text>You have given rating</Text>
+            ) : (
+              <CardPaper>
+                <RatingText>Please give rating on availed service</RatingText>
+                <AirbnbRating
+                  count={5}
+                  reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
+                  defaultRating={4}
+                  onFinishRating={(rating, id) =>
+                    this.confirmationBeforRating(rating, item._id)
+                  }
+                  size={30}
+                />
+              </CardPaper>
+            )}
           </CardPaper>
         ) : (
           <CardPaper containerStyle={{ elevation: 16 }}>

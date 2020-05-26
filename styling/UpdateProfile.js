@@ -30,6 +30,6 @@ export const UpdateProfileButton = styled(Button)`
 `;
 
 export const Error = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: red;
 `;

@@ -127,7 +127,7 @@ export default class RegistrationScreen extends Component {
                 value={values.name}
                 onChangeText={handleChange("name")}
                 onBlur={() => setFieldTouched("name")}
-                placeholder="please enter your name"
+                placeholder="Please enter your name"
                 mode="flat"
               />
               {touched.name && errors.name && <Error>{errors.name}</Error>}
@@ -136,7 +136,7 @@ export default class RegistrationScreen extends Component {
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
-                placeholder="please enter your email"
+                placeholder="Please enter your email"
                 mode="flat"
               />
               {touched.email && errors.email && <Error>{errors.email}</Error>}
@@ -146,7 +146,7 @@ export default class RegistrationScreen extends Component {
                 onChangeText={handleChange("phone")}
                 onBlur={() => setFieldTouched("phone")}
                 formikKey="phone"
-                placeholder="please enter your phone"
+                placeholder="Please enter your phone"
                 keyboardType={"phone-pad"}
                 mode="flat"
               />
@@ -157,8 +157,7 @@ export default class RegistrationScreen extends Component {
                 onChangeText={handleChange("password")}
                 onBlur={() => setFieldTouched("password")}
                 secureTextEntry={true}
-                placeholder="please enter your password"
-                style={{ marginTop: 15, backgroundColor: "transparent" }}
+                placeholder="Please enter your password"
                 mode="flat"
               />
               {touched.password && errors.password && (

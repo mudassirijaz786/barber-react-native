@@ -134,7 +134,7 @@ export default class UpdateProfileScreen extends React.Component {
                 onChangeText={handleChange("name")}
                 onBlur={() => setFieldTouched("name")}
                 style={{ marginTop: 15, backgroundColor: "transparent" }}
-                placeholder="please enter your name"
+                placeholder="Please enter your name"
                 mode="flat"
               />
               {touched.name && errors.name && <Error>{errors.name}</Error>}
@@ -143,7 +143,7 @@ export default class UpdateProfileScreen extends React.Component {
                 value={values.email}
                 onChangeText={handleChange("email")}
                 onBlur={() => setFieldTouched("email")}
-                placeholder="please enter your email"
+                placeholder="Please enter your email"
                 mode="flat"
               />
               {touched.email && errors.email && <Error>{errors.email}</Error>}
@@ -153,7 +153,7 @@ export default class UpdateProfileScreen extends React.Component {
                 onChangeText={handleChange("phone")}
                 onBlur={() => setFieldTouched("phone")}
                 formikKey="phone"
-                placeholder="please enter your phone"
+                placeholder="Please enter your phone"
                 keyboardType={"phone-pad"}
                 mode="flat"
               />

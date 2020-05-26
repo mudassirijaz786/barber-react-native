@@ -45,6 +45,6 @@ export const Blocked = styled(Block)`
 `;
 
 export const Error = styled.Text`
-  font-size: 12px;
+  font-size: 14px;
   color: red;
 `;

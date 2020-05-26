@@ -120,10 +120,15 @@ export default class FavouriteServices extends Component {
         <CardPaper elevation={10}>
           <CardItem header>
             <Left>
-              <ServiceImage source={{ uri: item.image_url }} />
+              <TouchableOpacity onPress={() => this.onPressed(item)}>
+                <ServiceImage source={{ uri: item.image_url }} />
+              </TouchableOpacity>
               <Body>
-                <ServiceName>{item.serviceName}</ServiceName>
-                <Text muted>{item.serviceDescription}</Text>
+                <TouchableOpacity onPress={() => this.onPressed(item)}>
+                  <ServiceName>{item.serviceName}</ServiceName>
+                  <Text muted>{item.serviceDescription}</Text>
+                </TouchableOpacity>
+
                 <Category>{item.service_category}</Category>
                 <Text muted>
                   Service time <Time>{item.service_time}</Time> minutes
@@ -166,12 +171,11 @@ export default class FavouriteServices extends Component {
 
         <SearchBar
           round
-          placeholderTextColor="blueviolet"
-          underlineColorAndroid="blueviolet"
+          placeholderTextColor="#808080"
           lightTheme
-          inputContainerStyle={{ backgroundColor: "transparent" }}
           containerStyle={{ backgroundColor: "transparent" }}
-          placeholder="Search favourite service by name..."
+          inputContainerStyle={{ backgroundColor: "#e4e4e5", borderRadius: 50 }}
+          placeholder="Search favourite service by name"
           onChangeText={this.updateSearch}
           value={search}
           showLoading={this.state.isLoading}

@@ -57,24 +57,30 @@ export default class OneServiceScreen extends Component {
           <CardPaper key={items._id}>
             <CardItem header>
               <Left>
-                <Thumbnail
-                  source={{
-                    uri: items.image_url,
-                  }}
-                />
+                <TouchableOpacity onPress={() => this.onPressed(items)}>
+                  <Thumbnail
+                    source={{
+                      uri: items.image_url,
+                    }}
+                  />
+                </TouchableOpacity>
                 <Body>
-                  <ServiceName>{items.serviceName}</ServiceName>
-                  <Category>{items.service_category}</Category>
+                  <TouchableOpacity onPress={() => this.onPressed(items)}>
+                    <ServiceName>{items.serviceName}</ServiceName>
+                    <Category>{items.service_category}</Category>
+                  </TouchableOpacity>
                 </Body>
               </Left>
             </CardItem>
             <CardItem>
               <Body>
-                <ImageService
-                  source={{
-                    uri: items.image_url,
-                  }}
-                />
+                <TouchableOpacity onPress={() => this.onPressed(items)}>
+                  <ImageService
+                    source={{
+                      uri: items.image_url,
+                    }}
+                  />
+                </TouchableOpacity>
                 <Reviews>Reviews: {items.ServiceAvgRating}</Reviews>
                 <Description muted>{items.serviceDescription}</Description>
               </Body>

@@ -106,14 +106,14 @@ export default class TokenForgetPasswordScreen extends Component {
               .required()
               .matches(
                 passwordReg,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "Password must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               ),
             confirmpassword: yup
               .string()
               .required()
               .matches(
                 passwordReg,
-                "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+                "Confirm password must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
               )
               .test("passwords-match", "Passwords must match", function (
                 value
@@ -137,7 +137,7 @@ export default class TokenForgetPasswordScreen extends Component {
                 value={values.token}
                 onChangeText={handleChange("token")}
                 onBlur={() => setFieldTouched("token")}
-                placeholder="please enter your token"
+                placeholder="Please enter your token"
                 mode="flat"
                 keyboardType={"phone-pad"}
               />
@@ -147,7 +147,7 @@ export default class TokenForgetPasswordScreen extends Component {
                 value={values.newpassword}
                 onChangeText={handleChange("newpassword")}
                 onBlur={() => setFieldTouched("newpassword")}
-                placeholder="please enter your new password"
+                placeholder="Please enter your new password"
                 mode="flat"
                 secureTextEntry={true}
               />
@@ -159,7 +159,7 @@ export default class TokenForgetPasswordScreen extends Component {
                 value={values.confirmpassword}
                 onChangeText={handleChange("confirmpassword")}
                 onBlur={() => setFieldTouched("confirmpassword")}
-                placeholder="please confirm your new password"
+                placeholder="Please confirm your new password"
                 mode="flat"
                 secureTextEntry={true}
               />

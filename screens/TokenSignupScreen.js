@@ -114,7 +114,7 @@ export default class TokenSignupScreen extends Component {
                 value={values.token}
                 onChangeText={handleChange("token")}
                 onBlur={() => setFieldTouched("token")}
-                placeholder="please enter your token"
+                placeholder="Please enter your token"
                 mode="flat"
                 keyboardType={"phone-pad"}
               />
