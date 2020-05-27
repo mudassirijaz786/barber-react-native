@@ -78,3 +78,16 @@ export const Category = styled.Text`
   font-size: 24px;
   font-weight: 500;
 `;
+
+export const Filter = styled.Text`
+  color: blueviolet;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 200;
+`;
+export const Blocked = styled(Block)`
+  align-content: center;
+  justify-content: center;
+  text-align: center;
+  padding-top: 15px;
+`;

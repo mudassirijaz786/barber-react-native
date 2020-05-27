@@ -44,6 +44,15 @@ const Drawer = (props) => {
     gettingCustomer();
   }, [gettingCustomer]);
 
+  var myDate = new Date();
+  var hrs = myDate.getHours();
+
+  var greet;
+
+  if (hrs < 12) greet = "Good Morning";
+  else if (hrs >= 12 && hrs <= 17) greet = "Good Afternoon";
+  else if (hrs >= 17 && hrs <= 24) greet = "Good Evening";
+
   return (
     <Block
       style={styles.container}
@@ -58,8 +67,11 @@ const Drawer = (props) => {
               <TouchableWithoutFeedback
                 onPress={() => props.navigation.navigate("Profile")}
               >
-                <Block style={styles.profile}>
-                  <Text h2 color="white">
+                <Block style={styles.profile} row>
+                  <Text h4 color="white" style={{ marginRight: 3 }}>
+                    {`${greet},`}
+                  </Text>
+                  <Text h4 color="white">
                     {user.UserName}
                   </Text>
                 </Block>

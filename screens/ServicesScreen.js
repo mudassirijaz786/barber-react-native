@@ -6,6 +6,7 @@ import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
 import { Left, Right, CardItem, Body, Icon } from "native-base";
 import Axios from "axios";
+import _ from "lodash";
 import { showMessage } from "react-native-flash-message";
 import {
   Container,
@@ -19,6 +20,8 @@ import {
   Time,
   Reviews,
   ServiceImage,
+  Filter,
+  Blocked,
   Price,
 } from "../styling/Services";
 
@@ -164,6 +167,17 @@ export default class ServicesScreen extends Component {
       </ContentForCard>
     );
   };
+
+  //sorting services on rating basis
+  onRatingSort() {
+    const ratedService = _.sortBy(this.state.services, [
+      function (service) {
+        return service.ServiceAvgRating;
+      },
+    ]).reverse();
+    this.setState({ services: ratedService });
+  }
+
   //rendering
   render() {
     const { search, services, isLoading, isFetching } = this.state;
@@ -187,6 +201,16 @@ export default class ServicesScreen extends Component {
         {services.length === 0 && (
           <NoService>Sorry, No service to display</NoService>
         )}
+        <Blocked row>
+          <Filter>Sort by rating</Filter>
+          <Icon
+            size={30}
+            name="sort"
+            type="MaterialIcons"
+            style={{ color: "#eb6709" }}
+            onPress={() => this.onRatingSort()}
+          />
+        </Blocked>
         {isLoading ? (
           <ActivityIndicator
             animating={isLoading}

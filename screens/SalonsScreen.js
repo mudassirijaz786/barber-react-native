@@ -79,7 +79,11 @@ export default class SalonsScreen extends React.Component {
         salonLocation["longitude"] = element.Longitude;
         const distanceInM = geolib.getDistance(currentLocation, salonLocation);
         const distance = geolib.convertDistance(distanceInM, "km");
-        salons[salons.indexOf(element)]["distance"] = distance.toFixed(2);
+        if (distance === 1) {
+          salons[salons.indexOf(element)]["distance"] = distanceInM.toFixed(2);
+        } else {
+          salons[salons.indexOf(element)]["distance"] = distance.toFixed(2);
+        }
       }
       this.setState({ salons, isLoading: false });
     });
@@ -117,7 +121,7 @@ export default class SalonsScreen extends React.Component {
           type: "danger",
         });
       });
-    // this.setState({ isLoading: false });
+    this.setState({ isLoading: false });
   };
 
   //moving to MapsAndService
@@ -173,15 +177,13 @@ export default class SalonsScreen extends React.Component {
   };
 
   //sorting salons on distance basis
-  onDistanceSort(salons) {
-    const salons1 = _.sortBy(this.state.salons, [
+  onDistanceSort() {
+    const distanceSalons = _.sortBy(this.state.salons, [
       function (salon) {
         return salon.distance;
       },
     ]);
-
-    console.log(salons1);
-    this.setState({ salons: salons1 });
+    this.setState({ salons: distanceSalons });
   }
 
   //rendering salons
@@ -263,7 +265,7 @@ export default class SalonsScreen extends React.Component {
             name="sort"
             type="MaterialIcons"
             style={{ color: "#eb6709" }}
-            onPress={() => this.onDistanceSort(salons)}
+            onPress={() => this.onDistanceSort()}
           />
         </Blocked>
         {salons.length === 0 && isLoading && (
