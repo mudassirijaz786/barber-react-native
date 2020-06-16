@@ -1,7 +1,6 @@
 //importing
 import React, { Component } from "react";
-import { Dimensions, StyleSheet, Text } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Dimensions, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Icon } from "native-base";
 import MapView, { Marker } from "react-native-maps";
 import * as geolib from "geolib";
@@ -156,10 +155,9 @@ class NearestSalonMapScreen extends Component {
             </Category>
             <Distance> at {distance} km </Distance>
           </Blocked>
-          {!currentPosition.latitude && !currentPosition.longitude && (
-            <ActivityIndicator size="large" color="blueviolet" />
-          )}
-          {currentPosition.latitude && currentPosition.longitude && (
+          {!currentPosition.latitude && !currentPosition.longitude ? (
+            <ActivityIndicator size={50} color="blueviolet" />
+          ) : (
             <MapView
               initialRegion={{
                 latitude: this.state.currentPosition.latitude,
@@ -200,8 +198,9 @@ class NearestSalonMapScreen extends Component {
                   longitude: currentPosition.longitude,
                 }}
               />
-              {points.map((point) => (
+              {points.map((point, index) => (
                 <Marker
+                  key={index}
                   pinColor="aqua"
                   coordinate={point}
                   title={point.name}

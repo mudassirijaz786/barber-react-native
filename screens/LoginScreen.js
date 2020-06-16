@@ -3,9 +3,9 @@ import * as yup from "yup";
 import { Formik } from "formik";
 import { Text } from "galio-framework";
 import React, { Component, Fragment } from "react";
-import { AsyncStorage } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import { showMessage } from "react-native-flash-message";
+import { url } from "./config.json";
 import {
   Container,
   Title,
@@ -25,25 +25,22 @@ export default class LoginScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      email: "",
-      password: "",
+      email: "ijazmudassir786@gmail.com",
+      password: "pa$$WORD1122",
       isLoading: false,
     };
   }
 
   //backend login call
   async loginCall(JsonObj) {
-    const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserLogin",
-      {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    );
+    const response = await fetch(url + "/UserLogin", {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonObj),
+    });
 
     //checking if status is 200
     if (response.status === 200) {
@@ -88,7 +85,7 @@ export default class LoginScreen extends Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

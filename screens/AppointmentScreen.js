@@ -6,6 +6,7 @@ import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { Picker, AsyncStorage } from "react-native";
 import moment from "moment";
+import { url } from "./config.json";
 import {
   Container,
   Title,
@@ -77,7 +78,8 @@ export default class AppointmentScreen extends Component {
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
         url:
-          "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
+          url +
+          "/book/appointment/" +
           this.props.navigation.state.params.items._id,
         method: "POST",
         headers: {

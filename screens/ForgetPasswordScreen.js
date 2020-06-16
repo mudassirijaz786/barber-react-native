@@ -2,9 +2,10 @@
 import * as yup from "yup";
 import { Formik } from "formik";
 import React, { Component, Fragment } from "react";
-import { ActivityIndicator } from "react-native-paper";
 import { Text } from "galio-framework";
+import { ActivityIndicator } from "react-native";
 import { showMessage } from "react-native-flash-message";
+import { url } from "./config.json";
 import {
   Container,
   InputField,
@@ -30,17 +31,14 @@ export default class ForgetPasswordScreen extends Component {
   //backend forget Token Call
   async forgetTokenCall(JsonObj) {
     this.setState({ isLoading: true });
-    const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/forgot/password",
-      {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    );
+    const response = await fetch(url + "/UserSignup/forgot/password", {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonObj),
+    });
 
     //check if status is 200
     if (response.status === 200) {
@@ -79,7 +77,7 @@ export default class ForgetPasswordScreen extends Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

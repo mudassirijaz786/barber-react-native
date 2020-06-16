@@ -1,13 +1,13 @@
 //import
 import React, { useState, useEffect, useCallback } from "react";
 import { DrawerItems } from "react-navigation";
-import { ActivityIndicator } from "react-native-paper";
 import { Block, Text, theme } from "galio-framework";
 const { width } = Dimensions.get("screen");
 import Axios from "axios";
 import {
   TouchableWithoutFeedback,
   ScrollView,
+  ActivityIndicator,
   StyleSheet,
   AsyncStorage,
   Dimensions,
@@ -22,8 +22,7 @@ const Drawer = (props) => {
     const value = await AsyncStorage.getItem("x-auth-token");
     setLoad(true);
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
+      url: "/UserSignUp",
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -59,7 +58,7 @@ const Drawer = (props) => {
       forceInset={{ top: "always", horizontal: "never" }}
     >
       {load ? (
-        <ActivityIndicator size="large" color="blueviolet" />
+        <ActivityIndicator animating={load} size={50} color="blueviolet" />
       ) : (
         users.map((user) => {
           return (

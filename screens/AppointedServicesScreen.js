@@ -2,15 +2,16 @@
 import React, { Component } from "react";
 import { Body, CardItem, Icon, Right, Left } from "native-base";
 import { Block } from "galio-framework";
-import { ActivityIndicator } from "react-native-paper";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { AirbnbRating } from "react-native-elements";
 import moment from "moment";
+import { url } from "./config.json";
 import {
   Text,
   AsyncStorage,
   TouchableOpacity,
+  ActivityIndicator,
   FlatList,
   Alert,
 } from "react-native";
@@ -26,7 +27,6 @@ import {
   SalonName,
   Close,
 } from "../styling/AppointedServices";
-
 //exporting class AppointedServicesScreen
 export default class AppointedServicesScreen extends Component {
   constructor(props) {
@@ -90,8 +90,7 @@ export default class AppointedServicesScreen extends Component {
     // obj["current_date"] = new Date();
 
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/customer/schedule",
+      url: url + "/customer/schedule",
       method: "POST",
       data: obj,
       headers: {
@@ -104,7 +103,6 @@ export default class AppointedServicesScreen extends Component {
         this.setState({
           appointedServices: response.data,
         });
-        console.log(this.state.app);
       })
       .catch((error) => {
         showMessage({
@@ -122,9 +120,7 @@ export default class AppointedServicesScreen extends Component {
   deleteAppointedService = async (id) => {
     value = await AsyncStorage.getItem("x-auth-token");
     Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/" +
-        id,
+      url: url + "/book/appointment/" + id,
       method: "DELETE",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -185,12 +181,11 @@ export default class AppointedServicesScreen extends Component {
 
   ratingCompleted = async (rating, id) => {
     value = await AsyncStorage.getItem("x-auth-token");
+
     var obj = {};
     obj["rating"] = rating;
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/service/rating/" +
-        id,
+      url: url + "/service/rating/" + id,
       method: "POST",
       data: obj,
       headers: {
@@ -291,7 +286,7 @@ export default class AppointedServicesScreen extends Component {
         {isLoading ? (
           <ActivityIndicator
             animating={isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

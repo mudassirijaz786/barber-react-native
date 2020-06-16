@@ -1,10 +1,11 @@
 //importing
 import * as yup from "yup";
 import { Formik } from "formik";
+import { ActivityIndicator } from "react-native";
 import { Text } from "galio-framework";
 import React, { Component, Fragment } from "react";
-import { ActivityIndicator } from "react-native-paper";
 import { showMessage } from "react-native-flash-message";
+import { url } from "./config.json";
 import {
   Container,
   Title,
@@ -34,17 +35,14 @@ export default class RegistrationScreen extends Component {
 
   //signup backend api call
   async SignupApiCall(JsonObj) {
-    const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
-      {
-        method: "post",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    );
+    const response = await fetch(url + "/UserSignUp", {
+      method: "post",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonObj),
+    });
 
     //checking if status is 200
     if (response.status === 200) {
@@ -87,7 +85,7 @@ export default class RegistrationScreen extends Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

@@ -1,13 +1,19 @@
 //importing
 import { Text } from "galio-framework";
 import React, { Component } from "react";
-import { TouchableOpacity, AsyncStorage, FlatList } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import {
+  TouchableOpacity,
+  AsyncStorage,
+  FlatList,
+  ActivityIndicator,
+} from "react-native";
 import { SearchBar } from "react-native-elements";
 import { Left, Right, CardItem, Body, Icon } from "native-base";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import decode from "jwt-decode";
+import { url } from "./config.json";
+
 import {
   Container,
   Title,
@@ -62,8 +68,7 @@ export default class FavouriteServices extends Component {
     //getting token from local storage
     value = await AsyncStorage.getItem("x-auth-token");
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/book/appointment/favourites",
+      url: url + "/book/appointment/favourites",
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -178,7 +183,7 @@ export default class FavouriteServices extends Component {
           placeholder="Search favourite service by name"
           onChangeText={this.updateSearch}
           value={search}
-          showLoading={this.state.isLoading}
+          showLoading={isLoading}
         />
         {services.length === 0 && (
           <NoService>Sorry, No service to display</NoService>
@@ -186,7 +191,7 @@ export default class FavouriteServices extends Component {
         {isLoading ? (
           <ActivityIndicator
             animating={isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

@@ -1,7 +1,14 @@
 //importing
 import React, { Component } from "react";
-import { View, Image, StyleSheet, Animated, Text } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import {
+  View,
+  Image,
+  StyleSheet,
+  Animated,
+  Text,
+  ActivityIndicator,
+} from "react-native";
+
 /* Logo */
 import Logo from "../assets/images/start.png";
 
@@ -35,7 +42,7 @@ class StartScreen extends Component {
         loadingSpinner: true,
       });
       setTimeout(() => {
-        this.props.navigation.navigate("Login");
+        this.props.navigation.navigate("Second");
       }, 1500);
     });
   }
@@ -57,7 +64,7 @@ class StartScreen extends Component {
           {this.state.loadingSpinner ? (
             <ActivityIndicator
               animating={this.state.loadingSpinner}
-              size="large"
+              size={50}
               style={{
                 position: "absolute",
                 left: 0,

@@ -5,10 +5,9 @@ import {
   TouchableOpacity,
   FlatList,
   Alert,
-  TouchableHighlight,
+  ActivityIndicator,
 } from "react-native";
 import { Text } from "galio-framework";
-import { ActivityIndicator } from "react-native-paper";
 import { SearchBar } from "react-native-elements";
 import { showMessage } from "react-native-flash-message";
 import Axios from "axios";
@@ -16,6 +15,7 @@ import { Left, Right, CardItem, Icon } from "native-base";
 import { getLocation } from "../components/location-service";
 import _ from "lodash";
 import * as geolib from "geolib";
+import { url } from "./config.json";
 import {
   Container,
   Title,
@@ -97,8 +97,7 @@ export default class SalonsScreen extends React.Component {
 
     //getting salons from backend
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/SalonSignUp",
+      url: url + "/SalonSignUp",
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -121,7 +120,7 @@ export default class SalonsScreen extends React.Component {
           type: "danger",
         });
       });
-    this.setState({ isLoading: false });
+    // this.setState({ isLoading: false });
   };
 
   //moving to MapsAndService
@@ -273,8 +272,8 @@ export default class SalonsScreen extends React.Component {
         )}
         {isLoading ? (
           <ActivityIndicator
-            animating={this.state.isLoading}
-            size="large"
+            animating={isLoading}
+            size={50}
             color="blueviolet"
           />
         ) : (

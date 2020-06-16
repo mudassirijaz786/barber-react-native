@@ -10,9 +10,9 @@ import {
   Email,
 } from "../styling/Profile";
 import { Icon } from "native-base";
-import { ActivityIndicator } from "react-native-paper";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import Axios from "axios";
+import { url } from "./config.json";
 
 //exporting class ProfileScreen
 export default class ProfileScreen extends React.Component {
@@ -48,8 +48,7 @@ export default class ProfileScreen extends React.Component {
 
     //getting salons from backend
     await Axios({
-      url:
-        "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp",
+      url: url + "/UserSignUp",
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -73,7 +72,11 @@ export default class ProfileScreen extends React.Component {
       <Container>
         <Title>Your Profile</Title>
         {this.state.isLoading ? (
-          <ActivityIndicator size="large" color="blueviolet" />
+          <ActivityIndicator
+            animating={this.state.isLoading}
+            size={50}
+            color="blueviolet"
+          />
         ) : (
           this.state.customer.map((customer) => {
             return (

@@ -2,10 +2,10 @@
 import * as yup from "yup";
 import { Formik } from "formik";
 import React, { Component, Fragment } from "react";
-import { AsyncStorage } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import { showMessage } from "react-native-flash-message";
 import { Icon } from "native-base";
+import { url } from "./config.json";
 import {
   Container,
   InputField,
@@ -50,18 +50,15 @@ export default class UpdatePasswordScreen extends Component {
     //getting token from local storage
     const token = await AsyncStorage.getItem("x-auth-token");
     this.setState({ isLoading: true });
-    const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignup/change/password",
-      {
-        method: "put",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "x-auth-token": token,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    );
+    const response = await fetch(url + "/UserSignup/change/password", {
+      method: "put",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "x-auth-token": token,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(JsonObj),
+    });
 
     // checking if status is 200
     if (response.status === 200) {
@@ -101,8 +98,8 @@ export default class UpdatePasswordScreen extends Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
-            color="#0000ff"
+            size={50}
+            color="blueviolet"
           />
         ) : (
           <Title>Reset Password</Title>

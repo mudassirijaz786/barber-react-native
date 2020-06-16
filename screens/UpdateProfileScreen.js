@@ -1,11 +1,11 @@
 //importing
 import React, { Fragment } from "react";
-import { AsyncStorage } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { AsyncStorage, ActivityIndicator } from "react-native";
 import * as yup from "yup";
 import { Formik } from "formik";
 import { showMessage } from "react-native-flash-message";
 import { Icon } from "native-base";
+import { url } from "./config.json";
 import {
   Container,
   InputField,
@@ -50,18 +50,15 @@ export default class UpdateProfileScreen extends React.Component {
     //getting token from local storage
     const value = await AsyncStorage.getItem("x-auth-token");
     this.setState({ isLoading: true });
-    const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/",
-      {
-        method: "put",
-        headers: {
-          Accept: "application/json, text/plain, */*",
-          "Content-Type": "application/json",
-          "x-auth-token": value,
-        },
-        body: JSON.stringify(JsonObj),
-      }
-    );
+    const response = await fetch(url + "/UserSignUp/", {
+      method: "put",
+      headers: {
+        Accept: "application/json, text/plain, */*",
+        "Content-Type": "application/json",
+        "x-auth-token": value,
+      },
+      body: JSON.stringify(JsonObj),
+    });
 
     //checking if status is 200
     if (response.status === 200) {
@@ -100,8 +97,8 @@ export default class UpdateProfileScreen extends React.Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
-            color="#0000ff"
+            size={50}
+            color="blueviolet"
           />
         ) : (
           <Title>Update your profile</Title>

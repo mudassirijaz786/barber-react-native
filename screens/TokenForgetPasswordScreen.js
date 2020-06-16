@@ -2,9 +2,10 @@
 import * as yup from "yup";
 import { Formik } from "formik";
 import React, { Component, Fragment } from "react";
-import { ActivityIndicator } from "react-native-paper";
 import { Text } from "galio-framework";
 import { showMessage } from "react-native-flash-message";
+import { ActivityIndicator } from "react-native";
+import { url } from "./config.json";
 import {
   Container,
   InputField,
@@ -37,7 +38,7 @@ export default class TokenForgetPasswordScreen extends Component {
   async resetPasswordCall(JsonObj) {
     this.setState({ isLoading: true });
     const response = await fetch(
-      "https://digital-salons-app.herokuapp.com/Digital_Saloon.com/api/UserSignUp/verify_code/and/update_password",
+      url + "/UserSignUp/verify_code/and/update_password",
       {
         method: "post",
         headers: {
@@ -87,7 +88,7 @@ export default class TokenForgetPasswordScreen extends Component {
         {this.state.isLoading ? (
           <ActivityIndicator
             animating={this.state.isLoading}
-            size="large"
+            size={50}
             color="blueviolet"
           />
         ) : (

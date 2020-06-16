@@ -1,7 +1,6 @@
 //importing
 import React, { Component } from "react";
-import { Dimensions, StyleSheet, Text } from "react-native";
-import { ActivityIndicator } from "react-native-paper";
+import { Dimensions, StyleSheet, Text, ActivityIndicator } from "react-native";
 import { Icon } from "native-base";
 import MapView, { Marker } from "react-native-maps";
 import * as geolib from "geolib";
@@ -64,13 +63,11 @@ class SalonTrackingScreen extends Component {
 
   //showing nearest salon or salon
   componentDidMount() {
-    this.setState({ isLoading: true });
     {
       this.state.latitude && this.state.longitude
         ? this.getInitialState()
         : null;
     }
-    this.setState({ isLoading: false });
   }
 
   //map ready
@@ -121,66 +118,68 @@ class SalonTrackingScreen extends Component {
       <Container>
         <Title>Locating Salon</Title>
         <Category>{salonName}</Category>
-        {isLoading ? (
-          <ActivityIndicator size="large" color="blueviolet" />
-        ) : (
-          <View>
-            {latitude && longitude && (
-              <View>
-                <Blocked row>
-                  <Text> Salon is locating at Distance of</Text>
-                  <Distance> {distance.toFixed(2)} km</Distance>
-                  <Text> from your current location</Text>
-                </Blocked>
-                {currentPosition.latitude && currentPosition.longitude && (
-                  <MapView
-                    initialRegion={{
-                      latitude: this.state.currentPosition.latitude,
-                      longitude: this.state.currentPosition.longitude,
-                      latitudeDelta: LATITUDE_DELTA,
-                      longitudeDelta: LONGITUDE_DELTA,
+        <View>
+          {latitude && longitude && (
+            <View>
+              <Blocked row>
+                <Text> Salon is locating at Distance of</Text>
+                <Distance> {distance.toFixed(2)} km</Distance>
+                <Text> from your current location</Text>
+              </Blocked>
+              {!currentPosition.latitude && !currentPosition.longitude ? (
+                <ActivityIndicator
+                  animating={isLoading}
+                  size={50}
+                  color="blueviolet"
+                />
+              ) : (
+                <MapView
+                  initialRegion={{
+                    latitude: this.state.currentPosition.latitude,
+                    longitude: this.state.currentPosition.longitude,
+                    latitudeDelta: LATITUDE_DELTA,
+                    longitudeDelta: LONGITUDE_DELTA,
+                  }}
+                  style={styles.container}
+                  ref={(c) => (this.mapView = c)}
+                  onPress={this.onMapPress}
+                >
+                  <MapViewDirections
+                    origin={this.state.currentPosition}
+                    destination={this.state.coordinatesEnd}
+                    mode="DRIVING"
+                    apikey={GOOGLE_MAPS_APIKEY}
+                    language="en"
+                    strokeWidth={4}
+                    strokeColor="blueviolet"
+                    onReady={this.onReady}
+                    resetOnChange={false}
+                  />
+                  <Marker
+                    pinColor="orange"
+                    title={salonName}
+                    description={`Distance is ${distance
+                      .toFixed(2)
+                      .toString()}`}
+                    coordinate={{
+                      latitude: latitude,
+                      longitude: longitude,
                     }}
-                    style={styles.container}
-                    ref={(c) => (this.mapView = c)}
-                    onPress={this.onMapPress}
-                  >
-                    <MapViewDirections
-                      origin={this.state.currentPosition}
-                      destination={this.state.coordinatesEnd}
-                      mode="DRIVING"
-                      apikey={GOOGLE_MAPS_APIKEY}
-                      language="en"
-                      strokeWidth={4}
-                      strokeColor="blueviolet"
-                      onReady={this.onReady}
-                      resetOnChange={false}
-                    />
-                    <Marker
-                      pinColor="orange"
-                      title={salonName}
-                      description={`Distance is ${distance
-                        .toFixed(2)
-                        .toString()}`}
-                      coordinate={{
-                        latitude: latitude,
-                        longitude: longitude,
-                      }}
-                    />
-                    <MapView.Marker
-                      pinColor="green"
-                      title="Current location"
-                      description="This is your current location"
-                      coordinate={{
-                        latitude: currentPosition.latitude,
-                        longitude: currentPosition.longitude,
-                      }}
-                    />
-                  </MapView>
-                )}
-              </View>
-            )}
-          </View>
-        )}
+                  />
+                  <MapView.Marker
+                    pinColor="green"
+                    title="Current location"
+                    description="This is your current location"
+                    coordinate={{
+                      latitude: currentPosition.latitude,
+                      longitude: currentPosition.longitude,
+                    }}
+                  />
+                </MapView>
+              )}
+            </View>
+          )}
+        </View>
       </Container>
     );
   }
