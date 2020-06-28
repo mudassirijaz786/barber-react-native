@@ -13,7 +13,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
 `;
 

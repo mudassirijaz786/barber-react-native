@@ -8,6 +8,11 @@ import {
   Text,
   ActivityIndicator,
 } from "react-native";
+import {
+  widthToDp,
+  listenToOrientationChange,
+  removeOrientationChange,
+} from "../styling/responsive";
 
 /* Logo */
 import Logo from "../assets/images/start.png";
@@ -23,8 +28,14 @@ class StartScreen extends Component {
     };
   }
 
+  componentWillUnMount() {
+    removeOrientationChange();
+  }
+
   //animations goes here
   componentDidMount() {
+    listenToOrientationChange(this);
+
     const { LogoAnime, LogoText } = this.state;
     Animated.parallel([
       Animated.spring(LogoAnime, {
@@ -74,17 +85,15 @@ class StartScreen extends Component {
                 alignItems: "center",
                 justifyContent: "center",
               }}
-              color="blueviolet"
+              color="orange"
             />
           ) : null}
         </Animated.View>
         <Animated.View style={{ opacity: this.state.LogoText }}>
-          <Text style={styles.logoTextOne}>Welcome to </Text>
+          <Text style={styles.logoTextOne}>Welcome </Text>
           <Text style={styles.logoTextTwo}>To</Text>
-          <Text style={styles.logoTextThree}>Digital Salon Mobile App</Text>
-          <Text style={styles.logoTextFour}>
-            Design and developed by Mudassir Ijaz
-          </Text>
+          <Text style={styles.logoTextThree}>Hairway</Text>
+          <Text style={styles.logoTextFour}>By Mudassir & CO</Text>
         </Animated.View>
       </View>
     );
@@ -105,25 +114,25 @@ const styles = StyleSheet.create({
   logoTextOne: {
     color: "blueviolet",
     textAlign: "center",
-    fontSize: 36,
-    fontWeight: "700",
+    fontSize: widthToDp("6%"),
+    fontWeight: "bold",
   },
   logoTextTwo: {
     color: "orange",
     textAlign: "center",
-    fontSize: 40,
-    fontWeight: "200",
+    fontSize: widthToDp("10%"),
+    fontWeight: "normal",
   },
   logoTextThree: {
     color: "blueviolet",
     textAlign: "center",
-    fontSize: 30,
-    fontWeight: "700",
+    fontSize: widthToDp("6%"),
+    fontWeight: "600",
   },
   logoTextFour: {
     color: "blueviolet",
     textAlign: "center",
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: widthToDp("3%"),
+    fontWeight: "600",
   },
 });

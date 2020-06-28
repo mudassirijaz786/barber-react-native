@@ -2,10 +2,12 @@
 import React, { Component } from "react";
 import { Body, CardItem, Icon, Right, Left } from "native-base";
 import { Block } from "galio-framework";
+import { TextInput, Button } from "react-native";
 import Axios from "axios";
 import { showMessage } from "react-native-flash-message";
 import { AirbnbRating } from "react-native-elements";
 import moment from "moment";
+import decode from "jwt-decode";
 import { url } from "./config.json";
 import {
   Text,
@@ -25,6 +27,7 @@ import {
   CardPaper,
   Price,
   SalonName,
+  Confirm,
   Close,
 } from "../styling/AppointedServices";
 //exporting class AppointedServicesScreen
@@ -35,6 +38,7 @@ export default class AppointedServicesScreen extends Component {
       isLoading: false,
       appointedServices: [],
       ratingGiven: false,
+      description: "",
       isFetching: false,
     };
   }
@@ -155,10 +159,13 @@ export default class AppointedServicesScreen extends Component {
   };
 
   //confirmation message before giving rating
-  confirmationBeforRating = (rating, id) => {
+  confirmationBeforRating = (rating, description, id) => {
     Alert.alert(
       "Do you wanna rate an availed service?",
-      `You have selected rating as ${rating} out of 5`,
+      ` You have selected  
+        Rating:${rating}, 
+        ID: ${id}  
+        Description: ${description}`,
       [
         {
           text: "Ask me later",
@@ -172,20 +179,24 @@ export default class AppointedServicesScreen extends Component {
         //if user press rate it now then call to ratingCompleted
         {
           text: "Rate it now",
-          onPress: () => this.ratingCompleted(rating, id),
+          onPress: () => this.ratingCompleted(id),
         },
       ],
       { cancelable: false }
     );
   };
 
-  ratingCompleted = async (rating, id) => {
+  ratingCompleted = async (id) => {
     value = await AsyncStorage.getItem("x-auth-token");
-
+    decoded = decode(value);
+    console.log(decoded.id);
     var obj = {};
-    obj["rating"] = rating;
+    obj["rating"] = this.state.rating;
+    obj["description"] = this.state.description;
+    obj["feedbackBy"] = decoded.id;
+    console.log(obj);
     await Axios({
-      url: url + "/service/rating/" + id,
+      url: url + "/salonservices/rating/" + "5ef7780d1552ba0017ecf96e",
       method: "POST",
       data: obj,
       headers: {
@@ -211,32 +222,80 @@ export default class AppointedServicesScreen extends Component {
       });
   };
 
+  handleDescription = (description) => {
+    this.setState({ description });
+    // console.log(this.state.description);
+  };
+
+  handleRating = (rating) => {
+    this.setState({ rating });
+    // console.log(this.state.description);
+  };
+
   renderingAppointedServices = ({ item }) => {
+    // FIXME: idr condition lgani ha ky agr feedback dy dia ha to already given wala card show ho jay otherwise appointment feedback wala ... and agr book kr li ha but availe nae ki to woi card jo lga hua ha ... just conditioning lgani ha
     return (
       <ContentForCard>
         {item.service_status ? (
-          <CardPaper containerStyle={{ elevation: 16 }}>
+          <CardPaper
+            containerStyle={{ elevation: 16 }}
+            style={{ borderRadius: 12 }}
+          >
             {this.state.ratingGiven ? (
-              <Text>You have given rating</Text>
+              <Text style={{ textAlign: "center" }}>You have given rating</Text>
             ) : (
-              <CardPaper>
-                <RatingText>Please give rating on availed service</RatingText>
+              <CardPaper style={{ borderRadius: 12 }}>
+                <CardItem
+                  header
+                  bordered
+                  style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+                >
+                  <RatingText>Please give rating on availed service</RatingText>
+                </CardItem>
                 <AirbnbRating
                   count={5}
                   reviews={["Terrible", "Bad", "Normal", "Good", "Amazing"]}
                   defaultRating={4}
-                  onFinishRating={(rating, id) =>
-                    this.confirmationBeforRating(rating, item._id)
-                  }
-                  size={30}
+                  onFinishRating={(rating) => this.handleRating(rating)}
+                  size={25}
                 />
+                <TextInput
+                  underlineColorAndroid="transparent"
+                  placeholder="Enter your feedback"
+                  placeholderTextColor="#9a73ef"
+                  autoCapitalize="none"
+                  onChangeText={this.handleDescription}
+                />
+                <Confirm
+                  onPress={() =>
+                    this.confirmationBeforRating(
+                      this.state.rating,
+                      this.state.description,
+                      item._id
+                    )
+                  }
+                  contentStyle={{ height: 50 }}
+                  uppercase={false}
+                  mode="outlined"
+                >
+                  Confirmed?
+                </Confirm>
               </CardPaper>
             )}
           </CardPaper>
         ) : (
-          <CardPaper containerStyle={{ elevation: 16 }}>
-            <CardItem header>
-              <SalonName>{item.Salon_id}</SalonName>
+          <CardPaper
+            containerStyle={{ elevation: 16 }}
+            style={{ borderRadius: 12 }}
+          >
+            <CardItem
+              header
+              bordered
+              style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+            >
+              <Body>
+                <SalonName>{item.Salon_id}</SalonName>
+              </Body>
             </CardItem>
             <CardItem style={{ marginLeft: 73 }}>
               <Block>
@@ -248,7 +307,13 @@ export default class AppointedServicesScreen extends Component {
                 </ServiceName>
               </Block>
             </CardItem>
-            <CardItem footer>
+            <CardItem
+              footer
+              style={{
+                borderBottomLeftRadius: 12,
+                borderBottomRightRadius: 12,
+              }}
+            >
               <Left>
                 <Price>{item.service_id}</Price>
               </Left>
@@ -277,6 +342,7 @@ export default class AppointedServicesScreen extends Component {
   //rendering
   render() {
     const { isLoading, appointedServices, isFetching } = this.state;
+    console.log(appointedServices);
     return (
       <Container>
         <Title>Availible services for today</Title>

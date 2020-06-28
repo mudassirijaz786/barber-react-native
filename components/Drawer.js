@@ -13,7 +13,7 @@ class DrawerItem extends React.Component {
       case "Salons":
         return (
           <Icon
-            size={16}
+            size={14}
             name="shop"
             family="GalioExtra"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
@@ -22,7 +22,7 @@ class DrawerItem extends React.Component {
       case "Profile":
         return (
           <Icon
-            size={16}
+            size={14}
             name="circle-10"
             family="GalioExtra"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
@@ -32,7 +32,7 @@ class DrawerItem extends React.Component {
       case "Appointed Services":
         return (
           <Icon
-            size={16}
+            size={14}
             name="ios-heart-empty"
             family="ionicon"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
@@ -42,7 +42,7 @@ class DrawerItem extends React.Component {
       case "Favourite Services":
         return (
           <Icon
-            size={16}
+            size={14}
             name="ios-timer"
             family="ionicon"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
@@ -51,7 +51,7 @@ class DrawerItem extends React.Component {
       case "Logout":
         return (
           <Icon
-            size={16}
+            size={14}
             name="ios-log-out"
             family="ionicon"
             color={focused ? "white" : materialTheme.COLORS.MUTED}
@@ -78,7 +78,7 @@ class DrawerItem extends React.Component {
           {this.renderIcon()}
         </Block>
         <Block row center flex={0.9}>
-          <Text size={18} color={focused ? "white" : "blueviolet"}>
+          <Text size={14} color={focused ? "white" : "blueviolet"}>
             {title}
           </Text>
         </Block>
@@ -93,8 +93,8 @@ export default DrawerItem;
 //styling
 const styles = StyleSheet.create({
   defaultStyle: {
-    paddingVertical: 16,
-    paddingHorizontal: 16,
+    paddingVertical: 10,
+    paddingHorizontal: 10,
   },
   activeStyle: {
     backgroundColor: "blueviolet",
@@ -107,6 +107,6 @@ const styles = StyleSheet.create({
       height: 2,
     },
     shadowRadius: 8,
-    shadowOpacity: 0.2,
+    shadowOpacity: 1,
   },
 });

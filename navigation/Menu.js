@@ -12,6 +12,7 @@ import {
   AsyncStorage,
   Dimensions,
 } from "react-native";
+import { url } from "../screens/config.json";
 
 //Drawer
 const Drawer = (props) => {
@@ -22,7 +23,7 @@ const Drawer = (props) => {
     const value = await AsyncStorage.getItem("x-auth-token");
     setLoad(true);
     await Axios({
-      url: "/UserSignUp",
+      url: url + "/UserSignUp",
       method: "GET",
       headers: {
         Accept: "application/json, text/plain, */*",
@@ -32,6 +33,7 @@ const Drawer = (props) => {
     })
       .then((response) => {
         setUsers(response.data);
+        console.log(response.data);
         setLoad(false);
       })
       .catch((error) => {
@@ -55,7 +57,7 @@ const Drawer = (props) => {
   return (
     <Block
       style={styles.container}
-      forceInset={{ top: "always", horizontal: "never" }}
+      forceInset={{ top: "transparent", horizontal: "never" }}
     >
       {load ? (
         <ActivityIndicator animating={load} size={50} color="blueviolet" />
@@ -66,20 +68,20 @@ const Drawer = (props) => {
               <TouchableWithoutFeedback
                 onPress={() => props.navigation.navigate("Profile")}
               >
-                <Block style={styles.profile} row>
-                  <Text h4 color="white" style={{ marginRight: 3 }}>
+                <Block row>
+                  <Text h6 color="white" style={{ marginRight: 3 }}>
                     {`${greet},`}
                   </Text>
-                  <Text h4 color="white">
+                  <Text h6 color="white">
                     {user.UserName}
                   </Text>
                 </Block>
               </TouchableWithoutFeedback>
               <Block flex>
-                <Text size={18} style={{ color: "orange" }}>
+                <Text size={14} style={{ color: "orange" }}>
                   {user.UserEmail}
                 </Text>
-                <Text size={16} style={{ color: "white" }}>
+                <Text size={14} style={{ color: "white" }}>
                   {user.phoneNumber}
                 </Text>
               </Block>
@@ -88,7 +90,7 @@ const Drawer = (props) => {
         })
       )}
       <Block flex>
-        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 1 }}>
+        <ScrollView showsVerticalScrollIndicator={false} style={{ flex: 0.8 }}>
           <DrawerItems {...props} />
         </ScrollView>
       </Block>
@@ -135,11 +137,8 @@ const styles = StyleSheet.create({
   header: {
     backgroundColor: "blueviolet",
     paddingHorizontal: 28,
-    paddingTop: theme.SIZES.BASE * 5,
+    paddingTop: theme.SIZES.BASE * 4,
     justifyContent: "center",
-  },
-  profile: {
-    marginBottom: theme.SIZES.BASE,
   },
 });
 

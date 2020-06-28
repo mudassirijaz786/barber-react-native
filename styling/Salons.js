@@ -9,19 +9,19 @@ export const Container = styled.View`
   align-content: center;
   background-color: whitesmoke;
   padding-left: 15px;
+  text-align: center;
   padding-right: 15px;
 `;
 
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
 `;
 
 export const SalonName = styled.Text`
   color: blueviolet;
-  text-align: center;
   font-size: 24px;
   font-weight: 400;
 `;
@@ -43,8 +43,8 @@ export const Close = styled.Text`
 export const Filter = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 24px;
-  font-weight: 200;
+  font-size: 20px;
+  font-weight: 400;
 `;
 
 export const Distance = styled.Text`
@@ -55,7 +55,6 @@ export const Distance = styled.Text`
 `;
 
 export const ContentForCard = styled(Content)`
-  align-content: center;
   text-align: center;
 `;
 
@@ -65,6 +64,7 @@ export const CardPaper = styled(Card)`
 
 export const SalonButton = styled(Button)`
   background-color: transparent;
+  font-size: 12px;
   border-radius: 60px;
   border-color: blueviolet;
 `;

@@ -114,8 +114,15 @@ export default class AppointmentScreen extends Component {
       <Container>
         <Title>Appoint this service</Title>
         <ContentForCard>
-          <CardPaper>
-            <CardItem bordered>
+          <CardPaper
+            containerStyle={{ elevation: 16 }}
+            style={{ borderRadius: 12 }}
+          >
+            <CardItem
+              header
+              bordered
+              style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+            >
               <Left>
                 <Body>
                   <DatePicker
@@ -182,7 +189,13 @@ export default class AppointmentScreen extends Component {
                 </Picker>
               </Right>
             </CardItem>
-            <CardItem footer>
+            <CardItem
+              footer
+              style={{
+                borderBottomLeftRadius: 12,
+                borderBottomRightRadius: 12,
+              }}
+            >
               <Left>
                 <Select> Select mode</Select>
               </Left>

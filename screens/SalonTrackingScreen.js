@@ -121,10 +121,10 @@ class SalonTrackingScreen extends Component {
         <View>
           {latitude && longitude && (
             <View>
-              <Blocked row>
-                <Text> Salon is locating at Distance of</Text>
-                <Distance> {distance.toFixed(2)} km</Distance>
-                <Text> from your current location</Text>
+              <Blocked row style={{ textAlign: "center" }}>
+                <Distance>
+                  {distance.toFixed(2)} km away from current location{" "}
+                </Distance>
               </Blocked>
               {!currentPosition.latitude && !currentPosition.longitude ? (
                 <ActivityIndicator

@@ -187,7 +187,7 @@ const AppStack = createDrawerNavigator(
       screen: HomeStack,
       navigationOptions: {
         drawerLabel: () => (
-          <Block style={{ marginVertical: 145 }}>
+          <Block style={{ marginVertical: "40%" }}>
             <Text>{` `}</Text>
           </Block>
         ),
@@ -209,15 +209,15 @@ const AppStack = createDrawerNavigator(
 //switch navigation for application
 const AppNavigator = createSwitchNavigator(
   {
-    App: AppStack,
-    Login: {
-      screen: LoginScreen,
-    },
     Start: {
       screen: StartScreen,
     },
     Second: {
       screen: SecondScreen,
+    },
+    App: AppStack,
+    Login: {
+      screen: LoginScreen,
     },
     Registration: {
       screen: RegistrationScreen,

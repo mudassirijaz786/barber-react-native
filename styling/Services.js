@@ -6,6 +6,7 @@ import { Card } from "react-native-paper";
 
 export const Container = styled.View`
   flex: 1;
+  align-content: center;
   background-color: whitesmoke;
   padding-left: 15px;
   padding-right: 15px;
@@ -14,7 +15,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
 `;
 
@@ -26,7 +27,8 @@ export const ServiceName = styled.Text`
 
 export const Reviews = styled.Text`
   color: #089920;
-  font-size: 24px;
+  font-size: 18px;
+
   font-weight: 400;
 `;
 
@@ -79,11 +81,18 @@ export const Category = styled.Text`
   font-weight: 500;
 `;
 
+export const Name = styled.Text`
+  color: #eb6709;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 500;
+`;
+
 export const Filter = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 24px;
-  font-weight: 200;
+  font-size: 20px;
+  font-weight: 400;
 `;
 export const Blocked = styled(Block)`
   align-content: center;

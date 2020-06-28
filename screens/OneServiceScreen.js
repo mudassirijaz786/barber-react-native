@@ -1,6 +1,6 @@
 //importing
 import React, { Component } from "react";
-import { TouchableOpacity } from "react-native";
+import { TouchableOpacity, Image } from "react-native";
 import { Text } from "galio-framework";
 import { CardItem, Thumbnail, Left, Body, Right, Icon } from "native-base";
 import {
@@ -10,10 +10,10 @@ import {
   Price,
   Category,
   ContentForCard,
-  ImageService,
   Description,
   CardPaper,
   ServiceButton,
+  NoFeedback,
   Reviews,
 } from "../styling/OneServiceScreen";
 
@@ -50,12 +50,21 @@ export default class OneServiceScreen extends Component {
   //rendering
   render() {
     const { items } = this.state;
+    console.log(items);
     return (
       <Container>
         <Title>Service information</Title>
         <ContentForCard>
-          <CardPaper key={items._id}>
-            <CardItem header>
+          <CardPaper
+            key={items._id}
+            containerStyle={{ elevation: 16 }}
+            style={{ borderRadius: 12 }}
+          >
+            <CardItem
+              header
+              bordered
+              style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+            >
               <Left>
                 <TouchableOpacity onPress={() => this.onPressed(items)}>
                   <Thumbnail
@@ -75,7 +84,8 @@ export default class OneServiceScreen extends Component {
             <CardItem>
               <Body>
                 <TouchableOpacity onPress={() => this.onPressed(items)}>
-                  <ImageService
+                  <Image
+                    style={{ borderRadius: 12, width: 297, height: 260 }}
                     source={{
                       uri: items.image_url,
                     }}
@@ -85,7 +95,13 @@ export default class OneServiceScreen extends Component {
                 <Description muted>{items.serviceDescription}</Description>
               </Body>
             </CardItem>
-            <CardItem>
+            <CardItem
+              footer
+              style={{
+                borderBottomLeftRadius: 12,
+                borderBottomRightRadius: 12,
+              }}
+            >
               <Left>
                 <TouchableOpacity>
                   <ServiceButton
@@ -105,6 +121,38 @@ export default class OneServiceScreen extends Component {
               </Right>
             </CardItem>
           </CardPaper>
+          <Title>Feedbacks</Title>
+          {items.feedbacks.length === 0 ? (
+            <NoFeedback>{items.serviceName} has no feedbacks</NoFeedback>
+          ) : (
+            items.feedbacks.map((feedback) => {
+              return (
+                <CardPaper
+                  key={feedback._id}
+                  containerStyle={{ elevation: 16 }}
+                  style={{ borderRadius: 12 }}
+                >
+                  <CardItem
+                    header
+                    bordered
+                    style={{
+                      borderTopLeftRadius: 12,
+                      borderTopRightRadius: 12,
+                    }}
+                  >
+                    <Left>
+                      <Body>
+                        <TouchableOpacity onPress={() => this.onPressed(items)}>
+                          <ServiceName>Rating: {feedback.rating}</ServiceName>
+                          <Category>Review: {feedback.description}</Category>
+                        </TouchableOpacity>
+                      </Body>
+                    </Left>
+                  </CardItem>
+                </CardPaper>
+              );
+            })
+          )}
         </ContentForCard>
       </Container>
     );

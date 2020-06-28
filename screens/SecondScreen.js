@@ -1,25 +1,13 @@
 //importing
 import React, { Component } from "react";
+import { Button } from "react-native-paper";
+import { View, StyleSheet, Text, ImageBackground } from "react-native";
 import {
-  View,
-  Image,
-  StyleSheet,
-  Animated,
-  Text,
-  ImageBackground,
-} from "react-native";
-
-/* Logo */
-import {
-  Container,
-  Title,
-  Forget,
-  SignupLink,
-  InputField,
-  SigninButton,
-  Blocked,
-  Error,
-} from "../styling/Login";
+  widthToDp,
+  heightToDp,
+  listenToOrientationChange,
+  removeOrientationChange,
+} from "../styling/responsive";
 
 //class StartScreen
 class SecondScreen extends Component {
@@ -28,8 +16,14 @@ class SecondScreen extends Component {
     this.state = {};
   }
 
-  //animations goes here
-  componentDidMount() {}
+  componentWillUnMount() {
+    removeOrientationChange();
+  }
+
+  componentDidMount() {
+    listenToOrientationChange(this);
+  }
+
   signin = () => {
     this.props.navigation.navigate("Login");
   };
@@ -39,34 +33,53 @@ class SecondScreen extends Component {
   //rendering
   render() {
     return (
-      <View style={styles.container}>
-        <ImageBackground
-          source={require("../assets/images/second_screen.png")}
-          style={styles.image}
-        >
-          <View style={{ marginTop: 150 }}>
-            <SigninButton
-              mode="outlined"
-              uppercase={false}
-              onPress={this.signin}
-              contentStyle={{ height: 50 }}
-            >
-              Sign In
-            </SigninButton>
-            <SigninButton
-              mode="outlined"
-              uppercase={false}
-              onPress={this.signup}
-              contentStyle={{ height: 50 }}
-            >
-              Sign Up
-            </SigninButton>
-          </View>
+      <ImageBackground
+        source={require("../assets/images/second.jpg")}
+        style={styles.image}
+        imageStyle={{ resizeMode: "stretch" }}
+        // type="stretch"
+      >
+        <View style={{ marginTop: heightToDp("50%") }}>
           <Text style={styles.text}>
             Book an Appointment for Salon & Barber
           </Text>
-        </ImageBackground>
-      </View>
+
+          <Button
+            style={{
+              marginTop: heightToDp("3%"),
+              backgroundColor: "black",
+              borderRadius: widthToDp("10%"),
+              marginLeft: widthToDp("10%"),
+              marginRight: widthToDp("10%"),
+              borderColor: "blueviolet",
+              color: "#eaeaec",
+            }}
+            mode="contained"
+            uppercase={false}
+            onPress={this.signin}
+            contentStyle={{ height: heightToDp("7%") }}
+          >
+            Sign In
+          </Button>
+          <Button
+            style={{
+              marginTop: heightToDp("3%"),
+              backgroundColor: "black",
+              borderRadius: widthToDp("10%"),
+              marginLeft: widthToDp("10%"),
+              marginRight: widthToDp("10%"),
+              borderColor: "blueviolet",
+              color: "#eaeaec",
+            }}
+            mode="contained"
+            uppercase={false}
+            onPress={this.signup}
+            contentStyle={{ height: heightToDp("7%") }}
+          >
+            Sign Up
+          </Button>
+        </View>
+      </ImageBackground>
     );
   }
 }
@@ -78,18 +91,24 @@ export default SecondScreen;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: "column",
+    alignItems: "center",
+    alignContent: "center",
+    height: heightToDp("100%"),
+    top: 0,
+    bottom: 0,
   },
   image: {
+    width: widthToDp("100%"),
+    height: heightToDp("100%"),
     flex: 1,
-    resizeMode: "cover",
     justifyContent: "center",
-    opacity: 0.8,
+    alignItems: "center",
+    opacity: 1,
   },
   text: {
-    top: 100,
     color: "white",
-    fontSize: 30,
+    fontSize: widthToDp("10%"),
+    textAlign: "center",
     fontWeight: "bold",
   },
 });

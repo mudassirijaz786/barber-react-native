@@ -15,7 +15,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
 `;
 
@@ -58,7 +58,8 @@ export const ContentForCard = styled(Content)`
 `;
 
 export const CardPaper = styled(Card)`
-  margin-top: 10px;
+  margin-top: 2px;
+  margin-bottom: 2px;
 `;
 
 export const Price = styled.Text`
@@ -95,4 +96,11 @@ export const Close = styled.Text`
   text-align: center;
   font-size: 18px;
   font-weight: 700;
+`;
+
+export const Confirm = styled(Button)`
+  margin-top: 15px;
+  background-color: transparent;
+  border-radius: 60px;
+  border-color: blueviolet;
 `;

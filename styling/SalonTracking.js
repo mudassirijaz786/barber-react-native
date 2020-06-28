@@ -11,7 +11,7 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
   font-weight: 700;
 `;
 
@@ -24,6 +24,7 @@ export const Distance = styled.Text`
 export const Category = styled.Text`
   color: #eb6709;
   font-size: 24px;
+  text-align: center;
   font-weight: 500;
 `;
 

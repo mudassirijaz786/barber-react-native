@@ -16,7 +16,8 @@ export const Container = styled.View`
 export const Title = styled.Text`
   color: blueviolet;
   text-align: center;
-  font-size: 36px;
+  font-size: 24px;
+  margin-top: 10px;
   font-weight: 700;
 `;
 
@@ -24,6 +25,14 @@ export const ServiceName = styled.Text`
   color: blueviolet;
   font-size: 24px;
   font-weight: 400;
+`;
+
+export const NoFeedback = styled.Text`
+  color: #eb6709;
+  font-size: 24px;
+  margin-top: 15px;
+  font-weight: 400;
+  text-align: center;
 `;
 
 export const Reviews = styled.Text`
@@ -63,10 +72,4 @@ export const Category = styled.Text`
 
 export const Description = styled(Text)`
   margin-top: 5px;
-`;
-
-export const ImageService = styled.Image`
-  width: 345px;
-  height: 300px;
-  margin-right: 10px;
 `;

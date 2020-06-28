@@ -21,6 +21,7 @@ import {
   NoService,
   ContentForCard,
   Category,
+  Name,
   ServiceButton,
   Time,
   Reviews,
@@ -124,8 +125,15 @@ export default class ServicesScreen extends Component {
   renderingServices = ({ item }) => {
     return (
       <ContentForCard>
-        <CardPaper elevation={10}>
-          <CardItem header>
+        <CardPaper
+          containerStyle={{ elevation: 16 }}
+          style={{ borderRadius: 12 }}
+        >
+          <CardItem
+            header
+            bordered
+            style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+          >
             <Left>
               <TouchableOpacity onPress={() => this.onPressed(item)}>
                 <ServiceImage source={{ uri: item.image_url }} />
@@ -134,10 +142,8 @@ export default class ServicesScreen extends Component {
               <Body>
                 <TouchableOpacity onPress={() => this.onPressed(item)}>
                   <ServiceName>{item.serviceName}</ServiceName>
-
                   <Text muted>{item.serviceDescription}</Text>
                 </TouchableOpacity>
-
                 <Category>{item.service_category}</Category>
                 <Text muted>
                   Service time <Time>{item.service_time}</Time> minutes
@@ -145,7 +151,10 @@ export default class ServicesScreen extends Component {
               </Body>
             </Left>
           </CardItem>
-          <CardItem>
+          <CardItem
+            footer
+            style={{ borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}
+          >
             <Left>
               <TouchableOpacity>
                 <ServiceButton
@@ -188,9 +197,7 @@ export default class ServicesScreen extends Component {
     return (
       <Container>
         <Title>Availible Services</Title>
-        <Category>
-          {this.props.navigation.state.params.items.SalonName}
-        </Category>
+        <Name>{this.props.navigation.state.params.items.SalonName}</Name>
         <SearchBar
           round
           placeholderTextColor="#808080"

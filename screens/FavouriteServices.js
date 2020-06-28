@@ -58,7 +58,7 @@ export default class FavouriteServices extends Component {
   };
 
   //getting services from salon id in props
-  async componentDidMount() {
+  componentDidMount() {
     this.gettingFavouriteServices();
   }
 
@@ -122,8 +122,15 @@ export default class FavouriteServices extends Component {
   renderingServices = ({ item }) => {
     return (
       <ContentForCard>
-        <CardPaper elevation={10}>
-          <CardItem header>
+        <CardPaper
+          containerStyle={{ elevation: 16 }}
+          style={{ borderRadius: 12 }}
+        >
+          <CardItem
+            header
+            bordered
+            style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+          >
             <Left>
               <TouchableOpacity onPress={() => this.onPressed(item)}>
                 <ServiceImage source={{ uri: item.image_url }} />
@@ -141,7 +148,10 @@ export default class FavouriteServices extends Component {
               </Body>
             </Left>
           </CardItem>
-          <CardItem>
+          <CardItem
+            footer
+            style={{ borderBottomLeftRadius: 12, borderBottomRightRadius: 12 }}
+          >
             <Left>
               <TouchableOpacity>
                 <ServiceButton
@@ -173,7 +183,6 @@ export default class FavouriteServices extends Component {
     return (
       <Container>
         <Title>Favourite Services</Title>
-
         <SearchBar
           round
           placeholderTextColor="#808080"

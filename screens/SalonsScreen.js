@@ -187,10 +187,18 @@ export default class SalonsScreen extends React.Component {
 
   //rendering salons
   renderingSalon = ({ item }) => {
+    // FIXME: idr refresh krta hun cards to loading hui jati ha ... agr loading false getInitialState() ky end pr na lgaun to loading pr cards to load ho jaty hain lekin distance cards main nae show hota
     return (
       <ContentForCard>
-        <CardPaper elevation={10}>
-          <CardItem header>
+        <CardPaper
+          containerStyle={{ elevation: 16 }}
+          style={{ borderRadius: 12 }}
+        >
+          <CardItem
+            header
+            bordered
+            style={{ borderTopLeftRadius: 12, borderTopRightRadius: 12 }}
+          >
             <TouchableOpacity onPress={() => this.onPressed(item)}>
               <SalonName>{item.SalonName}</SalonName>
             </TouchableOpacity>
@@ -198,17 +206,24 @@ export default class SalonsScreen extends React.Component {
           <CardItem>
             <Left>
               <Text>
-                Shop Open Time<Open>{item.Salon_opening_hours}</Open>
+                Open at<Open>{item.Salon_opening_hours}</Open>
               </Text>
             </Left>
             <Right>
               <Text>
-                Shop Close Time<Close> {item.Salon_closing_hours}</Close>
+                Close at<Close> {item.Salon_closing_hours}</Close>
               </Text>
             </Right>
           </CardItem>
 
-          <CardItem>
+          <CardItem
+            footer
+            style={{
+              borderBottomLeftRadius: 12,
+              borderBottomRightRadius: 12,
+              marginBottom: 12,
+            }}
+          >
             <Left>
               <TouchableOpacity>
                 <SalonButton
@@ -217,7 +232,7 @@ export default class SalonsScreen extends React.Component {
                   contentStyle={{ height: 30 }}
                   onPress={() => this.onPressed(item)}
                 >
-                  Explore maps and services
+                  Check it
                 </SalonButton>
               </TouchableOpacity>
             </Left>
