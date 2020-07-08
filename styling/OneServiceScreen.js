@@ -38,6 +38,7 @@ export const NoFeedback = styled.Text`
 export const Reviews = styled.Text`
   color: #089920;
   font-size: 24px;
+  margin-top: 5px;
   font-weight: 400;
 `;
 

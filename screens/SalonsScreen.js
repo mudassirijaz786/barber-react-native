@@ -95,6 +95,8 @@ export default class SalonsScreen extends React.Component {
     const value = await AsyncStorage.getItem("x-auth-token");
     this.setState({ isLoading: true });
 
+    console.log(value);
+
     //getting salons from backend
     await Axios({
       url: url + "/SalonSignUp",
@@ -137,6 +139,7 @@ export default class SalonsScreen extends React.Component {
   onRefresh = async () => {
     this.setState({ isFetching: true });
     await this.gettingSalons();
+    await this.getInitialState();
     this.setState({ isFetching: false });
   };
 

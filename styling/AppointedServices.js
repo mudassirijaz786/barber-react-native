@@ -26,6 +26,13 @@ export const SalonName = styled.Text`
   font-weight: 400;
 `;
 
+export const RatingGiven = styled.Text`
+  color: green;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+`;
+
 export const RatingText = styled.Text`
   color: blueviolet;
   text-align: center;

@@ -75,6 +75,9 @@ export default class AppointmentScreen extends Component {
       obj["stating_time"] = this.state.stating_time;
       obj["current_date"] = moment().format("YYYY-MM-DD");
       obj["salon_id"] = this.props.navigation.state.params.items.Salon_id;
+
+      console.log(obj);
+
       const value = await AsyncStorage.getItem("x-auth-token");
       Axios({
         url:

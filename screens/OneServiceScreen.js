@@ -85,7 +85,12 @@ export default class OneServiceScreen extends Component {
               <Body>
                 <TouchableOpacity onPress={() => this.onPressed(items)}>
                   <Image
-                    style={{ borderRadius: 12, width: 297, height: 260 }}
+                    style={{
+                      borderRadius: 12,
+                      width: 310,
+                      height: 260,
+                      marginLeft: 20,
+                    }}
                     source={{
                       uri: items.image_url,
                     }}
@@ -142,7 +147,7 @@ export default class OneServiceScreen extends Component {
                   >
                     <Left>
                       <Body>
-                        <TouchableOpacity onPress={() => this.onPressed(items)}>
+                        <TouchableOpacity>
                           <ServiceName>Rating: {feedback.rating}</ServiceName>
                           <Category>Review: {feedback.description}</Category>
                         </TouchableOpacity>
